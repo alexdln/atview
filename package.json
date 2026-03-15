@@ -1,0 +1,51 @@
+{
+    "name": "atview",
+    "version": "1.0.0",
+    "description": "Modules for atproto apps",
+    "scripts": {
+        "format": "prettier . --check",
+        "lint:code": "eslint .",
+        "lint:css": "stylelint \"**/*.{css,scss,sass}\"",
+        "prettier": "prettier",
+        "stylelint": "stylelint",
+        "eslint": "eslint",
+        "check": "concurrently -n lint:code,lint:css \"pnpm run lint:code\" \"pnpm run lint:css\"",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,jsx,json}": [
+            "pnpm exec eslint"
+        ],
+        "*.{css,scss,sass}": [
+            "pnpm exec stylelint"
+        ]
+    },
+    "keywords": [
+        "atproto",
+        "modules",
+        "atview"
+    ],
+    "author": {
+        "name": "Alex Savelyev",
+        "email": "dev@alexdln.com",
+        "url": "https://github.com/alexdln/"
+    },
+    "devDependencies": {
+        "eslint": "10.0.3",
+        "eslint-config-next": "16.1.6",
+        "eslint-config-prettier": "10.1.8",
+        "eslint-plugin-prettier": "5.5.5",
+        "husky": "9.1.7",
+        "lint-staged": "16.4.0",
+        "prettier": "3.8.1",
+        "stylelint": "17.4.0",
+        "stylelint-config-prettier": "9.0.5",
+        "stylelint-config-recess-order": "7.6.1",
+        "stylelint-config-standard-scss": "17.0.0",
+        "stylelint-prettier": "5.0.3",
+        "typescript": "5.9.3",
+        "typescript-eslint": "8.57.0"
+    },
+    "license": "MIT",
+    "packageManager": "pnpm@11.0.0-dev.1005+sha512.91f84a392eea348ea4852a182912d2520273a4336f933b78cc44bc931eb999923c097e9433a9b355adc1f725725ea99082fc9f032a559df832632e764c92c798"
+}
