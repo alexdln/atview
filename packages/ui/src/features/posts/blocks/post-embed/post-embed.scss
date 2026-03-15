@@ -1,0 +1,206 @@
+@use "../../../../assets/mixins/media";
+
+.post-embed__media {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+}
+
+.post-embed__tenor-video {
+    width: 100%;
+    max-height: 600px;
+    margin-top: 16px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.post-embed__external {
+    position: relative;
+    display: block;
+    padding: 2px;
+    color: var(--cl-main-300);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--cl-main-950) 50%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cl-main-700) 30%, transparent);
+
+    &:hover {
+        color: var(--cl-primary-400);
+        background: var(--cl-main-950);
+    }
+}
+
+.post-embed__external-thumb {
+    width: 100%;
+    aspect-ratio: 1.91 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.post-embed__external-body {
+    padding: 12px 16px;
+}
+
+.post-embed__external-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cl-main-100);
+}
+
+.post-embed__external-description {
+    margin-block: 8px;
+    font-size: 14px;
+    line-height: 1.25;
+    color: var(--cl-main-100);
+}
+
+.post-embed__external-host {
+    padding-top: 8px;
+    margin: 0;
+    margin-top: 8px;
+    font-size: 14px;
+    border-top: 1px solid var(--cl-main-500);
+}
+
+.post-embed__video {
+    position: relative;
+    display: block;
+    padding: 2px;
+    color: var(--cl-main-300);
+    background: var(--cl-main-900);
+}
+
+.post-embed__video-figure {
+    display: block;
+    margin: 0;
+}
+
+.post-embed__video:hover {
+    color: var(--cl-primary-400);
+    background: var(--cl-main-800);
+}
+
+.post-embed__video-player {
+    display: block;
+    width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+}
+
+.post-embed__video-caption {
+    display: none;
+}
+
+.post-embed__images {
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.post-embed__images--multiple {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.post-embed__image-item {
+    position: relative;
+    padding: 1px;
+}
+
+.post-embed__image-item--multiple {
+    background: var(--cl-main-800);
+    border-radius: 8px;
+}
+
+.post-embed__image-blur {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-height: 480px;
+    margin-bottom: 8px;
+    object-fit: cover;
+    border-radius: 6px;
+    filter: blur(12px);
+}
+
+.post-embed__image-main {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    border-radius: 6px;
+}
+
+.post-embed__image-main--single {
+    margin-right: auto;
+    margin-left: auto;
+    object-fit: contain;
+}
+
+.post-embed__image-main--multiple {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.post-embed__alt-badge {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    padding: 4px 12px;
+    font-size: 12px;
+    background: color-mix(in srgb, var(--cl-main-900) 80%, transparent);
+    border-radius: 6px;
+}
+
+.post-embed__notice {
+    padding: 16px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    background: color-mix(in srgb, var(--cl-main-950) 50%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cl-main-700) 50%, transparent);
+    border-radius: 6px;
+}
+
+.post-embed__notice-title {
+    font-weight: 600;
+    color: var(--cl-main-100);
+}
+
+.post-embed__notice-icon {
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.post-embed__reference {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+
+    @include media.media(md) {
+        border-radius: 12px;
+    }
+}
+
+.post-embed__reference--post {
+    padding: 8px;
+    background: color-mix(in srgb, var(--cl-main-950) 50%, transparent);
+    border: 1px solid var(--cl-main-800);
+
+    @include media.media(md) {
+        padding: 16px;
+    }
+}
+
+.post-embed__reference--feed {
+    padding: 16px;
+    background: var(--cl-main-950);
+    border: 1px solid color-mix(in srgb, var(--cl-main-700) 30%, transparent);
+}
+
+.post-embed__reference--feed:hover {
+    background: color-mix(in srgb, var(--cl-main-700) 20%, transparent);
+}

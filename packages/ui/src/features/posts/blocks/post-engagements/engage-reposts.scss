@@ -1,0 +1,37 @@
+.engage-reposts {
+    position: relative;
+    z-index: 10;
+}
+
+.engage-reposts__action {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    padding: 4px;
+    text-align: left;
+}
+
+.engage-reposts__action:hover,
+.engage-reposts__action:focus-within {
+    color: var(--cl-primary-300);
+}
+
+.engage-reposts__action:disabled {
+    cursor: not-allowed;
+}
+
+.engage-reposts__icon {
+    display: block;
+    transition: all 0.2s;
+}
+
+.engage-reposts:active .engage-reposts__icon {
+    transform: scale(0.75);
+}
+
+.engage-reposts__count {
+    position: relative;
+    display: block;
+    transition: all 0.2s;
+}

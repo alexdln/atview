@@ -1,0 +1,60 @@
+@use "../../../../assets/mixins/media";
+
+.post-engagements {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    color: var(--cl-main-400);
+}
+
+.post-engagements__reply {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    text-align: left;
+}
+
+.post-engagements__reply:hover {
+    color: var(--cl-primary-300);
+}
+
+.post-engagements__reply:disabled {
+    cursor: not-allowed;
+}
+
+.post-engagements__icon {
+    display: block;
+    transition: all 0.2s;
+}
+
+.post-engagements__reply:active .post-engagements__icon {
+    transform: scale(0.75);
+}
+
+.post-engagements__external {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.post-engagements__external-link {
+    display: block;
+    padding: 4px;
+    margin-top: -2px;
+    color: var(--cl-main-100);
+
+    &:hover {
+        color: var(--cl-accent-300);
+    }
+}
+
+.post-engagements__external-icon {
+    display: block;
+}
+
+@include media.media(null, sm) {
+    .post-engagements {
+        font-size: 14px;
+    }
+}
