@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "../../../../assets/mixins/breakpoints";
+
+@mixin media($sizeFrom: null, $sizeTo: null) {
+    @if $sizeFrom and $sizeTo and $sizeFrom {
+        @media (#{map.get(breakpoints.$sizes, $sizeFrom)} <=width < #{map.get(breakpoints.$sizes, $sizeTo)}) {
+            @content;
+        }
+    } @else if $sizeFrom and $sizeFrom {
+        @media (#{map.get(breakpoints.$sizes, $sizeFrom)} <=width) {
+            @content;
+        }
+    } @else {
+        @media (width < #{map.get(breakpoints.$sizes, $sizeTo)}) {
+            @content;
+        }
+    }
+}

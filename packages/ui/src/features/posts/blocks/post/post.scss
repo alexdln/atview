@@ -1,0 +1,132 @@
+@use "../../../../assets/mixins/media";
+
+.post_root {
+    padding: 8px;
+    margin-block: 1.5rem;
+    background-color: color-mix(in srgb, var(--cl-main-900) 50%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cl-main-800) 50%, transparent);
+    border-radius: 8px;
+
+    @include media.media(md) {
+        padding: 16px;
+        border-radius: 16px;
+    }
+}
+
+.post {
+    position: relative;
+}
+
+.post__header {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.post__avatar-link {
+    position: relative;
+    display: block;
+    margin-right: 8px;
+}
+
+.post__avatar,
+.post__avatar-fallback {
+    display: block;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    border: 1px solid var(--cl-main-950);
+    border-radius: 999px;
+}
+
+.post__avatar-fallback {
+    background: var(--cl-main-800);
+}
+
+.post__avatar--live,
+.post__avatar-fallback--live {
+    border-color: var(--cl-red-500);
+}
+
+.post__live-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
+    background: color-mix(in srgb, var(--cl-red-500) 80%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cl-red-500) 90%, transparent);
+    border-radius: 999px;
+    backdrop-filter: blur(2px);
+}
+
+.post__author-meta {
+    overflow: hidden;
+    font-weight: 500;
+    line-height: 1.25;
+}
+
+.post__author-name-link {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--cl-main-200);
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover {
+        color: var(--cl-main-50);
+    }
+}
+
+.post__author-handle {
+    color: var(--cl-main-400);
+
+    .post__author-name-link:hover & {
+        color: var(--cl-main-300);
+    }
+}
+
+.post__date {
+    display: block;
+    font-weight: 300;
+
+    @include media.media(null, md) {
+        font-size: 14px;
+    }
+}
+
+.post__stats {
+    display: flex;
+    gap: 20px;
+    padding-top: 8px;
+    margin-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--cl-main-500) 30%, transparent);
+}
+
+.post__stats-link {
+    display: block;
+    padding: 6px 0;
+    color: var(--cl-main-300);
+
+    &:hover {
+        color: var(--cl-main-50);
+    }
+}
+
+.post__stats-save {
+    display: block;
+    padding: 6px 0;
+    color: var(--cl-main-400);
+}
+
+.post__engagements--spaced {
+    margin-top: 8px;
+}
+
+.post__engagements--post-page {
+    margin-right: -2px;
+    margin-left: -2px;
+}
