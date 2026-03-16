@@ -67,7 +67,12 @@ export const Post: React.FC<PostProps> = ({
     return (
         <div className={clsx("post", !nested && "post_root", className)}>
             <div className="post__header">
-                <a href={`https://bsky.app/profile/${author.handle}`} className="post__avatar-link">
+                <a
+                    href={`https://bsky.app/profile/${author.handle}`}
+                    className="post__avatar-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     {author.avatar ? (
                         <img
                             className={clsx(
@@ -89,7 +94,12 @@ export const Post: React.FC<PostProps> = ({
                     {isAuthorLive && <div className="post__live-dot" aria-label="Live" />}
                 </a>
                 <span className="post__author-meta">
-                    <a href={`https://bsky.app/profile/${author.handle}`} className="post__author-name-link">
+                    <a
+                        href={`https://bsky.app/profile/${author.handle}`}
+                        className="post__author-name-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         {author.displayName || author.handle}{" "}
                         <span className="post__author-handle">@{author.handle}</span>
                     </a>
@@ -104,6 +114,8 @@ export const Post: React.FC<PostProps> = ({
                         <a
                             href={`https://bsky.app/profile/${author.handle}/post/${rkey}/quotes`}
                             className="post__stats-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             {`${quoteCount} ${quoteCount === 1 ? "quote" : "quotes"}`}
                         </a>
@@ -112,6 +124,8 @@ export const Post: React.FC<PostProps> = ({
                         <a
                             href={`https://bsky.app/profile/${author.handle}/post/${rkey}/reposted-by`}
                             className="post__stats-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             {`${repostCount} ${repostCount === 1 ? "repost" : "reposts"}`}
                         </a>
@@ -120,6 +134,8 @@ export const Post: React.FC<PostProps> = ({
                         <a
                             href={`https://bsky.app/profile/${author.handle}/post/${rkey}/liked-by`}
                             className="post__stats-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             {`${likeCount} ${likeCount === 1 ? "like" : "likes"}`}
                         </a>

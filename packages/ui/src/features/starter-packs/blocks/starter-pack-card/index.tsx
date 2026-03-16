@@ -21,6 +21,8 @@ export const StarterPackCard: React.FC<StarterPackCardProps> = ({ pack, classNam
                 <a
                     href={`https://bsky.app/starter-pack/${pack.creator.handle}/${rkey}`}
                     className="starter-pack-card__title-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <p className="starter-pack-card__title">{pack.record.name}</p>
                 </a>
@@ -29,6 +31,8 @@ export const StarterPackCard: React.FC<StarterPackCardProps> = ({ pack, classNam
                     <a
                         href={`https://bsky.app/profile/${pack.creator.handle}`}
                         className="starter-pack-card__creator-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {pack.creator.displayName || `@${pack.creator.handle}`}
                     </a>
@@ -37,6 +41,8 @@ export const StarterPackCard: React.FC<StarterPackCardProps> = ({ pack, classNam
                     <a
                         href={`https://bsky.app/starter-pack/${pack.creator.handle}/${rkey}`}
                         className="starter-pack-card__description-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         <p className="starter-pack-card__description">{pack.record.description}</p>
                     </a>
