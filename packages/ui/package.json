@@ -47,7 +47,8 @@
     "clsx": "2.1.1",
     "contection": "2.3.0",
     "contection-top-layer": "2.3.0",
-    "hls.js": "1.6.15"
+    "hls.js": "1.6.15",
+    "multiformats": "13.4.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "29.0.2",

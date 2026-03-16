@@ -18,7 +18,12 @@ export const FeedCard: React.FC<FeedCardProps> = ({ feed, className }) => {
     const authorDid = feed.creator?.handle || host;
 
     return (
-        <a href={`https://bsky.app/profile/${authorDid}/feed/${rkey}`} className={clsx("feed-card", className)}>
+        <a
+            href={`https://bsky.app/profile/${authorDid}/feed/${rkey}`}
+            className={clsx("feed-card", className)}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <div className="feed-card__header">
                 <img src={feed.avatar} alt={feed.displayName} className="feed-card__avatar" />
                 <div className="feed-card__author">

@@ -1,6 +1,5 @@
-import clsx from "clsx";
-
 import React from "react";
+import clsx from "clsx";
 
 import { type Record } from "@atproto/api/dist/client/types/app/bsky/feed/post";
 import { type AppBskyEmbedImages, type AppBskyEmbedVideo, type AppBskyEmbedExternal } from "@atproto/api";
@@ -15,19 +14,36 @@ import {
 import { isMain as isStrongRef } from "@atproto/api/dist/client/types/com/atproto/repo/strongRef";
 import { isBlockedPost, isGeneratorView, PostView } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import { isStarterPackView, isStarterPackViewBasic } from "@atproto/api/dist/client/types/app/bsky/graph/defs";
+import { CID, type MultihashDigest, type Version } from "multiformats/cid";
 
 import { Post } from "@src/features/posts/blocks/post";
 import { FeedCard } from "@src/features/feeds/blocks/feed-card";
 import { VideoPlayer } from "@src/features/posts/blocks/video-player";
 import { StarterPackCard, StarterPackCardProps } from "@src/features/starter-packs/blocks/starter-pack-card";
+
 import { ImageWrapper } from "../image-wrapper";
 
 import "./post-embed.scss";
 
-const formatLink = (link: string | { $link: string } | undefined) => {
+const formatLink = (
+    link:
+        | string
+        | { $link: string }
+        | {
+              code: number;
+              version: number;
+              multihash: MultihashDigest<number>;
+          }
+        | undefined,
+) => {
     if (!link) return "";
 
     if (typeof link === "string") return link;
+
+    if ("version" in link && "code" in link && "multihash" in link) {
+        const cid = CID.create(link.version as Version, link.code, link.multihash);
+        return cid.toString();
+    }
 
     if (link.toString() === "[object Object]") return "$link" in link ? link.$link : "";
 
