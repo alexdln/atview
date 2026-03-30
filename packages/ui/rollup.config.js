@@ -18,7 +18,9 @@ const createConfig = (format, outputDir, tsconfig) => ({
         preserveModulesRoot: "src",
         entryFileNames: `[name].${format === "esm" ? "mjs" : "js"}`,
     },
-    external: ["react", "contection", "@atproto/api", "hls.js", "clsx", "contection-top-layer"],
+    external: (id) => {
+        return id.includes("node_modules");
+    },
     plugins: [
         nodeResolve(),
         commonjs(),

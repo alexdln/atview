@@ -7,7 +7,7 @@ import { useDialogReducer } from "contection-top-layer";
 import { FullViewDialogProvider } from "@src/features/shared/stores/top-layer/stores";
 
 export interface ImageWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
-    uris: { img: string; webp?: string; fullUri?: string; alt: string }[];
+    uris: { img: string; webp?: string; fullUri?: string; alt?: string }[];
     index: number;
 }
 

@@ -16,7 +16,9 @@ const createConfig = (format, outputDir, tsconfig) => ({
         preserveModulesRoot: "src",
         entryFileNames: `[name].${format === "esm" ? "mjs" : "js"}`,
     },
-    external: ["@atproto/api", "@atproto/xrpc"],
+    external: (id) => {
+        return id.includes("node_modules");
+    },
     plugins: [
         nodeResolve(),
         commonjs(),
