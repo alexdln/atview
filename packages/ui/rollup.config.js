@@ -9,7 +9,7 @@ const sass = require("rollup-plugin-sass");
 const isProduction = process.env.NODE_ENV === "production";
 
 const createConfig = (format, outputDir, tsconfig) => ({
-    input: ["src/index.tsx"],
+    input: ["src/index.tsx", "src/index.client.tsx"],
     output: {
         dir: outputDir,
         format,

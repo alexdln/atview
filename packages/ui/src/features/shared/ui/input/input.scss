@@ -1,0 +1,16 @@
+.input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--cl-main-100);
+    background-color: color-mix(in srgb, var(--cl-main-900) 30%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cl-main-100) 40%, transparent);
+    border-radius: 0.5rem;
+    transition: border-color 0.2s ease-in-out;
+
+    &:hover {
+        border-color: color-mix(in srgb, var(--cl-main-100) 90%, transparent);
+    }
+}

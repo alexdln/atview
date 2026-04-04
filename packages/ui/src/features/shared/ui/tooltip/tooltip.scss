@@ -1,0 +1,34 @@
+.tooltip {
+    position: absolute;
+    box-sizing: border-box;
+    display: none;
+    width: max-content;
+    max-width: 200px;
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    background: color-mix(in srgb, var(--cl-main-900) 90%, transparent);
+    border: 2px solid var(--cl-main-800);
+    border-radius: 8px;
+    opacity: 0;
+    backdrop-filter: blur(2px);
+    transform: translateY(80%);
+    transition:
+        transform 0.2s allow-discrete,
+        opacity 0.2s allow-discrete;
+
+    &._bottom-start {
+        bottom: -4px;
+        left: -4px;
+    }
+
+    &._bottom-end {
+        right: -4px;
+        bottom: -4px;
+    }
+}
+
+.tooltip._visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(100%);
+}

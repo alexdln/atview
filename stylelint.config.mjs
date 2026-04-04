@@ -5,7 +5,17 @@ const stylelintConfig = {
         "prettier/prettier": true,
         "selector-class-pattern": null,
     },
-    ignoreFiles: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", "**/*.svg", "**/*.webp", "**/*.ico"],
+    ignoreFiles: [
+        "**/dist/**",
+        "**/node_modules/**",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.gif",
+        "**/*.svg",
+        "**/*.webp",
+        "**/*.ico",
+    ],
 };
 
 export default stylelintConfig;

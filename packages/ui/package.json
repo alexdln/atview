@@ -12,6 +12,12 @@
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.mjs"
     },
+    "./client": {
+      "types": "./dist/cjs/index.client.d.ts",
+      "import": "./dist/esm/index.client.mjs",
+      "require": "./dist/cjs/index.client.js",
+      "default": "./dist/esm/index.client.mjs"
+    },
     "./posts/blocks/image-wrapper": {
       "types": "./dist/cjs/features/posts/blocks/image-wrapper/index.d.ts",
       "import": "./dist/esm/features/posts/blocks/image-wrapper/index.mjs",
@@ -45,8 +51,8 @@
   "dependencies": {
     "@atproto/api": "0.19.3",
     "clsx": "2.1.1",
-    "contection": "2.3.0",
-    "contection-top-layer": "2.3.0",
+    "contection": "2.3.1",
+    "contection-top-layer": "2.3.1",
     "hls.js": "1.6.15",
     "multiformats": "13.4.2"
   },

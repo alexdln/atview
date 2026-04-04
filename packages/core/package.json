@@ -1,0 +1,48 @@
+{
+  "name": "@atview/core",
+  "version": "0.0.1",
+  "description": "Core features for atview",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "atproto",
+    "core"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexdln/atview.git"
+  },
+  "author": {
+    "name": "Alex Savelyev",
+    "email": "dev@alexdln.com",
+    "url": "https://github.com/alexdln/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@atproto/api": "0.19.3",
+    "multiformats": "13.4.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "29.0.2",
+    "@rollup/plugin-node-resolve": "16.0.3",
+    "@rollup/plugin-terser": "1.0.0",
+    "@rollup/plugin-typescript": "12.3.0",
+    "@types/node": "25.5.0",
+    "rollup": "4.59.0",
+    "tslib": "2.8.1",
+    "typescript": "5.9.3"
+  }
+}

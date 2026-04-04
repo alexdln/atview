@@ -1,0 +1,10 @@
+.atview-table-container {
+    margin: 1em 0;
+    overflow-x: auto;
+    border: 2px solid color-mix(in srgb, var(--cl-main-800) 30%, transparent);
+    border-radius: 8px;
+}
+
+.atview-table {
+    border-collapse: collapse;
+}

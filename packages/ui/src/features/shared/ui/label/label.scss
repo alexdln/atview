@@ -1,0 +1,23 @@
+.label {
+    display: block;
+}
+
+.label-text {
+    display: block;
+    padding-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cl-main-300);
+
+    .label:has(.input:focus-visible, .select:focus-visible, .textarea:focus-visible) & {
+        color: var(--cl-main-50);
+    }
+}
+
+.label-required {
+    &::after {
+        margin-left: 4px;
+        color: var(--cl-accent-500);
+        content: "*";
+    }
+}
