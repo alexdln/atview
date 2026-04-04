@@ -1,0 +1,8 @@
+.atview-iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 1em 0;
+    border: 2px solid color-mix(in srgb, var(--cl-main-800) 70%, transparent);
+    border-radius: 8px;
+}

@@ -1,0 +1,46 @@
+.copy-button {
+    position: relative;
+    padding: 6px;
+    font: inherit;
+    color: var(--cl-main-300);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: 6px;
+    transition:
+        color 0.2s,
+        background-color 0.2s;
+}
+
+.copy-button-success {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: transform 0.2s;
+}
+
+.copy-button-base {
+    transition: transform 0.2s;
+}
+
+.copy-button:hover {
+    color: var(--cl-main-50);
+}
+
+.copy-button:active,
+.copy-button._active {
+    color: var(--cl-success);
+
+    .copy-button-success {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .copy-button-base {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+}
+
+.copy-button-svg {
+    display: block;
+}

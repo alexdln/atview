@@ -1,0 +1,55 @@
+.code-section {
+    position: relative;
+    padding: 3px;
+    margin-block: 1.5em 1.75em;
+    background-color: var(--cl-main-900);
+    border: 1px solid var(--cl-main-800);
+    border-radius: 8px;
+}
+
+.code-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-family: var(--font-mono);
+    color: var(--cl-main-300);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.code-section-block._space-right {
+    padding-right: 3rem;
+}
+
+.code-section-header + .code-section-block {
+    margin-block: 0;
+    border: 0;
+}
+
+.code-section:hover .code-section-copy {
+    opacity: 0.9;
+}
+
+.code-section-copy.code-section-copy {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    background: color-mix(in srgb, var(--cl-main-900) 90%, transparent);
+    border: 2px solid var(--cl-main-800);
+    opacity: 0;
+    backdrop-filter: blur(2px);
+    transition:
+        opacity 0.2s,
+        color 0.2s,
+        background-color 0.2s;
+
+    &:hover,
+    &._active {
+        opacity: 1;
+    }
+}
+
+.code-section-filename {
+    font-family: var(--font-mono);
+}
