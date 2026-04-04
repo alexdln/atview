@@ -27,7 +27,7 @@ const renderInline = (node: AstInlineNode): string => {
 
     if (node.type === "mention") {
         const record = JSON.stringify({ did: node.did });
-        return `<span data-tag="link" data-record='${escapeAttr(record)}'>${node.children.map(renderInline).join("")}</span>`;
+        return `<span data-tag="mention" data-record='${escapeAttr(record)}'>${node.children.map(renderInline).join("")}</span>`;
     }
 
     const tag = INLINE_TAG_MAP[node.type];
@@ -63,6 +63,7 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
         }
 
         case "media": {
+            const text = block.text ? escapeHtml(block.text) : "";
             const record = JSON.stringify({
                 image: block.image,
                 alt: block.alt || "",
@@ -76,7 +77,7 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             const previewUrl = formatMediaUri(block.image as string, context.authorDid);
             const previewStyle = `--preview-url: url(${previewUrl});--aspect-ratio: ${String(ratio)}`;
 
-            return `<span data-tag="media" data-record='${escapeAttr(record)}' style='${previewStyle}'>&#8203;</span>`;
+            return `<span data-tag="media" data-record='${escapeAttr(record)}' style='${previewStyle}'>${text}</span>`;
         }
 
         case "unordered-list": {
@@ -101,7 +102,7 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
         case "website": {
             const record = JSON.stringify({ uri: block.uri });
             const label = block.title || block.uri;
-            return `<span data-tag="link" data-record='${escapeAttr(record)}'>${escapeHtml(label)}</span>`;
+            return `<span data-tag="website" data-record='${escapeAttr(record)}'>${escapeHtml(label)}</span>`;
         }
 
         case "table":

@@ -100,9 +100,12 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
             blocks.push({ type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) });
         } else if (feature.$type === "net.atview.richtext.facet#bsky-post") {
             blocks.push({ type: "bsky-post", uri: String(feature.uri || ""), cid: String(feature.cid || "") });
+        } else if (feature.$type === "net.atview.richtext.facet#website") {
+            blocks.push({ type: "website", uri: String(feature.uri || ""), title: String(feature.title || "") });
         } else if (feature.$type === "net.atview.richtext.facet#media") {
             blocks.push({
                 type: "media",
+                text,
                 image: (feature.image as string | Blob) || "",
                 alt: feature.altText ? String(feature.altText) : undefined,
                 width: feature.width ? String(feature.width) : undefined,
@@ -112,6 +115,12 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
             pendingInlines.push({
                 type: "link",
                 uri: String(feature.uri || ""),
+                children: [{ type: "text", value: text }],
+            });
+        } else if (feature.$type === "net.atview.richtext.facet#mention") {
+            pendingInlines.push({
+                type: "mention",
+                did: String(feature.did || ""),
                 children: [{ type: "text", value: text }],
             });
         } else if (feature.$type in INLINE_FACET_MAP) {
