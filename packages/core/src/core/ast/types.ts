@@ -82,6 +82,7 @@ export interface AstCodeBlockNode {
 
 export interface AstMediaNode {
     type: "media";
+    text?: string;
     image: string | Blob;
     alt?: string;
     width?: string;
@@ -106,6 +107,7 @@ export interface AstOrderedListNode {
 
 export interface AstBskyPostNode {
     type: "bsky-post";
+    text?: string;
     uri: string;
     cid: string;
 }

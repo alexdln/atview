@@ -59,25 +59,28 @@ const collectInline = (node: Node, objectStore: Map<string, File>): AstInlineNod
 
     const el = node as HTMLElement;
     const tag = el.dataset.tag;
+    const children = collectChildrenInline(el, objectStore);
 
     if (tag && tag in INLINE_TAG_MAP) {
-        const children = collectChildrenInline(el, objectStore);
         if (children.length === 0) return [];
         return [{ type: INLINE_TAG_MAP[tag], children } as AstInlineNode];
     }
 
-    if (tag === "link") {
+    if (tag === "mention") {
         const record = parseRecord(el.dataset.record || "", objectStore);
-        const children = collectChildrenInline(el, objectStore);
         if (children.length === 0) return [];
 
-        if (record?.did) {
-            return [{ type: "mention", did: String(record.did), children }];
-        }
+        return [{ type: "mention", did: String(record?.did || ""), children }];
+    }
+
+    if (tag === "link") {
+        const record = parseRecord(el.dataset.record || "", objectStore);
+        if (children.length === 0) return [];
+
         return [{ type: "link", uri: String(record?.uri || ""), children }];
     }
 
-    return collectChildrenInline(el, objectStore);
+    return children;
 };
 
 const collectChildrenInline = (el: Node, objectStore: Map<string, File>): AstInlineNode[] =>
@@ -85,7 +88,7 @@ const collectChildrenInline = (el: Node, objectStore: Map<string, File>): AstInl
 
 const extractInlineContent = (el: Node, objectStore: Map<string, File>): AstInlineNode[] => {
     const nodes = collectChildrenInline(el, objectStore);
-    return nodes.length > 0 ? nodes : [{ type: "text", value: "" }];
+    return nodes.length > 0 ? nodes : [];
 };
 
 const splitParagraphs = (nodes: AstInlineNode[]): AstBlockNode[] => {
@@ -99,7 +102,10 @@ const splitParagraphs = (nodes: AstInlineNode[]): AstBlockNode[] => {
                 blocks.push({ type: "paragraph", children: [...queueNodes, { type: "text", value: text }] });
                 queueNodes = [];
             });
-            queueNodes = [...queueNodes, { type: "text", value: textParagraphs[textParagraphs.length - 1] }];
+            const paragraphValue = textParagraphs[textParagraphs.length - 1];
+            if (paragraphValue) {
+                queueNodes = [...queueNodes, { type: "text", value: paragraphValue }];
+            }
         } else {
             queueNodes.push(node);
         }
@@ -137,7 +143,7 @@ export const htmlToAst = (html: HTMLElement, objectStore: Map<string, File>): As
 
     for (const child of Array.from(html.childNodes)) {
         if (child.nodeType === Node.TEXT_NODE) {
-            pendingNodes.push(child);
+            if (child.textContent) pendingNodes.push(child);
             continue;
         }
 
@@ -184,8 +190,11 @@ export const htmlToAst = (html: HTMLElement, objectStore: Map<string, File>): As
             });
         } else if (tag === "bsky-post") {
             blocks.push({ type: "bsky-post", uri: String(record?.uri || ""), cid: String(record?.cid || "") });
+        } else if (tag === "website") {
+            blocks.push({ type: "website", uri: String(record?.uri || ""), title: String(record?.title || "") });
         } else if (tag === "media") {
             blocks.push({
+                text: cleanText(el.textContent || ""),
                 type: "media",
                 image: record?.image || "",
                 alt: record?.alt ? String(record.alt) : undefined,

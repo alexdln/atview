@@ -41,7 +41,7 @@ const collectInline = (node: AstInlineNode, collector: Collector) => {
     } else if (node.type === "mention") {
         collector.facets.push({
             index: { byteStart, byteEnd },
-            features: [{ $type: "net.atview.richtext.facet#link", did: node.did }],
+            features: [{ $type: "net.atview.richtext.facet#mention", did: node.did }],
         });
     } else if (node.type in INLINE_TYPE_TO_FACET) {
         collector.facets.push({
@@ -113,7 +113,7 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
         }
 
         case "media": {
-            collector.text += "\u200B";
+            collector.text += block.text;
             const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
             const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
             collector.facets.push({
@@ -155,7 +155,7 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
         }
 
         case "bsky-post": {
-            collector.text += "\u200B";
+            collector.text += block.text;
             const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
             const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
             collector.facets.push({
@@ -165,8 +165,18 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
             break;
         }
 
+        case "website": {
+            collector.text += block.title || block.uri;
+            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
+            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
+            collector.facets.push({
+                index: { byteStart, byteEnd },
+                features: [{ $type: "net.atview.richtext.facet#website", uri: block.uri }],
+            });
+            break;
+        }
+
         case "horizontal-rule":
-        case "website":
         case "table":
         case "iframe":
             break;
