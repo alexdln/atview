@@ -77,54 +77,75 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
             pendingInlines = [];
         }
 
-        if (feature.$type in HEADING_LEVELS) {
-            blocks.push({
-                type: "heading",
-                level: HEADING_LEVELS[feature.$type],
-                children: [{ type: "text", value: text }],
-            });
-        } else if (feature.$type === "net.atview.richtext.facet#blockquote") {
-            blocks.push({
-                type: "blockquote",
-                children: [{ type: "text", value: text }],
-            });
-        } else if (feature.$type === "net.atview.richtext.facet#code-block") {
-            blocks.push({
-                type: "code-block",
-                text,
-                ...(feature.language ? { language: String(feature.language) } : {}),
-            });
-        } else if (feature.$type === "net.atview.richtext.facet#ul") {
-            blocks.push({ type: "unordered-list", items: parseListItems(text, /^- /) });
-        } else if (feature.$type === "net.atview.richtext.facet#ol") {
-            blocks.push({ type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) });
-        } else if (feature.$type === "net.atview.richtext.facet#bsky-post") {
-            blocks.push({ type: "bsky-post", uri: String(feature.uri || ""), cid: String(feature.cid || "") });
-        } else if (feature.$type === "net.atview.richtext.facet#website") {
-            blocks.push({ type: "website", uri: String(feature.uri || ""), title: String(feature.title || "") });
-        } else if (feature.$type === "net.atview.richtext.facet#media") {
-            blocks.push({
-                type: "media",
-                text,
-                image: (feature.image as string | Blob) || "",
-                alt: feature.altText ? String(feature.altText) : undefined,
-                width: feature.width ? String(feature.width) : undefined,
-                height: feature.height ? String(feature.height) : undefined,
-            });
-        } else if (feature.$type === "net.atview.richtext.facet#link") {
-            pendingInlines.push({
-                type: "link",
-                uri: String(feature.uri || ""),
-                children: [{ type: "text", value: text }],
-            });
-        } else if (feature.$type === "net.atview.richtext.facet#mention") {
-            pendingInlines.push({
-                type: "mention",
-                did: String(feature.did || ""),
-                children: [{ type: "text", value: text }],
-            });
-        } else if (feature.$type in INLINE_FACET_MAP) {
-            pendingInlines.push(wrapInline(INLINE_FACET_MAP[feature.$type], text));
+        switch (feature.$type) {
+            case "net.atview.richtext.facet#h2":
+            case "net.atview.richtext.facet#h3":
+            case "net.atview.richtext.facet#h4":
+            case "net.atview.richtext.facet#h5":
+            case "net.atview.richtext.facet#h6":
+                blocks.push({
+                    type: "heading",
+                    level: HEADING_LEVELS[feature.$type],
+                    children: [{ type: "text", value: text }],
+                });
+                break;
+            case "net.atview.richtext.facet#blockquote":
+                blocks.push({
+                    type: "blockquote",
+                    children: [{ type: "text", value: text }],
+                });
+                break;
+            case "net.atview.richtext.facet#code-block":
+                blocks.push({
+                    type: "code-block",
+                    text,
+                    ...(feature.language ? { language: String(feature.language) } : {}),
+                });
+                break;
+            case "net.atview.richtext.facet#ul":
+                blocks.push({ type: "unordered-list", items: parseListItems(text, /^- /) });
+                break;
+            case "net.atview.richtext.facet#ol":
+                blocks.push({ type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) });
+                break;
+            case "net.atview.richtext.facet#bsky-post":
+                blocks.push({ type: "bsky-post", uri: String(feature.uri || ""), cid: String(feature.cid || "") });
+                break;
+            case "net.atview.richtext.facet#website":
+                blocks.push({ type: "website", uri: String(feature.uri || ""), title: String(feature.title || "") });
+                break;
+            case "net.atview.richtext.facet#media":
+                blocks.push({
+                    type: "media",
+                    text,
+                    image: (feature.image as string | Blob) || "",
+                    alt: feature.altText ? String(feature.altText) : undefined,
+                    width: feature.width ? String(feature.width) : undefined,
+                    height: feature.height ? String(feature.height) : undefined,
+                });
+                break;
+            case "net.atview.richtext.facet#link":
+                pendingInlines.push({
+                    type: "link",
+                    uri: String(feature.uri || ""),
+                    children: [{ type: "text", value: text }],
+                });
+                break;
+            case "net.atview.richtext.facet#mention":
+                pendingInlines.push({
+                    type: "mention",
+                    did: String(feature.did || ""),
+                    children: [{ type: "text", value: text }],
+                });
+                break;
+            case "net.atview.richtext.facet#b":
+            case "net.atview.richtext.facet#i":
+            case "net.atview.richtext.facet#u":
+            case "net.atview.richtext.facet#code":
+                pendingInlines.push(wrapInline(INLINE_FACET_MAP[feature.$type], text));
+                break;
+            default:
+                break;
         }
 
         prevEndChar = endChar;

@@ -17,7 +17,6 @@ const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
 export const AtviewProvider = {
     dataToAst,
     astToData,
-    // dataToJsx,
     dataToHtml,
     htmlToData,
     formatDocument,
