@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { type Facet } from "@src/core/defs/document";
-import { astToHtml } from "@src/core/ast";
+import { astToAtviewHtml } from "@src/core/ast";
 import { AtviewProvider } from "@src/core/providers";
 
 import { normalizeAtviewData, parseHtmlToAst } from "../../helpers";
@@ -11,7 +11,7 @@ const expectFullRoundTrip = (
     context: { authorDid?: string } = {},
 ) => {
     const ast = AtviewProvider.dataToAst(initial);
-    const html = astToHtml(ast, context);
+    const html = astToAtviewHtml(ast, context);
     const astFromHtml = parseHtmlToAst(html);
     const data = AtviewProvider.astToData(astFromHtml);
     expect(normalizeAtviewData(data)).toEqual(normalizeAtviewData(initial));
@@ -61,7 +61,9 @@ describe("AtviewProvider data html pipeline", () => {
 describe("AtviewProvider.htmlToData", () => {
     test("mirrors astToData after parse", () => {
         const root = document.createElement("div");
-        root.innerHTML = astToHtml([{ type: "paragraph", children: [{ type: "text", value: "paragraph-sample" }] }]);
+        root.innerHTML = astToAtviewHtml([
+            { type: "paragraph", children: [{ type: "text", value: "paragraph-sample" }] },
+        ]);
         const via = AtviewProvider.htmlToData(root, new Map());
         const direct = AtviewProvider.astToData(parseHtmlToAst(root.innerHTML));
         expect(via.textContent).toBe(direct.textContent);

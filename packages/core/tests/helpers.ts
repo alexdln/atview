@@ -1,4 +1,4 @@
-import { htmlToAst } from "@src/core/ast";
+import { atviewHtmlToAst } from "@src/core/ast";
 import {
     type Facet,
     type LeafletDocument,
@@ -23,7 +23,7 @@ export const normalizeAtviewData = (data: { textContent: string; facets?: Facet[
 export const parseHtmlToAst = (html: string, objectStore = new Map<string, File>()) => {
     const root = document.createElement("div");
     root.innerHTML = html;
-    return htmlToAst(root, objectStore);
+    return atviewHtmlToAst(root, objectStore);
 };
 
 export const minimalStandardAtview = (textContent: string, facets: Facet[] = []): StandardDocumentAtview => ({

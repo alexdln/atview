@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { htmlToAst } from "@src/core/ast";
+import { atviewHtmlToAst } from "@src/core/ast";
 
 import { parseHtmlToAst } from "../helpers";
 
-describe("htmlToAst", () => {
+describe("atviewHtmlToAst", () => {
     test("plain text to paragraphs", () => {
         const root = document.createElement("div");
         root.textContent = "first-block\n\nsecond-block";
-        const ast = htmlToAst(root, new Map());
+        const ast = atviewHtmlToAst(root, new Map());
         expect(ast).toEqual([
             { type: "paragraph", children: [{ type: "text", value: "first-block" }] },
             { type: "paragraph", children: [{ type: "text", value: "second-block" }] },
@@ -73,9 +73,9 @@ describe("htmlToAst", () => {
     });
 });
 
-describe("htmlToAst edge document shapes", () => {
+describe("atviewHtmlToAst edge document shapes", () => {
     test("empty container", () => {
         const root = document.createElement("div");
-        expect(htmlToAst(root, new Map())).toEqual([]);
+        expect(atviewHtmlToAst(root, new Map())).toEqual([]);
     });
 });
