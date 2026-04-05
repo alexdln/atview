@@ -1,6 +1,10 @@
 import { AtUri } from "@atproto/api";
 
-import { type LeafletLinearDocument } from "@src/core/defs/document";
+import {
+    type LeafletDocument,
+    type StandardDocumentLeaflet,
+    type LeafletLinearDocument,
+} from "@src/core/defs/document";
 
 export interface BuildParams {
     pages: LeafletLinearDocument[];
@@ -24,7 +28,21 @@ const extractPlainText = (pages: LeafletLinearDocument[]) =>
         .filter(Boolean)
         .join("\n\n");
 
-export const formatDocument = (documentType: string, data: BuildParams, metadata: Metadata) => {
+export function formatDocument(
+    documentType: "pub.leaflet.document",
+    data: BuildParams,
+    metadata: Metadata,
+): LeafletDocument;
+export function formatDocument(
+    documentType: "site.standard.document",
+    data: BuildParams,
+    metadata: Metadata,
+): StandardDocumentLeaflet;
+export function formatDocument(
+    documentType: "pub.leaflet.document" | "site.standard.document",
+    data: BuildParams,
+    metadata: Metadata,
+) {
     if (documentType === "pub.leaflet.document") {
         return {
             $type: "pub.leaflet.document",
@@ -36,7 +54,7 @@ export const formatDocument = (documentType: string, data: BuildParams, metadata
             publishedAt: metadata.publishedAt,
             publication: new AtUri(metadata.publication).rkey,
             ...(metadata.coverImage ? { coverImage: metadata.coverImage } : {}),
-        } as const;
+        } as LeafletDocument;
     }
 
     return {
@@ -50,5 +68,5 @@ export const formatDocument = (documentType: string, data: BuildParams, metadata
         tags: metadata.tags,
         publishedAt: metadata.publishedAt,
         ...(metadata.coverImage ? { coverImage: metadata.coverImage } : {}),
-    } as const;
-};
+    } as StandardDocumentLeaflet;
+}
