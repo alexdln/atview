@@ -111,11 +111,11 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
     }
 };
 
-export interface AstToHtmlContext {
+export interface AstToAtviewHtmlContext {
     authorDid?: string;
 }
 
-export const astToHtml = (ast: AstDocument, context: AstToHtmlContext = {}): string => {
+export const astToAtviewHtml = (ast: AstDocument, context: AstToAtviewHtmlContext = {}): string => {
     const parts: string[] = [];
     let prevType: string | null = null;
 

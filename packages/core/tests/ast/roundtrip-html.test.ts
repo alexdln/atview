@@ -1,17 +1,17 @@
 import { describe, expect, test } from "vitest";
 
 import { type AstDocument } from "@src/core/ast/types";
-import { astToHtml } from "@src/core/ast";
+import { astToAtviewHtml } from "@src/core/ast";
 
 import { parseHtmlToAst } from "../helpers";
 
 const expectAstHtmlRoundTrip = (ast: AstDocument, context: { authorDid?: string } = {}) => {
-    const html = astToHtml(ast, context);
+    const html = astToAtviewHtml(ast, context);
     const again = parseHtmlToAst(html);
     expect(again).toEqual(ast);
 };
 
-describe("astToHtml then htmlToAst", () => {
+describe("astToAtviewHtml then atviewHtmlToAst", () => {
     test("paragraphs and inline marks", () => {
         expectAstHtmlRoundTrip([
             { type: "paragraph", children: [{ type: "text", value: "opening" }] },
@@ -90,8 +90,8 @@ describe("astToHtml then htmlToAst", () => {
             { type: "paragraph", children: [{ type: "text", value: "second-paragraph" }] },
             { type: "code-block", text: "code-sample" },
         ];
-        const once = parseHtmlToAst(astToHtml(ast));
-        const twice = parseHtmlToAst(astToHtml(once));
+        const once = parseHtmlToAst(astToAtviewHtml(ast));
+        const twice = parseHtmlToAst(astToAtviewHtml(once));
         expect(twice).toEqual(once);
     });
 });

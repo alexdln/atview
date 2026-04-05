@@ -124,7 +124,7 @@ const parseListItems = (text: string, marker: RegExp): AstListItem[] =>
         .filter(Boolean)
         .map((item) => ({ children: [{ type: "text" as const, value: item }] }));
 
-export const htmlToAst = (html: HTMLElement, objectStore: Map<string, File>): AstDocument => {
+export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string, File>): AstDocument => {
     const blocks: AstBlockNode[] = [];
     let pendingNodes: Node[] = [];
 
@@ -141,7 +141,7 @@ export const htmlToAst = (html: HTMLElement, objectStore: Map<string, File>): As
         blocks.push(...splitParagraphs(inlines));
     };
 
-    for (const child of Array.from(html.childNodes)) {
+    for (const child of Array.from(atviewHtml.childNodes)) {
         if (child.nodeType === Node.TEXT_NODE) {
             if (child.textContent) pendingNodes.push(child);
             continue;

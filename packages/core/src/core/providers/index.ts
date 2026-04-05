@@ -1,5 +1,5 @@
 import { type Document, isLeafletMain, isStandardSiteAtview, isStandardSiteLeaflet } from "@src/core/defs/document";
-import { type AstToHtmlContext } from "@src/core/ast/ast-to-html";
+import { type AstToAtviewHtmlContext } from "@src/core/ast/ast-to-atview-html";
 
 import { ENGINES } from "../data/engines";
 import { LeafletProvider } from "./leaflet";
@@ -12,7 +12,7 @@ export * from "./pckt";
 
 export const getDocumentHtml = <T extends Document>(
     post: T,
-    context: AstToHtmlContext,
+    context: AstToAtviewHtmlContext,
 ): { html: string; engine: keyof typeof ENGINES } | null => {
     if (isStandardSiteAtview(post)) {
         return {

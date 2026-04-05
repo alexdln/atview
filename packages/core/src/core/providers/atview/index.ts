@@ -1,23 +1,22 @@
 import { type Facet } from "@src/core/defs/document";
 
-import { astToHtml, htmlToAst, type AstToHtmlContext } from "../../ast";
+import { astToAtviewHtml, atviewHtmlToAst, type AstToAtviewHtmlContext } from "../../ast";
 import { dataToAst } from "./data-to-ast";
 import { astToData } from "./ast-to-data";
 import { formatDocument } from "./format-document";
 import { processBlobs } from "./process-blobs";
 
-const dataToHtml = (data: { textContent: string; facets?: Facet[] }, context: AstToHtmlContext) =>
-    astToHtml(dataToAst(data), context);
+const dataToHtml = (data: { textContent: string; facets?: Facet[] }, context: AstToAtviewHtmlContext) =>
+    astToAtviewHtml(dataToAst(data), context);
 
 const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
     engine: "facets" as const,
-    ...astToData(htmlToAst(html, objectStore)),
+    ...astToData(atviewHtmlToAst(html, objectStore)),
 });
 
 export const AtviewProvider = {
     dataToAst,
     astToData,
-    // dataToJsx,
     dataToHtml,
     htmlToData,
     formatDocument,
