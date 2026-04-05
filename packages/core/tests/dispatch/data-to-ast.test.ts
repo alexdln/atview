@@ -39,6 +39,6 @@ describe("dataToAst dispatch", () => {
     test("standard site pckt unwraps items", () => {
         const items = [{ $type: "blog.pckt.block.text" as const, plaintext: "pckt-paragraph" }];
         const doc = minimalStandardPckt(items);
-        expect(dataToAst(doc)).toEqual(PcktProvider.dataToAst(items));
+        expect(dataToAst(doc)).toEqual(PcktProvider.dataToAst({ items }));
     });
 });

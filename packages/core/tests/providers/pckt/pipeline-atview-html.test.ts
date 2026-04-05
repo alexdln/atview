@@ -36,7 +36,9 @@ describe("Pckt REST-style document html", () => {
 
 describe("PcktProvider.atviewHtmlToData", () => {
     test("mirrors astToData after parse", () => {
-        const ast = PcktProvider.dataToAst([{ $type: "blog.pckt.block.text", plaintext: "paragraph-sample" }]);
+        const ast = PcktProvider.dataToAst({
+            items: [{ $type: "blog.pckt.block.text", plaintext: "paragraph-sample" }],
+        });
         const root = document.createElement("div");
         root.innerHTML = astToAtviewHtml(ast);
         const via = PcktProvider.atviewHtmlToData(root, new Map());

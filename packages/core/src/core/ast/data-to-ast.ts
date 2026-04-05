@@ -20,7 +20,7 @@ export const dataToAst = <T extends Document>(post: T) => {
         return LeafletProvider.dataToAst({ pages: post.content.pages });
     }
     if (isStandardSitePckt(post)) {
-        return PcktProvider.dataToAst(post.content.items);
+        return PcktProvider.dataToAst({ items: post.content.items });
     }
     return null;
 };

@@ -7,7 +7,7 @@ import { formatDocument } from "./format-document";
 import { processBlobs } from "./process-blobs";
 
 const dataToAtviewHtml = (data: { items: PcktBlock[] }, context: AstToAtviewHtmlContext) =>
-    astToAtviewHtml(dataToAst(data.items), context);
+    astToAtviewHtml(dataToAst(data), context);
 
 const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
     engine: "pckt_blocks" as const,

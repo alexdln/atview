@@ -131,12 +131,15 @@ const blockToAst = (block: PcktBlock): AstBlockNode | null => {
             const url = block.url || block.attrs?.url || "";
             return { type: "iframe", url };
 
+        case "blog.pckt.block.codeBlock":
+            return { type: "code-block", text: block.plaintext, language: block.language };
+
         default:
             return null;
     }
 };
 
-export const dataToAst = (items: PcktBlock[]): AstDocument => {
+export const dataToAst = ({ items }: { items: PcktBlock[] }): AstDocument => {
     const blocks: AstBlockNode[] = [];
     for (const item of items) {
         const node = blockToAst(item);
