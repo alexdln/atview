@@ -6,10 +6,10 @@ import { astToData } from "./ast-to-data";
 import { formatDocument } from "./format-document";
 import { processBlobs } from "./process-blobs";
 
-const dataToHtml = (data: { textContent: string; facets?: Facet[] }, context: AstToAtviewHtmlContext) =>
+const dataToAtviewHtml = (data: { textContent: string; facets?: Facet[] }, context: AstToAtviewHtmlContext) =>
     astToAtviewHtml(dataToAst(data), context);
 
-const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
+const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
     engine: "facets" as const,
     ...astToData(atviewHtmlToAst(html, objectStore)),
 });
@@ -17,8 +17,8 @@ const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
 export const AtviewProvider = {
     dataToAst,
     astToData,
-    dataToHtml,
-    htmlToData,
+    dataToAtviewHtml,
+    atviewHtmlToData,
     formatDocument,
     processBlobs,
 };

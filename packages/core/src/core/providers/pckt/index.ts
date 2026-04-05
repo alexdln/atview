@@ -6,10 +6,10 @@ import { dataToAst } from "./data-to-ast";
 import { formatDocument } from "./format-document";
 import { processBlobs } from "./process-blobs";
 
-const dataToHtml = (data: { items: PcktBlock[] }, context: AstToAtviewHtmlContext) =>
+const dataToAtviewHtml = (data: { items: PcktBlock[] }, context: AstToAtviewHtmlContext) =>
     astToAtviewHtml(dataToAst(data.items), context);
 
-const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
+const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
     engine: "pckt_blocks" as const,
     ...astToData(atviewHtmlToAst(html, objectStore)),
 });
@@ -17,8 +17,8 @@ const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
 export const PcktProvider = {
     dataToAst,
     astToData,
-    dataToHtml,
-    htmlToData,
+    dataToAtviewHtml,
+    atviewHtmlToData,
     formatDocument,
     processBlobs,
 };

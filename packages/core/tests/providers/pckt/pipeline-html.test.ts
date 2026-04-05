@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { astToAtviewHtml } from "@src/core/ast";
-import { getDocumentHtml, PcktProvider } from "@src/core/providers";
+import { getDocumentAtviewHtml, PcktProvider } from "@src/core/providers";
 
-import { minimalStandardPckt, parseHtmlToAst } from "../../helpers";
+import { minimalStandardPckt, parseAtviewHtmlToAst } from "../../helpers";
 
-describe("PcktProvider dataToHtml", () => {
+describe("PcktProvider dataToAtviewHtml", () => {
     test("renders paragraph from items", () => {
-        const html = PcktProvider.dataToHtml(
+        const html = PcktProvider.dataToAtviewHtml(
             { items: [{ $type: "blog.pckt.block.text", plaintext: "pipeline-body" }] },
             {},
         );
@@ -15,32 +15,32 @@ describe("PcktProvider dataToHtml", () => {
     });
 
     test("empty items yields empty document html", () => {
-        const html = PcktProvider.dataToHtml({ items: [] }, {});
+        const html = PcktProvider.dataToAtviewHtml({ items: [] }, {});
         expect(html.trim()).toBe("");
     });
 });
 
 describe("Pckt REST-style document html", () => {
-    test("getDocumentHtml aligns with dataToHtml", () => {
+    test("getDocumentAtviewHtml aligns with dataToAtviewHtml", () => {
         const items = [
             { $type: "blog.pckt.block.heading" as const, plaintext: "Title", level: 2 },
             { $type: "blog.pckt.block.text" as const, plaintext: "Under heading" },
         ];
         const doc = minimalStandardPckt(items);
-        const fromApi = getDocumentHtml(doc, {});
-        const direct = PcktProvider.dataToHtml({ items }, {});
+        const fromApi = getDocumentAtviewHtml(doc, {});
+        const direct = PcktProvider.dataToAtviewHtml({ items }, {});
         expect(fromApi?.engine).toBe("pckt_blocks");
         expect(fromApi?.html).toBe(direct);
     });
 });
 
-describe("PcktProvider.htmlToData", () => {
+describe("PcktProvider.atviewHtmlToData", () => {
     test("mirrors astToData after parse", () => {
         const ast = PcktProvider.dataToAst([{ $type: "blog.pckt.block.text", plaintext: "paragraph-sample" }]);
         const root = document.createElement("div");
         root.innerHTML = astToAtviewHtml(ast);
-        const via = PcktProvider.htmlToData(root, new Map());
-        const direct = PcktProvider.astToData(parseHtmlToAst(root.innerHTML));
+        const via = PcktProvider.atviewHtmlToData(root, new Map());
+        const direct = PcktProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.items).toEqual(direct.items);
         expect(via.engine).toBe("pckt_blocks");
     });

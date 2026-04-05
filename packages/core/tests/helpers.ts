@@ -21,7 +21,7 @@ export const normalizeAtviewData = (data: { textContent: string; facets?: Facet[
     facets: sortFacets(data.facets ?? []),
 });
 
-export const parseHtmlToAst = (html: string, objectStore = new Map<string, File>()) => {
+export const parseAtviewHtmlToAst = (html: string, objectStore = new Map<string, File>()) => {
     const root = document.createElement("div");
     root.innerHTML = html;
     return atviewHtmlToAst(root, objectStore);

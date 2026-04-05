@@ -3,11 +3,11 @@ import { describe, expect, test } from "vitest";
 import { type AstDocument } from "@src/core/ast/types";
 import { astToAtviewHtml } from "@src/core/ast";
 
-import { parseHtmlToAst } from "../helpers";
+import { parseAtviewHtmlToAst } from "../helpers";
 
 const expectAstHtmlRoundTrip = (ast: AstDocument, context: { authorDid?: string } = {}) => {
     const html = astToAtviewHtml(ast, context);
-    const again = parseHtmlToAst(html);
+    const again = parseAtviewHtmlToAst(html);
     expect(again).toEqual(ast);
 };
 
@@ -90,8 +90,8 @@ describe("astToAtviewHtml then atviewHtmlToAst", () => {
             { type: "paragraph", children: [{ type: "text", value: "second-paragraph" }] },
             { type: "code-block", text: "code-sample" },
         ];
-        const once = parseHtmlToAst(astToAtviewHtml(ast));
-        const twice = parseHtmlToAst(astToAtviewHtml(once));
+        const once = parseAtviewHtmlToAst(astToAtviewHtml(ast));
+        const twice = parseAtviewHtmlToAst(astToAtviewHtml(once));
         expect(twice).toEqual(once);
     });
 });
