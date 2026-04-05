@@ -6,6 +6,7 @@ import {
     type LeafletLinearDocument,
     type StandardDocumentAtview,
     type StandardDocumentLeaflet,
+    type StandardDocumentPckt,
 } from "@src/core/defs/document";
 
 export const sortFacets = (facets: Facet[]) =>
@@ -52,6 +53,19 @@ export const minimalStandardLeaflet = (
     tags: [],
     publishedAt: "2026-01-01T00:00:00.000Z",
     content: { $type: "pub.leaflet.content", pages },
+});
+
+export const minimalStandardPckt = (items: StandardDocumentPckt["content"]["items"]): StandardDocumentPckt => ({
+    $type: "site.standard.document",
+    site: "at://did:plc:test",
+    path: "/example-path",
+    title: "example-title",
+    description: "example-description",
+    coverImage: "bafycover",
+    textContent: "derived",
+    tags: [],
+    publishedAt: "2026-01-01T00:00:00.000Z",
+    content: { $type: "blog.pckt.content", items },
 });
 
 export const minimalLeafletMain = (pages: LeafletDocument["pages"]): LeafletDocument => ({

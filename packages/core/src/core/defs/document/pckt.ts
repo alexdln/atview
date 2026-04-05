@@ -44,6 +44,12 @@ export interface PcktBlockquoteBlock {
     content: PcktBlock[];
 }
 
+export interface PcktCodeBlock {
+    $type: "blog.pckt.block.codeBlock";
+    plaintext: string;
+    language?: string;
+}
+
 export interface PcktHorizontalRuleBlock {
     $type: "blog.pckt.block.horizontalRule";
 }
@@ -93,6 +99,7 @@ export type PcktBlock =
     | PcktWebsiteBlock
     | PcktBlueskyEmbedBlock
     | PcktBlockquoteBlock
+    | PcktCodeBlock
     | PcktHorizontalRuleBlock
     | PcktOrderedListBlock
     | PcktBulletListBlock

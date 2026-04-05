@@ -1,9 +1,16 @@
-import { type Document, isLeafletMain, isStandardSiteAtview, isStandardSiteLeaflet } from "@src/core/defs/document";
+import {
+    type Document,
+    isLeafletMain,
+    isStandardSiteAtview,
+    isStandardSiteLeaflet,
+    isStandardSitePckt,
+} from "@src/core/defs/document";
 import { type AstToAtviewHtmlContext } from "@src/core/ast/ast-to-atview-html";
 
 import { ENGINES } from "../data/engines";
 import { LeafletProvider } from "./leaflet";
 import { AtviewProvider } from "./atview";
+import { PcktProvider } from "./pckt";
 
 export * from "../data/engines";
 export * from "./atview";
@@ -27,6 +34,12 @@ export const getDocumentHtml = <T extends Document>(
         return {
             html: LeafletProvider.dataToHtml({ pages: post.content.pages }, context),
             engine: "leaflet_blocks",
+        };
+    }
+    if (isStandardSitePckt(post)) {
+        return {
+            html: PcktProvider.dataToHtml({ items: post.content.items }, context),
+            engine: "pckt_blocks",
         };
     }
     return null;

@@ -1,5 +1,6 @@
 import { LeafletProvider } from "../providers/leaflet";
 import { AtviewProvider } from "../providers/atview";
+import { PcktProvider } from "../providers/pckt";
 
 export const ENGINES = {
     leaflet_blocks: {
@@ -22,5 +23,12 @@ export const ENGINES = {
         publicationType: "site.standard.publication",
         wysiwygEngine: "facets",
         provider: AtviewProvider,
+    },
+    pckt_blocks: {
+        label: "site.standard.document [Pckt/Blocks]",
+        documentType: "site.standard.document",
+        publicationType: "site.standard.publication",
+        wysiwygEngine: "blocks",
+        provider: PcktProvider,
     },
 } as const;

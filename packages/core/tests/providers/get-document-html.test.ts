@@ -3,7 +3,13 @@ import { describe, expect, test } from "vitest";
 import { type LeafletBlock, type LeafletDocumentBlock } from "@src/core/defs/document";
 import { getDocumentHtml } from "@src/core/providers";
 
-import { linearPage, minimalLeafletMain, minimalStandardAtview, minimalStandardLeaflet } from "../helpers";
+import {
+    linearPage,
+    minimalLeafletMain,
+    minimalStandardAtview,
+    minimalStandardLeaflet,
+    minimalStandardPckt,
+} from "../helpers";
 
 const wrap = (block: LeafletBlock) =>
     ({
@@ -31,23 +37,11 @@ describe("getDocumentHtml", () => {
         expect(result?.engine).toBe("leaflet_blocks");
     });
 
-    test("pckt returns null", () => {
-        expect(
-            getDocumentHtml(
-                {
-                    $type: "site.standard.document",
-                    site: "at://did:plc:example",
-                    path: "/example-path",
-                    title: "example-title",
-                    description: "example-description",
-                    coverImage: "bafy",
-                    textContent: "",
-                    tags: [],
-                    publishedAt: "2026-01-01T00:00:00.000Z",
-                    content: { $type: "blog.pckt.content", items: [] },
-                },
-                {},
-            ),
-        ).toBeNull();
+    test("pckt blocks engine", () => {
+        const doc = minimalStandardPckt([{ $type: "blog.pckt.block.text", plaintext: "example-body" }]);
+        const result = getDocumentHtml(doc, {});
+        expect(result?.engine).toBe("pckt_blocks");
+        expect(result?.html).toBeDefined();
+        expect(result?.html).toContain("example-body");
     });
 });
