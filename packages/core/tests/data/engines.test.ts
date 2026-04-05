@@ -7,5 +7,6 @@ describe("ENGINES", () => {
         expect(ENGINES.atview_facets.provider.dataToAst).toBeDefined();
         expect(ENGINES.leaflet_blocks.provider.dataToAst).toBeDefined();
         expect(ENGINES.leaflet_blocks_old.provider.dataToAst).toBeDefined();
+        expect(ENGINES.pckt_blocks.provider.dataToAst).toBeDefined();
     });
 });

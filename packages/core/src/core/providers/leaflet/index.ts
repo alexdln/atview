@@ -6,10 +6,10 @@ import { astToData } from "./ast-to-data";
 import { formatDocument } from "./format-document";
 import { processBlobs } from "./process-blobs";
 
-const dataToHtml = (data: { pages: LeafletLinearDocument[] }, context: AstToAtviewHtmlContext) =>
+const dataToAtviewHtml = (data: { pages: LeafletLinearDocument[] }, context: AstToAtviewHtmlContext) =>
     astToAtviewHtml(dataToAst(data), context);
 
-const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
+const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
     engine: "blocks" as const,
     ...astToData(atviewHtmlToAst(html, objectStore)),
 });
@@ -17,8 +17,8 @@ const htmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
 export const LeafletProvider = {
     dataToAst,
     astToData,
-    dataToHtml,
-    htmlToData,
+    dataToAtviewHtml,
+    atviewHtmlToData,
     formatDocument,
     processBlobs,
 };

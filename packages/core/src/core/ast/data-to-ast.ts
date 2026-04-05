@@ -1,5 +1,13 @@
-import { isStandardSiteAtview, isLeafletMain, isStandardSiteLeaflet, type Document } from "../defs/document";
-import { AtviewProvider, LeafletProvider } from "../providers";
+import {
+    isStandardSiteAtview,
+    isLeafletMain,
+    isStandardSiteLeaflet,
+    isStandardSitePckt,
+    type Document,
+} from "../defs/document";
+import { AtviewProvider } from "../providers/atview";
+import { LeafletProvider } from "../providers/leaflet";
+import { PcktProvider } from "../providers/pckt";
 
 export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSiteAtview(post)) {
@@ -10,6 +18,9 @@ export const dataToAst = <T extends Document>(post: T) => {
     }
     if (isStandardSiteLeaflet(post)) {
         return LeafletProvider.dataToAst({ pages: post.content.pages });
+    }
+    if (isStandardSitePckt(post)) {
+        return PcktProvider.dataToAst({ items: post.content.items });
     }
     return null;
 };

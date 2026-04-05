@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
 import { astToAtviewHtml, type AstDocument } from "@src/core/ast";
-import { AtviewProvider, LeafletProvider } from "@src/core/providers";
+import { AtviewProvider, LeafletProvider, PcktProvider } from "@src/core/providers";
 
-import { parseHtmlToAst } from "../helpers";
+import { parseAtviewHtmlToAst } from "../helpers";
 
 describe("shared html between providers", () => {
     test("parsed ast roundtrips through atview and leaflet separately", () => {
@@ -11,9 +11,10 @@ describe("shared html between providers", () => {
             { type: "paragraph", children: [{ type: "text", value: "shared-paragraph-body" }] },
             { type: "code-block", text: "shared-code-block" },
         ];
-        const parsed = parseHtmlToAst(astToAtviewHtml(ast));
+        const parsed = parseAtviewHtmlToAst(astToAtviewHtml(ast));
         expect(AtviewProvider.dataToAst(AtviewProvider.astToData(parsed))).toEqual(parsed);
         expect(LeafletProvider.dataToAst(LeafletProvider.astToData(parsed))).toEqual(parsed);
+        expect(PcktProvider.dataToAst(PcktProvider.astToData(parsed))).toEqual(parsed);
     });
 });
 
@@ -31,5 +32,11 @@ describe("ast through each provider roundtrip", () => {
         ];
         const back = LeafletProvider.dataToAst(LeafletProvider.astToData(ast));
         expect(back).toEqual(ast);
+    });
+
+    test("pckt", () => {
+        const ast: AstDocument = [{ type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] }];
+        const data = PcktProvider.astToData(ast);
+        expect(PcktProvider.dataToAst(data)).toEqual(ast);
     });
 });

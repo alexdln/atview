@@ -21,15 +21,15 @@ describe("PcktProvider.dataToAst", () => {
                 ],
             },
         ];
-        const ast = PcktProvider.dataToAst(items);
+        const ast = PcktProvider.dataToAst({ items });
         expect(ast[0]?.type).toBe("paragraph");
     });
 
     test("empty text skipped", () => {
-        expect(PcktProvider.dataToAst([{ $type: "blog.pckt.block.text", plaintext: "" }])).toEqual([]);
+        expect(PcktProvider.dataToAst({ items: [{ $type: "blog.pckt.block.text", plaintext: "" }] })).toEqual([]);
     });
 
-    test("heading image website embed", () => {
+    test("heading image website embed code-block", () => {
         const items: PcktBlock[] = [
             { $type: "blog.pckt.block.heading", plaintext: "Sample heading", level: 3 },
             {
@@ -49,9 +49,14 @@ describe("PcktProvider.dataToAst", () => {
                 $type: "blog.pckt.block.blueskyEmbed",
                 postRef: { uri: "at://example/post", cid: "example-cid" },
             },
+            {
+                $type: "blog.pckt.block.codeBlock",
+                plaintext: "code-block-text",
+                language: "javascript",
+            },
         ];
-        const ast = PcktProvider.dataToAst(items);
-        expect(ast.map((b) => b.type)).toEqual(["heading", "media", "website", "bsky-post"]);
+        const ast = PcktProvider.dataToAst({ items });
+        expect(ast.map((b) => b.type)).toEqual(["heading", "media", "website", "bsky-post", "code-block"]);
     });
 
     test("blockquote horizontal rule", () => {
@@ -62,7 +67,7 @@ describe("PcktProvider.dataToAst", () => {
             },
             { $type: "blog.pckt.block.horizontalRule" },
         ];
-        const ast = PcktProvider.dataToAst(items);
+        const ast = PcktProvider.dataToAst({ items });
         expect(ast.map((b) => b.type)).toEqual(["blockquote", "horizontal-rule"]);
     });
 
@@ -83,7 +88,7 @@ describe("PcktProvider.dataToAst", () => {
                 content: [listItem("bullet-item-text")],
             },
         ];
-        const ast = PcktProvider.dataToAst(items);
+        const ast = PcktProvider.dataToAst({ items });
         expect(ast[0]?.type).toBe("ordered-list");
         expect(ast[1]?.type).toBe("unordered-list");
     });
@@ -107,7 +112,7 @@ describe("PcktProvider.dataToAst", () => {
             },
             { $type: "blog.pckt.block.iframe", url: "https://embed.example/frame" },
         ];
-        const ast = PcktProvider.dataToAst(items);
+        const ast = PcktProvider.dataToAst({ items });
         expect(ast[0]?.type).toBe("table");
         expect(ast[1]?.type).toBe("iframe");
     });
@@ -128,11 +133,11 @@ describe("PcktProvider.dataToAst", () => {
                 ],
             },
         ];
-        const ast = PcktProvider.dataToAst(items);
+        const ast = PcktProvider.dataToAst({ items });
         expect(ast[0]?.type).toBe("paragraph");
     });
 
     test("unknown block omitted", () => {
-        expect(PcktProvider.dataToAst([{ $type: "blog.pckt.block.unknown" } as never])).toEqual([]);
+        expect(PcktProvider.dataToAst({ items: [{ $type: "blog.pckt.block.unknown" } as never] })).toEqual([]);
     });
 });

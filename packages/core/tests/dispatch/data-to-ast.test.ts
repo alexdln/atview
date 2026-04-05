@@ -1,10 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { type StandardDocumentPckt, type LeafletBlock, type LeafletDocumentBlock } from "@src/core/defs/document";
+import { type LeafletBlock, type LeafletDocumentBlock } from "@src/core/defs/document";
 import { dataToAst } from "@src/core/ast/data-to-ast";
-import { AtviewProvider, LeafletProvider } from "@src/core/providers";
+import { AtviewProvider, LeafletProvider, PcktProvider } from "@src/core/providers";
 
-import { linearPage, minimalLeafletMain, minimalStandardAtview, minimalStandardLeaflet } from "../helpers";
+import {
+    linearPage,
+    minimalLeafletMain,
+    minimalStandardAtview,
+    minimalStandardLeaflet,
+    minimalStandardPckt,
+} from "../helpers";
 
 const wrap = (block: LeafletBlock) =>
     ({
@@ -30,19 +36,9 @@ describe("dataToAst dispatch", () => {
         expect(dataToAst(doc)).toEqual(LeafletProvider.dataToAst({ pages }));
     });
 
-    test("pckt standard document returns null", () => {
-        const pckt: StandardDocumentPckt = {
-            $type: "site.standard.document",
-            site: "at://did:plc:example",
-            path: "/example-path",
-            title: "example-title",
-            description: "example-description",
-            coverImage: "bafy",
-            textContent: "",
-            tags: [],
-            publishedAt: "2026-01-01T00:00:00.000Z",
-            content: { $type: "blog.pckt.content", items: [] },
-        };
-        expect(dataToAst(pckt)).toBeNull();
+    test("standard site pckt unwraps items", () => {
+        const items = [{ $type: "blog.pckt.block.text" as const, plaintext: "pckt-paragraph" }];
+        const doc = minimalStandardPckt(items);
+        expect(dataToAst(doc)).toEqual(PcktProvider.dataToAst({ items }));
     });
 });
