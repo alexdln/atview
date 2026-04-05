@@ -1,6 +1,7 @@
 import { type Agent } from "@atproto/api";
 
 import { type LeafletLinearDocument } from "@src/core/defs/document";
+import { readBlobAsUint8Array } from "@src/core/utils/blob";
 
 export const processBlobs = async (
     pages: LeafletLinearDocument[],
@@ -19,7 +20,7 @@ export const processBlobs = async (
 
             if (!file) continue;
 
-            const bytes = new Uint8Array(await file.arrayBuffer());
+            const bytes = await readBlobAsUint8Array(file);
             const { data } = await agent.com.atproto.repo.uploadBlob(bytes, { encoding: file.type });
             const { mimeType, ref, size } = data.blob;
             block.image = { mimeType, ref, size, $type: "blob" };
