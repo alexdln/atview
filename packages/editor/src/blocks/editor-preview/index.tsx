@@ -18,13 +18,7 @@ export const EditorPreview = <Engine extends WysiwygEngine>({
     const [data, setData] = useState<WysiwygData<Engine> | null>(null);
 
     useEffect(() => {
-        previewUpdateRef.current = (data: WysiwygData<Engine>) => {
-            if (data.engine === "facets") {
-                setData(data);
-            } else {
-                setData(data);
-            }
-        };
+        previewUpdateRef.current = setData;
         return () => {
             previewUpdateRef.current = null;
         };

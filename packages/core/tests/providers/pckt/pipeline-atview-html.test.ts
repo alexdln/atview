@@ -29,8 +29,7 @@ describe("Pckt REST-style document html", () => {
         const doc = minimalStandardPckt(items);
         const fromApi = getDocumentAtviewHtml(doc, {});
         const direct = PcktProvider.dataToAtviewHtml({ items }, {});
-        expect(fromApi?.engine).toBe("pckt_blocks");
-        expect(fromApi?.html).toBe(direct);
+        expect(fromApi).toBe(direct);
     });
 });
 
@@ -44,6 +43,5 @@ describe("PcktProvider.atviewHtmlToData", () => {
         const via = PcktProvider.atviewHtmlToData(root, new Map());
         const direct = PcktProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.items).toEqual(direct.items);
-        expect(via.engine).toBe("pckt_blocks");
     });
 });

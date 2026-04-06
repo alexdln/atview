@@ -10,7 +10,6 @@ const dataToAtviewHtml = (data: { pages: LeafletLinearDocument[] }, context: Ast
     astToAtviewHtml(dataToAst(data), context);
 
 const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
-    engine: "blocks" as const,
     ...astToData(atviewHtmlToAst(html, objectStore)),
 });
 

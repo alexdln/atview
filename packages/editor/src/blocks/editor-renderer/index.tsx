@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { LeafletProvider, AtviewProvider } from "@atview/core";
+import { LeafletProvider, AtviewProvider, PcktProvider } from "@atview/core";
 import { astToJsx } from "@atview/docs";
 
 import { WysiwygData } from "../wysiwyg";
@@ -12,10 +12,12 @@ export interface EditorRendererProps {
 
 export const EditorRenderer: React.FC<EditorRendererProps> = ({ data, authorDid = "" }) => {
     const jsx = useMemo(() => {
-        if (data.engine === "facets") {
+        if (data.engine === "atview_facets") {
             return astToJsx(AtviewProvider.dataToAst(data), { authorDid }).jsx;
-        } else {
+        } else if (data.engine === "leaflet_blocks" || data.engine === "leaflet_blocks_old") {
             return astToJsx(LeafletProvider.dataToAst(data), { authorDid }).jsx;
+        } else if (data.engine === "pckt_blocks") {
+            return astToJsx(PcktProvider.dataToAst(data), { authorDid }).jsx;
         }
     }, [data, authorDid]);
 

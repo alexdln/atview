@@ -20,18 +20,22 @@ import {
     processImportImages,
 } from "./html";
 import { unwrapInvalidRecursive, fixTextNodes, checkRangeFormatting, resetSelectionFormatting } from "./utils";
-import { AtviewProvider, LeafletProvider } from "@atview/core";
+import { AtviewProvider, ENGINES, LeafletProvider, PcktProvider } from "@atview/core";
 
 import "./wysiwyg.scss";
 
-export type WysiwygEngine = "facets" | "blocks";
-export type WysiwygData<Engine extends WysiwygEngine = WysiwygEngine> = Engine extends "facets"
-    ? ReturnType<typeof AtviewProvider.atviewHtmlToData>
-    : ReturnType<typeof LeafletProvider.atviewHtmlToData>;
+export type WysiwygEngine = keyof typeof ENGINES;
+export type WysiwygData<Engine extends WysiwygEngine = WysiwygEngine> = Engine extends "leaflet_blocks"
+    ? ReturnType<typeof LeafletProvider.atviewHtmlToData> & { engine: "leaflet_blocks" }
+    : Engine extends "leaflet_blocks_old"
+      ? ReturnType<typeof LeafletProvider.atviewHtmlToData> & { engine: "leaflet_blocks_old" }
+      : Engine extends "pckt_blocks"
+        ? ReturnType<typeof PcktProvider.atviewHtmlToData> & { engine: "pckt_blocks" }
+        : ReturnType<typeof AtviewProvider.atviewHtmlToData> & { engine: "atview_facets" };
 
 export type EditorRef<Engine extends WysiwygEngine = WysiwygEngine> = {
     getData: () => WysiwygData<Engine>;
-    getHtml: () => string;
+    getValue: () => string;
     node: HTMLDivElement;
 };
 
@@ -50,7 +54,7 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
     className,
     defaultValue,
     objectStore,
-    engine = "facets" as Engine,
+    engine = "atview_facets" as Engine,
 }: WysiwygProps<Engine>) => {
     const [, setLinkDialog] = useDialogReducer(EditorLinkDialogProvider);
     const [, setPostDialog] = useDialogReducer(EditorPostDialogProvider);
@@ -63,10 +67,13 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
     const wysiwygRef = useRef<HTMLDivElement>(null);
 
     const atviewHtmlToData = useMemo(() => {
-        if (engine === "facets") {
-            return AtviewProvider.atviewHtmlToData;
+        if (engine === "pckt_blocks") {
+            return PcktProvider.atviewHtmlToData;
         }
-        return LeafletProvider.atviewHtmlToData;
+        if (engine === "leaflet_blocks" || engine === "leaflet_blocks_old") {
+            return LeafletProvider.atviewHtmlToData;
+        }
+        return AtviewProvider.atviewHtmlToData;
     }, [engine]);
 
     const normalizeEditor = useCallback(() => {
@@ -272,8 +279,9 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
 
     const submitHandler = useCallback(() => {
         if (!wysiwygRef.current || !onPreviewUpdate) return;
-        onPreviewUpdate(atviewHtmlToData(wysiwygRef.current, objectStoreRef.current) as WysiwygData<Engine>);
-    }, [onPreviewUpdate, atviewHtmlToData]);
+        const data = atviewHtmlToData(wysiwygRef.current, objectStoreRef.current);
+        onPreviewUpdate({ ...data, engine } as WysiwygData<Engine>);
+    }, [onPreviewUpdate, atviewHtmlToData, engine]);
 
     const enterHandler = useCallback(
         (e: KeyboardEvent) => {
@@ -300,8 +308,11 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
     useEffect(() => {
         if (editorRef) {
             editorRef.current = {
-                getData: () => atviewHtmlToData(wysiwygRef.current!, objectStoreRef.current) as WysiwygData<Engine>,
-                getHtml: () => wysiwygRef.current!.innerHTML,
+                getData: () => {
+                    const data = atviewHtmlToData(wysiwygRef.current!, objectStoreRef.current);
+                    return { ...data, engine } as WysiwygData<Engine>;
+                },
+                getValue: () => wysiwygRef.current!.innerHTML,
                 node: wysiwygRef.current!,
             };
         }

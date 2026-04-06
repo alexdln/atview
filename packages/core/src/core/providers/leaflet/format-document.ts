@@ -29,19 +29,24 @@ const extractPlainText = (pages: LeafletLinearDocument[]) =>
         .join("\n\n");
 
 export function formatDocument(
-    documentType: "pub.leaflet.document",
     data: BuildParams,
     metadata: Metadata,
+    documentType: "pub.leaflet.document",
 ): LeafletDocument;
 export function formatDocument(
-    documentType: "site.standard.document",
     data: BuildParams,
     metadata: Metadata,
+    documentType: "site.standard.document",
 ): StandardDocumentLeaflet;
 export function formatDocument(
-    documentType: "pub.leaflet.document" | "site.standard.document",
     data: BuildParams,
     metadata: Metadata,
+    documentType: "site.standard.document" | "pub.leaflet.document",
+): StandardDocumentLeaflet | LeafletDocument;
+export function formatDocument(
+    data: BuildParams,
+    metadata: Metadata,
+    documentType: "pub.leaflet.document" | "site.standard.document",
 ) {
     if (documentType === "pub.leaflet.document") {
         return {

@@ -13,6 +13,5 @@ describe("LeafletProvider data html pipeline", () => {
         const via = LeafletProvider.atviewHtmlToData(root, new Map());
         const direct = LeafletProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.pages).toEqual(direct.pages);
-        expect(via.engine).toBe("blocks");
     });
 });

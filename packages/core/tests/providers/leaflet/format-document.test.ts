@@ -26,7 +26,7 @@ describe("LeafletProvider.formatDocument", () => {
     };
 
     test("pub.leaflet.document branch", () => {
-        const doc = LeafletProvider.formatDocument("pub.leaflet.document", { pages }, meta);
+        const doc = LeafletProvider.formatDocument({ pages }, meta, "pub.leaflet.document");
         expect(doc.$type).toBe("pub.leaflet.document");
         expect(doc).toMatchObject({
             pages,
@@ -40,7 +40,7 @@ describe("LeafletProvider.formatDocument", () => {
     });
 
     test("site.standard.document branch", () => {
-        const doc = LeafletProvider.formatDocument("site.standard.document", { pages }, meta);
+        const doc = LeafletProvider.formatDocument({ pages }, meta, "site.standard.document");
         expect(doc.$type).toBe("site.standard.document");
         expect(doc.content.$type).toBe("pub.leaflet.content");
         expect(doc.textContent).toBe("page-plaintext");

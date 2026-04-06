@@ -21,27 +21,24 @@ describe("getDocumentAtviewHtml", () => {
     test("atview facets engine", () => {
         const doc = minimalStandardAtview("example-body", []);
         const result = getDocumentAtviewHtml(doc, {});
-        expect(result?.engine).toBe("atview_facets");
-        expect(result?.html).toBeDefined();
+        expect(result).toBe("example-body");
     });
 
     test("leaflet main old engine", () => {
         const pages = [linearPage([wrap({ $type: "pub.leaflet.blocks.text", plaintext: "example-body" })])];
         const result = getDocumentAtviewHtml(minimalLeafletMain(pages), {});
-        expect(result?.engine).toBe("leaflet_blocks_old");
+        expect(result).toBe("example-body");
     });
 
     test("standard leaflet engine", () => {
         const pages = [linearPage([wrap({ $type: "pub.leaflet.blocks.text", plaintext: "example-body" })])];
         const result = getDocumentAtviewHtml(minimalStandardLeaflet(pages), {});
-        expect(result?.engine).toBe("leaflet_blocks");
+        expect(result).toBe("example-body");
     });
 
     test("pckt blocks engine", () => {
         const doc = minimalStandardPckt([{ $type: "blog.pckt.block.text", plaintext: "example-body" }]);
         const result = getDocumentAtviewHtml(doc, {});
-        expect(result?.engine).toBe("pckt_blocks");
-        expect(result?.html).toBeDefined();
-        expect(result?.html).toContain("example-body");
+        expect(result).toBe("example-body");
     });
 });
