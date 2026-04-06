@@ -69,6 +69,12 @@ const textContentWithBr = (node: Node): string => {
 const collectChildrenInline = (parent: Node, context: RenderContext): AstInlineNode[] =>
     Array.from(parent.childNodes).flatMap((child) => walkInline(child, context));
 
+/** Non-paragraph blocks use plain text only (no bold/link structure). */
+const plainInlineNodesFromElement = (element: HTMLElement): AstInlineNode[] => {
+    const value = cleanText(element.textContent || "");
+    return value ? [{ type: "text", value }] : [];
+};
+
 const inlineFromClonedNodes = (nodes: Node[], context: RenderContext): AstInlineNode[] => {
     if (nodes.length === 0) return [];
     return collectChildrenInline(cloneNodesIntoWrapper(context.document, nodes), context);
@@ -178,7 +184,14 @@ const parseListItem = (listItemElement: HTMLLIElement, context: RenderContext): 
         inlineBuffer.push(child);
     }
 
-    const children = inlineFromClonedNodes(inlineBuffer, context);
+    const children =
+        inlineBuffer.length === 0
+            ? []
+            : (() => {
+                  const container = cloneNodesIntoWrapper(context.document, inlineBuffer);
+                  const value = cleanText(container.textContent || "");
+                  return value ? [{ type: "text" as const, value }] : [];
+              })();
 
     const item: AstListItem = { children };
     if (nestedList) {
@@ -260,14 +273,14 @@ const walkFlow = async (
             blocks.push({
                 type: "heading",
                 level: headingLevel,
-                children: collectChildrenInline(element, context),
+                children: plainInlineNodesFromElement(element),
             });
             continue;
         }
 
         if (tag === "blockquote") {
             flushPendingIntoBlocks();
-            blocks.push({ type: "blockquote", children: collectChildrenInline(element, context) });
+            blocks.push({ type: "blockquote", children: plainInlineNodesFromElement(element) });
             continue;
         }
 

@@ -133,8 +133,10 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
                 if (!selection || selection.rangeCount === 0 || !isSelectionInsideEditor(wysiwygRef.current)) return;
 
                 const range = selection.getRangeAt(0);
-                const processedHtml = await processImportImages(html, objectStoreRef.current, { origin });
-                const fragment = buildPseudoFragmentFromHtml(processedHtml, document);
+                const processedHtml = await processImportImages(html, objectStoreRef.current, {
+                    origin: window.location.origin,
+                });
+                const fragment = await buildPseudoFragmentFromHtml(processedHtml, document);
                 const nodes = Array.from(fragment.childNodes);
                 if (!nodes.length) return;
 
@@ -169,7 +171,7 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
         if (!wysiwygRef.current) return;
         if (!isSelectionInsideEditor(wysiwygRef.current)) return;
 
-        const payload = buildHtmlFromSelection(wysiwygRef.current);
+        const payload = buildHtmlFromSelection(wysiwygRef.current, objectStoreRef.current);
         if (!payload) return;
 
         e.preventDefault();
@@ -262,7 +264,7 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
 
                     const articleHtml = extractArticleHtml(html);
                     const processedHtml = await processImportImages(articleHtml, objectStoreRef.current, { origin });
-                    insertHtmlToEditor(processedHtml, wysiwygRef.current, normalizeEditor, { origin });
+                    await insertHtmlToEditor(processedHtml, wysiwygRef.current, normalizeEditor);
                 },
             },
         });

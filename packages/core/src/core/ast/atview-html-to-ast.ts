@@ -12,6 +12,7 @@ const BLOCK_TAGS = new Set([
     "ul",
     "ol",
     "bsky-post",
+    "website",
     "media",
 ]);
 
@@ -83,6 +84,12 @@ const collectInline = (node: Node, objectStore: Map<string, File>): AstInlineNod
 const collectChildrenInline = (el: Node, objectStore: Map<string, File>): AstInlineNode[] =>
     Array.from(el.childNodes).flatMap((child) => collectInline(child, objectStore));
 
+/** Block-level spans (heading, blockquote, etc.) store plain text only; ignore nested pseudo-inline markup. */
+const plainInlineNodesFromBlockElement = (el: HTMLElement): AstInlineNode[] => {
+    const value = cleanText(el.textContent || "");
+    return value ? [{ type: "text", value }] : [];
+};
+
 const parseListItems = (text: string, marker: RegExp): AstListItem[] =>
     text
         .split("\n")
@@ -128,12 +135,12 @@ export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string
             blocks.push({
                 type: "heading",
                 level: HEADING_TAG_TO_LEVEL[tag],
-                children: collectChildrenInline(el, objectStore),
+                children: plainInlineNodesFromBlockElement(el),
             });
         } else if (tag === "blockquote") {
             blocks.push({
                 type: "blockquote",
-                children: collectChildrenInline(el, objectStore),
+                children: plainInlineNodesFromBlockElement(el),
             });
         } else if (tag === "code-block") {
             blocks.push({
