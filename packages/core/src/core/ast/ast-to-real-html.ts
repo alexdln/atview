@@ -1,5 +1,5 @@
-import { formatMediaUri } from "../utils";
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "./types";
+import { formatMediaUri } from "../utils";
 
 const escapeHtml = (text: string) =>
     text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -42,15 +42,15 @@ const plainInline = (node: AstInlineNode): string => {
     }
 };
 
-const plainListItem = (item: AstListItem): string => {
+const plainListItem = (item: AstListItem, context: { authorDid?: string }): string => {
     let t = item.children.map(plainInline).join("");
     if (item.sublist) {
-        t += `\n${plainBlock(item.sublist)}`;
+        t += `\n${plainBlock(item.sublist, context)}`;
     }
     return t;
 };
 
-const plainBlock = (block: AstBlockNode): string => {
+const plainBlock = (block: AstBlockNode, context: { authorDid?: string }): string => {
     switch (block.type) {
         case "paragraph":
             return block.children.map(plainInline).join("");
@@ -62,12 +62,12 @@ const plainBlock = (block: AstBlockNode): string => {
             return block.text;
         case "media":
             const image = block.image;
-            return block.text || formatMediaUri(image);
+            return block.text || formatMediaUri(image, { authorDid: context.authorDid, thumbnail: true });
         case "unordered-list":
-            return block.items.map((i) => `- ${plainListItem(i)}`).join("\n");
+            return block.items.map((i) => `- ${plainListItem(i, context)}`).join("\n");
         case "ordered-list": {
             const start = block.start ?? 1;
-            return block.items.map((i, j) => `${String(start + j)}. ${plainListItem(i)}`).join("\n");
+            return block.items.map((i, j) => `${String(start + j)}. ${plainListItem(i, context)}`).join("\n");
         }
         case "bsky-post":
             return block.text || "";
@@ -83,7 +83,11 @@ const plainBlock = (block: AstBlockNode): string => {
     }
 };
 
-export const astToPlainText = (ast: AstDocument): string => ast.map(plainBlock).filter(Boolean).join("\n\n");
+export const astToPlainText = (ast: AstDocument, context: { authorDid?: string }): string =>
+    ast
+        .map((block) => plainBlock(block, context))
+        .filter(Boolean)
+        .join("\n\n");
 
 const renderListItem = (item: AstListItem): string => {
     const inline = escapeHtml(item.children.map(plainInline).join(""));

@@ -103,7 +103,7 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             const h = Number(block.height) || 1;
             const ratio = Math.round((w / h) * 100) / 100;
 
-            const previewUrl = formatMediaUri(block.image as string, context.authorDid);
+            const previewUrl = formatMediaUri(block.image as string, { ...context, thumbnail: true });
             const previewStyle = `--preview-url: url(${previewUrl});--aspect-ratio: ${String(ratio)}`;
 
             return `<span data-tag="media" data-type="block" data-record='${escapeAttr(record)}' style='${previewStyle}'>${text}</span>`;

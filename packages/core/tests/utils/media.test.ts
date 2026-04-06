@@ -19,7 +19,7 @@ describe("formatMediaUri", () => {
             mimeType: "image/png",
             size: 10,
         };
-        expect(formatMediaUri(blob, "did:plc:author")).toContain("did:plc:author");
-        expect(formatMediaUri(blob, "did:plc:author")).toContain("bafyref");
+        expect(formatMediaUri(blob, { authorDid: "did:plc:author" })).toContain("did:plc:author");
+        expect(formatMediaUri(blob, { authorDid: "did:plc:author" })).toContain("bafyref");
     });
 });

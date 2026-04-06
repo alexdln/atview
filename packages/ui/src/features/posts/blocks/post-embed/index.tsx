@@ -136,7 +136,7 @@ const ImagesEmbed: React.FC<{ embed: AppBskyEmbedImages.Main; did: string; class
 }) => {
     const multiple = embed.images.length > 1;
     const uris = embed.images.map(({ image, alt }) => ({
-        img: `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${formatLink(image.ref)}@jpeg`,
+        img: `https://cdn.bsky.app/img/feed_thumbnail/plain/${did}/${formatLink(image.ref)}@jpeg`,
         fullUri: `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${formatLink(image.ref)}@jpeg`,
         alt,
     }));
