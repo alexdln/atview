@@ -18,14 +18,19 @@ export interface MediaProps {
 }
 
 export const Media: React.FC<MediaProps> = ({ alt, caption, image, fullUri, width, height, authorDid, className }) => {
-    const uri = formatMediaUri(image, authorDid);
+    const fullUriFinal = fullUri || formatMediaUri(image, { authorDid });
+    const thumbnailUri = formatMediaUri(image, { authorDid, thumbnail: true });
 
     return (
-        <ImageWrapper uris={[{ img: uri, alt, fullUri }]} index={0} className={clsx("atview-media", className)}>
+        <ImageWrapper
+            uris={[{ img: thumbnailUri, alt, fullUri: fullUriFinal }]}
+            index={0}
+            className={clsx("atview-media", className)}
+        >
             <figure className="atview-media-figure">
                 <div className="atview-media-image-container">
-                    <img className="atview-media-image-bg" src={uri} alt="" width={width} height={height} />
-                    <img className="atview-media-image" src={uri} alt={alt} width={width} height={height} />
+                    <img className="atview-media-image-bg" src={thumbnailUri} alt="" width={width} height={height} />
+                    <img className="atview-media-image" src={thumbnailUri} alt={alt} width={width} height={height} />
                 </div>
                 {caption && <figcaption className="atview-media-caption">{caption}</figcaption>}
             </figure>

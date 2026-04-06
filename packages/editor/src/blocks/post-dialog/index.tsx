@@ -3,7 +3,7 @@
 import React, { useCallback } from "react";
 import { useDialogReducer, useDialogStore } from "contection-top-layer";
 import { Input, Post } from "@atview/ui";
-import { useQueryLoader } from "@atview/docs";
+import { useQueryLoader } from "@atview/docs/client";
 
 import { EditorDialog } from "../editor-dialog";
 import { EditorPostDialogProvider } from "../../stores/top-layer/store";

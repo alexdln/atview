@@ -37,7 +37,7 @@ export const isSelectionInsideEditor = (editor: HTMLDivElement) => {
     return Boolean(startEl && endEl && editor.contains(startEl) && editor.contains(endEl));
 };
 
-export const buildHtmlFromSelection = (editor: HTMLDivElement, objectStore: Map<string, File>) => {
+export const buildHtmlFromSelection = (editor: HTMLDivElement, objectStore: Map<string, File>, authorDid?: string) => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0 || !isSelectionInsideEditor(editor)) return null;
 
@@ -49,7 +49,7 @@ export const buildHtmlFromSelection = (editor: HTMLDivElement, objectStore: Map<
     const html = astToRealHtml(ast);
     return {
         html,
-        text: astToPlainText(ast),
+        text: astToPlainText(ast, { authorDid: authorDid }),
     };
 };
 

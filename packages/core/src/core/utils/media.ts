@@ -27,13 +27,20 @@ export const formatLinkKey = (
     return link.toString();
 };
 
-export function formatMediaUri(image: Blob | string, authorDid?: string): string;
-export function formatMediaUri(image?: undefined, authorDid?: string): undefined;
-export function formatMediaUri(image?: Blob | string, authorDid?: string): string | undefined;
-export function formatMediaUri(image?: Blob | string, authorDid?: string) {
+type MediaUriContext = {
+    authorDid?: string;
+    format?: "jpeg" | "png" | "webp";
+    thumbnail?: boolean;
+};
+
+export function formatMediaUri(image: Blob | string, context?: MediaUriContext): string;
+export function formatMediaUri(image?: undefined, context?: MediaUriContext): undefined;
+export function formatMediaUri(image?: Blob | string, context?: MediaUriContext): string | undefined;
+export function formatMediaUri(image?: Blob | string, context?: MediaUriContext) {
+    const { authorDid, format = "jpeg", thumbnail } = context ?? {};
     const uri =
         !image || typeof image === "string"
             ? image
-            : `https://cdn.bsky.app/img/feed_thumbnail/plain/${authorDid}/${formatLinkKey(image.ref)}`;
+            : `https://cdn.bsky.app/img/${thumbnail ? "feed_thumbnail" : "feed_fullsize"}/plain/${authorDid}/${formatLinkKey(image.ref)}@${format}`;
     return uri;
 }
