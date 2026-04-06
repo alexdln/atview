@@ -10,7 +10,6 @@ const dataToAtviewHtml = (data: { textContent: string; facets?: Facet[] }, conte
     astToAtviewHtml(dataToAst(data), context);
 
 const atviewHtmlToData = (html: HTMLElement, objectStore: Map<string, File>) => ({
-    engine: "facets" as const,
     ...astToData(atviewHtmlToAst(html, objectStore)),
 });
 

@@ -68,6 +68,5 @@ describe("AtviewProvider.atviewHtmlToData", () => {
         const direct = AtviewProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.textContent).toBe(direct.textContent);
         expect(via.facets).toEqual(direct.facets);
-        expect(via.engine).toBe("facets");
     });
 });
