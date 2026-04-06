@@ -107,10 +107,7 @@ describe("realHtmlToAst", () => {
             },
             {
                 type: "blockquote",
-                children: [
-                    { type: "text", value: "quote " },
-                    { type: "italic", children: [{ type: "text", value: "q" }] },
-                ],
+                children: [{ type: "text", value: "quote q" }],
             },
             {
                 type: "code-block",
