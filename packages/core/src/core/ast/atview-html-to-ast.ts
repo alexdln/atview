@@ -1,6 +1,5 @@
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "./types";
-
-const ZERO_WIDTH_SPACES = /\u200B/g;
+import { cleanText, cloneNodesIntoWrapper, splitParagraphs } from "./document-text";
 
 const BLOCK_TAGS = new Set([
     "h2",
@@ -13,6 +12,7 @@ const BLOCK_TAGS = new Set([
     "ul",
     "ol",
     "bsky-post",
+    "website",
     "media",
 ]);
 
@@ -46,8 +46,6 @@ const parseRecord = (raw: string, objectStore: Map<string, File>) => {
         return raw;
     }
 };
-
-const cleanText = (text: string) => text.replace(ZERO_WIDTH_SPACES, "").replace(/\r/g, "");
 
 const collectInline = (node: Node, objectStore: Map<string, File>): AstInlineNode[] => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -86,35 +84,10 @@ const collectInline = (node: Node, objectStore: Map<string, File>): AstInlineNod
 const collectChildrenInline = (el: Node, objectStore: Map<string, File>): AstInlineNode[] =>
     Array.from(el.childNodes).flatMap((child) => collectInline(child, objectStore));
 
-const extractInlineContent = (el: Node, objectStore: Map<string, File>): AstInlineNode[] => {
-    const nodes = collectChildrenInline(el, objectStore);
-    return nodes.length > 0 ? nodes : [];
-};
-
-const splitParagraphs = (nodes: AstInlineNode[]): AstBlockNode[] => {
-    const blocks: AstBlockNode[] = [];
-    let queueNodes: AstInlineNode[] = [];
-    nodes.forEach((node) => {
-        if (node.type === "text" && node.value.includes("\n\n")) {
-            const textParagraphs = node.value.split("\n\n");
-            textParagraphs.slice(0, -1).forEach((text) => {
-                if (!text.trim()) return;
-                blocks.push({ type: "paragraph", children: [...queueNodes, { type: "text", value: text }] });
-                queueNodes = [];
-            });
-            const paragraphValue = textParagraphs[textParagraphs.length - 1];
-            if (paragraphValue) {
-                queueNodes = [...queueNodes, { type: "text", value: paragraphValue }];
-            }
-        } else {
-            queueNodes.push(node);
-        }
-    });
-
-    if (queueNodes.length > 0) {
-        blocks.push({ type: "paragraph", children: queueNodes });
-    }
-    return blocks;
+/** Block-level spans (heading, blockquote, etc.) store plain text only; ignore nested pseudo-inline markup. */
+const plainInlineNodesFromBlockElement = (el: HTMLElement): AstInlineNode[] => {
+    const value = cleanText(el.textContent || "");
+    return value ? [{ type: "text", value }] : [];
 };
 
 const parseListItems = (text: string, marker: RegExp): AstListItem[] =>
@@ -131,10 +104,7 @@ export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string
     const flushText = () => {
         if (pendingNodes.length === 0) return;
 
-        const container = document.createElement("div");
-        for (const node of pendingNodes) {
-            container.appendChild(node.cloneNode(true));
-        }
+        const container = cloneNodesIntoWrapper(document, pendingNodes);
         pendingNodes = [];
 
         const inlines = collectChildrenInline(container, objectStore);
@@ -165,12 +135,12 @@ export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string
             blocks.push({
                 type: "heading",
                 level: HEADING_TAG_TO_LEVEL[tag],
-                children: extractInlineContent(el, objectStore),
+                children: plainInlineNodesFromBlockElement(el),
             });
         } else if (tag === "blockquote") {
             blocks.push({
                 type: "blockquote",
-                children: extractInlineContent(el, objectStore),
+                children: plainInlineNodesFromBlockElement(el),
             });
         } else if (tag === "code-block") {
             blocks.push({
