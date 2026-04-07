@@ -114,6 +114,9 @@ const blockToAst = (block: LeafletBlock): AstBlockNode | null => {
         case "pub.leaflet.blocks.website":
             return { type: "website", uri: block.src, title: block.title };
 
+        case "pub.leaflet.blocks.iframe":
+            return { type: "iframe", url: block.url, height: block.height };
+
         default:
             return null;
     }

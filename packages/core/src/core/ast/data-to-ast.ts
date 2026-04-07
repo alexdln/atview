@@ -8,6 +8,7 @@ import {
 import { AtviewProvider } from "../providers/atview";
 import { LeafletProvider } from "../providers/leaflet";
 import { PcktProvider } from "../providers/pckt";
+import { SiteStandardProvider } from "../providers/site-standard";
 
 export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSiteAtview(post)) {
@@ -22,5 +23,5 @@ export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSitePckt(post)) {
         return PcktProvider.dataToAst({ items: post.content.items });
     }
-    return null;
+    return SiteStandardProvider.dataToAst({ textContent: post.textContent });
 };

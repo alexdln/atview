@@ -47,7 +47,7 @@ describe("LeafletProvider.astToData", () => {
         expect(pages[0]?.blocks.length).toBe(4);
     });
 
-    test("bsky website hr drops table iframe", () => {
+    test("bsky website hr iframe drops table", () => {
         const ast: AstDocument = [
             { type: "bsky-post", uri: "at://example/post", cid: "example-cid" },
             { type: "website", uri: "https://example.com", title: "website-title" },
@@ -56,6 +56,6 @@ describe("LeafletProvider.astToData", () => {
             { type: "iframe", url: "https://embed.example/frame" },
         ];
         const { pages } = LeafletProvider.astToData(ast);
-        expect(pages[0]?.blocks.length).toBe(3);
+        expect(pages[0]?.blocks.length).toBe(4);
     });
 });

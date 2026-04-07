@@ -4,6 +4,7 @@ import {
     type LeafletDocument,
     type LeafletDocumentBlock,
     type LeafletLinearDocument,
+    type StandardDocument,
     type StandardDocumentAtview,
     type StandardDocumentLeaflet,
     type StandardDocumentPckt,
@@ -26,6 +27,18 @@ export const parseAtviewHtmlToAst = (html: string, objectStore = new Map<string,
     root.innerHTML = html;
     return atviewHtmlToAst(root, objectStore);
 };
+
+export const minimalStandardPlain = (textContent: string): StandardDocument => ({
+    $type: "site.standard.document",
+    site: "at://did:plc:test",
+    path: "/example-path",
+    title: "example-title",
+    description: "example-description",
+    coverImage: "bafycover",
+    textContent,
+    tags: [],
+    publishedAt: "2026-01-01T00:00:00.000Z",
+});
 
 export const minimalStandardAtview = (textContent: string, facets: Facet[] = []): StandardDocumentAtview => ({
     $type: "site.standard.document",

@@ -20,7 +20,7 @@ import {
     processImportImages,
 } from "./html";
 import { unwrapInvalidRecursive, fixTextNodes, checkRangeFormatting, resetSelectionFormatting } from "./utils";
-import { AtviewProvider, ENGINES, LeafletProvider, PcktProvider } from "@atview/core";
+import { AtviewProvider, ENGINES, LeafletProvider, PcktProvider, SiteStandardProvider } from "@atview/core";
 
 import "./wysiwyg.scss";
 
@@ -31,7 +31,9 @@ export type WysiwygData<Engine extends WysiwygEngine = WysiwygEngine> = Engine e
       ? ReturnType<typeof LeafletProvider.atviewHtmlToData> & { engine: "leaflet_blocks_old" }
       : Engine extends "pckt_blocks"
         ? ReturnType<typeof PcktProvider.atviewHtmlToData> & { engine: "pckt_blocks" }
-        : ReturnType<typeof AtviewProvider.atviewHtmlToData> & { engine: "atview_facets" };
+        : Engine extends "atview_facets"
+          ? ReturnType<typeof AtviewProvider.atviewHtmlToData> & { engine: "atview_facets" }
+          : ReturnType<typeof SiteStandardProvider.atviewHtmlToData> & { engine: "site_standard_plain" };
 
 export type EditorRef<Engine extends WysiwygEngine = WysiwygEngine> = {
     getData: () => WysiwygData<Engine>;
@@ -73,7 +75,10 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
         if (engine === "leaflet_blocks" || engine === "leaflet_blocks_old") {
             return LeafletProvider.atviewHtmlToData;
         }
-        return AtviewProvider.atviewHtmlToData;
+        if (engine === "atview_facets") {
+            return AtviewProvider.atviewHtmlToData;
+        }
+        return SiteStandardProvider.atviewHtmlToData;
     }, [engine]);
 
     const normalizeEditor = useCallback(() => {

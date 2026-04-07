@@ -9,6 +9,7 @@ export interface MentionProps {
 
 export const Mention: React.FC<MentionProps> = ({ did, ...props }) => (
     <LinkBase
+        underline
         variant="accent"
         target="_blank"
         rel="noopener noreferrer"
