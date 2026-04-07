@@ -10,11 +10,13 @@ import { type AstToAtviewHtmlContext } from "@src/core/ast/ast-to-atview-html";
 import { LeafletProvider } from "./leaflet";
 import { AtviewProvider } from "./atview";
 import { PcktProvider } from "./pckt";
+import { SiteStandardProvider } from "./site-standard";
 
 export * from "../data/engines";
 export * from "./atview";
 export * from "./leaflet";
 export * from "./pckt";
+export * from "./site-standard";
 
 export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstToAtviewHtmlContext): string => {
     if (isStandardSiteAtview(post)) {
@@ -29,5 +31,5 @@ export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstT
     if (isStandardSitePckt(post)) {
         return PcktProvider.dataToAtviewHtml({ items: post.content.items }, context);
     }
-    return "";
+    return SiteStandardProvider.dataToAtviewHtml({ textContent: post.textContent }, context);
 };

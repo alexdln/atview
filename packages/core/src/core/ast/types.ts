@@ -140,6 +140,7 @@ export interface AstTableNode {
 export interface AstIframeNode {
     type: "iframe";
     url: string;
+    height?: number;
 }
 
 export type AstBlockNode =

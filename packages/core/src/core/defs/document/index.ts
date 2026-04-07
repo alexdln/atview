@@ -17,7 +17,7 @@ export * from "./leaflet";
 export * from "./pckt";
 export * from "./shared";
 
-export type Document = LeafletDocument | StandardDocumentExtended;
+export type Document = LeafletDocument | StandardDocumentExtended | StandardDocument;
 
 export const isLeafletContent = (data: Record["value"]): data is LeafletContent => data.$type === "pub.leaflet.content";
 

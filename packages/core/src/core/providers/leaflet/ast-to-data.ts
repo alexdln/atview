@@ -149,8 +149,14 @@ const blockToLeaflet = (block: AstBlockNode): LeafletDocumentBlock | null => {
                 ...(block.title ? { title: block.title } : {}),
             });
 
-        case "table":
         case "iframe":
+            return wrap({
+                $type: "pub.leaflet.blocks.iframe",
+                url: block.url,
+                ...(block.height ? { height: block.height } : {}),
+            });
+
+        case "table":
             return null;
     }
 };

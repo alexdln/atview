@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { type LeafletBlock, type LeafletDocumentBlock } from "@src/core/defs/document";
 import { dataToAst } from "@src/core/ast/data-to-ast";
-import { AtviewProvider, LeafletProvider, PcktProvider } from "@src/core/providers";
+import { AtviewProvider, LeafletProvider, PcktProvider, SiteStandardProvider } from "@src/core/providers";
 
 import {
     linearPage,
@@ -10,6 +10,7 @@ import {
     minimalStandardAtview,
     minimalStandardLeaflet,
     minimalStandardPckt,
+    minimalStandardPlain,
 } from "../helpers";
 
 const wrap = (block: LeafletBlock) =>
@@ -40,5 +41,10 @@ describe("dataToAst dispatch", () => {
         const items = [{ $type: "blog.pckt.block.text" as const, plaintext: "pckt-paragraph" }];
         const doc = minimalStandardPckt(items);
         expect(dataToAst(doc)).toEqual(PcktProvider.dataToAst({ items }));
+    });
+
+    test("plain site.standard.document uses textContent as one paragraph", () => {
+        const doc = minimalStandardPlain("a\n\nb");
+        expect(dataToAst(doc)).toEqual(SiteStandardProvider.dataToAst({ textContent: "a\n\nb" }));
     });
 });

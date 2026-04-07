@@ -1,6 +1,7 @@
 import { LeafletProvider } from "../providers/leaflet";
 import { AtviewProvider } from "../providers/atview";
 import { PcktProvider } from "../providers/pckt";
+import { SiteStandardProvider } from "../providers/site-standard";
 
 export const ENGINES = {
     leaflet_blocks: {
@@ -26,5 +27,11 @@ export const ENGINES = {
         documentType: "site.standard.document",
         publicationType: "site.standard.publication",
         provider: PcktProvider,
+    },
+    site_standard_plain: {
+        label: "site.standard.document [Site Standard/Plain]",
+        documentType: "site.standard.document",
+        publicationType: "site.standard.publication",
+        provider: SiteStandardProvider,
     },
 } as const;

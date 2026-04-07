@@ -9,6 +9,7 @@ import {
     minimalStandardAtview,
     minimalStandardLeaflet,
     minimalStandardPckt,
+    minimalStandardPlain,
 } from "../helpers";
 
 const wrap = (block: LeafletBlock) =>
@@ -40,5 +41,11 @@ describe("getDocumentAtviewHtml", () => {
         const doc = minimalStandardPckt([{ $type: "blog.pckt.block.text", plaintext: "example-body" }]);
         const result = getDocumentAtviewHtml(doc, {});
         expect(result).toBe("example-body");
+    });
+
+    test("plain site.standard.document (textContent only, single paragraph)", () => {
+        const doc = minimalStandardPlain("Line one\n\nLine two");
+        const result = getDocumentAtviewHtml(doc, {});
+        expect(result).toBe("Line one\n\nLine two");
     });
 });

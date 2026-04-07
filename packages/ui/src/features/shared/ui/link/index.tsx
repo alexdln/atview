@@ -8,7 +8,7 @@ export interface LinkProps {
 
 export const Link: React.FC<LinkProps> = ({ href, children }) =>
     href ? (
-        <LinkBase variant="accent" target="_blank" rel="noopener noreferrer" href={href}>
+        <LinkBase underline variant="accent" target="_blank" rel="noopener noreferrer" href={href}>
             {children}
         </LinkBase>
     ) : (

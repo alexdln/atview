@@ -65,6 +65,12 @@ export interface LeafletWebsiteBlock {
     description?: string;
 }
 
+export interface LeafletIframeBlock {
+    $type: "pub.leaflet.blocks.iframe";
+    url: string;
+    height?: number;
+}
+
 export type LeafletBlock =
     | LeafletTextBlock
     | LeafletHeaderBlock
@@ -75,7 +81,8 @@ export type LeafletBlock =
     | LeafletOrderedListBlock
     | LeafletBskyPostBlock
     | LeafletHorizontalRuleBlock
-    | LeafletWebsiteBlock;
+    | LeafletWebsiteBlock
+    | LeafletIframeBlock;
 
 export interface LeafletDocumentBlock {
     $type: "pub.leaflet.pages.linearDocument#block";
