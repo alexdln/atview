@@ -119,7 +119,6 @@ const VideoEmbed: React.FC<{
                     preload="none"
                     src={playlist}
                     className="post-embed__video-player"
-                    autoPlay
                     muted
                     loop
                 />

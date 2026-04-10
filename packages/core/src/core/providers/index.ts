@@ -33,3 +33,16 @@ export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstT
     }
     return SiteStandardProvider.dataToAtviewHtml({ textContent: post.textContent }, context);
 };
+
+export const getProvider = <T extends Document>(post: T) => {
+    if (isStandardSiteAtview(post)) {
+        return AtviewProvider;
+    }
+    if (isLeafletMain(post) || isStandardSiteLeaflet(post)) {
+        return LeafletProvider;
+    }
+    if (isStandardSitePckt(post)) {
+        return PcktProvider;
+    }
+    return SiteStandardProvider;
+};

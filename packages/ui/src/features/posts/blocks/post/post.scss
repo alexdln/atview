@@ -19,7 +19,8 @@
 
 .post__header {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     gap: 8px;
     width: 100%;
     margin-bottom: 8px;
