@@ -1,15 +1,21 @@
 "use client";
 
-import React from "react";
-
+import React, { useEffect, useRef } from "react";
+import { useStore } from "contection";
 import Hls from "hls.js";
-import { useEffect, useRef } from "react";
+
+import { SettingsStore } from "@src/features/shared/stores/settings/stores";
 
 export interface VideoPlayerProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
     src: string;
 }
 
-export const VideoPlayer = ({ src, ...props }: VideoPlayerProps) => {
+export const VideoPlayer = ({ src, autoPlay, ...props }: VideoPlayerProps) => {
+    const videoAutoplay = useStore(SettingsStore, {
+        mutation: (state) => state.videoAutoplay,
+        enabled: autoPlay === undefined ? "always" : "never",
+    });
+    const targetAutoPlay = Boolean(autoPlay === undefined ? videoAutoplay : autoPlay);
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
@@ -25,5 +31,26 @@ export const VideoPlayer = ({ src, ...props }: VideoPlayerProps) => {
         }
     }, [src]);
 
-    return <video ref={videoRef} src={src} {...props} />;
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video || !autoPlay) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (!entry) return;
+                if (entry.isIntersecting) {
+                    void video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            },
+            { threshold: 0.5 },
+        );
+
+        observer.observe(video);
+        return () => observer.disconnect();
+    }, [targetAutoPlay]);
+
+    return <video ref={videoRef} src={src} {...props} autoPlay={targetAutoPlay} />;
 };
