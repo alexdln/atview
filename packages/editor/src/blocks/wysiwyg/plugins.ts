@@ -155,6 +155,15 @@ const createCodeBlockSubmit =
         options.normalizeEditor();
     };
 
+const createMathBlockSubmit = (options: PluginFactoryOptions, snapshot: WysiwygSelectionSnapshot) => (text: string) => {
+    insertFacet(snapshot, {
+        tag: "math",
+        text,
+        type: "block",
+    });
+    options.normalizeEditor();
+};
+
 const createDialogPlugin = (
     options: PluginFactoryOptions,
     config: {
@@ -241,6 +250,21 @@ export const createWysiwygPlugins = (options: PluginFactoryOptions): WysiwygPlug
                 },
             }),
     }),
+
+    createDialogPlugin(options, {
+        id: "mathBlock",
+        label: "Math Block",
+        appliedTag: "math",
+        block: true,
+        openDialog: (snapshot) =>
+            options.setMathDialog({
+                open: true,
+                data: {
+                    text: snapshot.text,
+                    onSubmit: createMathBlockSubmit(options, snapshot),
+                },
+            }),
+    }),
 ];
 
 const createLinkFacetEdit = (options: PluginFactoryOptions, element: HTMLElement) => (uri: string, text: string) => {
@@ -309,6 +333,15 @@ const createCodeBlockEdit =
         options.normalizeEditor();
     };
 
+const createMathBlockEdit = (options: PluginFactoryOptions, element: HTMLElement) => (text: string) => {
+    updateFacet(element as HTMLSpanElement, {
+        tag: "math",
+        text,
+        type: "block",
+    });
+    options.normalizeEditor();
+};
+
 export const createBlockEditHandlers = (
     options: PluginFactoryOptions,
 ): Record<string, (element: HTMLElement) => void> => ({
@@ -357,6 +390,15 @@ export const createBlockEditHandlers = (
                 filename: String(record?.filename || ""),
                 language: String(record?.language || ""),
                 onSubmit: createCodeBlockEdit(options, element),
+            },
+        });
+    },
+    math: (element) => {
+        options.setMathDialog({
+            open: true,
+            data: {
+                text: element.textContent || "",
+                onSubmit: createMathBlockEdit(options, element),
             },
         });
     },

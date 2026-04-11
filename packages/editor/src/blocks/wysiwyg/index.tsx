@@ -9,6 +9,7 @@ import {
     EditorMediaDialogProvider,
     EditorCodeDialogProvider,
     EditorImportDialogProvider,
+    EditorMathDialogProvider,
 } from "../../stores/top-layer/store";
 import { createWysiwygPlugins, createBlockEditHandlers } from "./plugins";
 import {
@@ -63,6 +64,7 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
     const [, setMediaDialog] = useDialogReducer(EditorMediaDialogProvider);
     const [, setCodeDialog] = useDialogReducer(EditorCodeDialogProvider);
     const [, setImportDialog] = useDialogReducer(EditorImportDialogProvider);
+    const [, setMathDialog] = useDialogReducer(EditorMathDialogProvider);
 
     const objectStoreRef = useRef(objectStore || new Map<string, File>());
     const controlsRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -98,8 +100,9 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
                 setMediaDialog,
                 setCodeDialog,
                 setImportDialog,
+                setMathDialog,
             }),
-        [normalizeEditor, setCodeDialog, setImportDialog, setLinkDialog, setMediaDialog, setPostDialog],
+        [normalizeEditor, setCodeDialog, setImportDialog, setLinkDialog, setMediaDialog, setPostDialog, setMathDialog],
     );
 
     const editHandlers = useMemo(
@@ -113,8 +116,9 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
                 setMediaDialog,
                 setCodeDialog,
                 setImportDialog,
+                setMathDialog,
             }),
-        [normalizeEditor, setCodeDialog, setImportDialog, setLinkDialog, setMediaDialog, setPostDialog],
+        [normalizeEditor, setCodeDialog, setImportDialog, setLinkDialog, setMediaDialog, setPostDialog, setMathDialog],
     );
 
     const pluginAppliedTags = useMemo(
