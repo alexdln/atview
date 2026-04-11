@@ -176,9 +176,39 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
             break;
         }
 
-        case "horizontal-rule":
-        case "table":
+        case "horizontal-rule": {
+            collector.text += "\n\n";
+            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
+            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
+            collector.facets.push({
+                index: { byteStart, byteEnd },
+                features: [{ $type: "net.atview.richtext.facet#horizontal-rule" }],
+            });
+            break;
+        }
+
         case "iframe":
+            collector.text += block.url;
+            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
+            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
+            collector.facets.push({
+                index: { byteStart, byteEnd },
+                features: [{ $type: "net.atview.richtext.facet#iframe", url: block.url }],
+            });
+            break;
+
+        case "math": {
+            collector.text += block.content;
+            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
+            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
+            collector.facets.push({
+                index: { byteStart, byteEnd },
+                features: [{ $type: "net.atview.richtext.facet#math", tex: block.content }],
+            });
+            break;
+        }
+
+        case "table":
             break;
     }
 };

@@ -156,6 +156,12 @@ const blockToLeaflet = (block: AstBlockNode): LeafletDocumentBlock | null => {
                 ...(block.height ? { height: block.height } : {}),
             });
 
+        case "math":
+            return wrap({
+                $type: "pub.leaflet.blocks.math",
+                tex: block.content,
+            });
+
         case "table":
             return null;
     }

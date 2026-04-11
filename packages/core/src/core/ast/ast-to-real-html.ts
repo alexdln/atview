@@ -157,6 +157,10 @@ const renderBlock = (block: AstBlockNode): string => {
             return `<p><a href="${escapeAttr(block.uri)}">${label}</a></p>`;
         }
 
+        case "math": {
+            return `<span data-tag="math" data-type="block">${escapeHtml(block.content)}</span>`;
+        }
+
         case "table":
         case "iframe":
             return "";

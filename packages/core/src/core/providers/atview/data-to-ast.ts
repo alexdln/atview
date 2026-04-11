@@ -15,6 +15,9 @@ const BLOCK_FACET_TYPES = new Set([
     "net.atview.richtext.facet#bsky-post",
     "net.atview.richtext.facet#ul",
     "net.atview.richtext.facet#ol",
+    "net.atview.richtext.facet#horizontal-rule",
+    "net.atview.richtext.facet#iframe",
+    "net.atview.richtext.facet#math",
 ]);
 
 const HEADING_LEVELS: Record<string, 2 | 3 | 4 | 5 | 6> = {
@@ -143,6 +146,15 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
             case "net.atview.richtext.facet#u":
             case "net.atview.richtext.facet#code":
                 pendingInlines.push(wrapInline(INLINE_FACET_MAP[feature.$type], text));
+                break;
+            case "net.atview.richtext.facet#horizontal-rule":
+                blocks.push({ type: "horizontal-rule" });
+                break;
+            case "net.atview.richtext.facet#iframe":
+                blocks.push({ type: "iframe", url: String(feature.url || "") });
+                break;
+            case "net.atview.richtext.facet#math":
+                blocks.push({ type: "math", content: text });
                 break;
             default:
                 break;
