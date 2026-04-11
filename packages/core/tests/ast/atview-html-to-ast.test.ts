@@ -53,6 +53,11 @@ describe("atviewHtmlToAst", () => {
         expect(ast[1]?.type).toBe("media");
     });
 
+    test("math block span", () => {
+        const ast = parseAtviewHtmlToAst('<span data-tag="math" data-type="block">\\sum_{i=1}^n i</span>');
+        expect(ast[0]).toEqual({ type: "math", content: "\\sum_{i=1}^n i" });
+    });
+
     test("objectStore injects file into parsed media record", () => {
         const file = new File([], "example.png", { type: "image/png" });
         const store = new Map([["object-key", file]]);

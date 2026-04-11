@@ -107,6 +107,27 @@ describe("LeafletProvider.dataToAst", () => {
         expect(ast.map((b) => b.type)).toEqual(["bsky-post", "horizontal-rule", "website"]);
     });
 
+    test("math and iframe", () => {
+        const ast = LeafletProvider.dataToAst({
+            pages: [
+                linearPage([
+                    wrap({ $type: "pub.leaflet.blocks.math", tex: "\\frac{a}{b}" }),
+                    wrap({
+                        $type: "pub.leaflet.blocks.iframe",
+                        url: "https://embed.example/frame",
+                        height: 320,
+                    }),
+                ]),
+            ],
+        });
+        expect(ast[0]).toEqual({ type: "math", content: "\\frac{a}{b}" });
+        expect(ast[1]).toEqual({
+            type: "iframe",
+            url: "https://embed.example/frame",
+            height: 320,
+        });
+    });
+
     test("unknown block omitted", () => {
         const ast = LeafletProvider.dataToAst({
             pages: [

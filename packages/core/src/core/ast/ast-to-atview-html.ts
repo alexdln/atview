@@ -134,8 +134,15 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             return `<span data-tag="website" data-type="block" data-record='${escapeAttr(record)}'>${escapeHtml(label)}</span>`;
         }
 
+        case "math": {
+            return `<span data-tag="math" data-type="block">${escapeHtml(block.content)}</span>`;
+        }
+
         case "table":
         case "iframe":
+            return "";
+
+        default:
             return "";
     }
 };

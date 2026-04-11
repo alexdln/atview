@@ -191,6 +191,9 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
         case "iframe":
             return <blockElements.iframe key={key} url={block.url} />;
 
+        case "math":
+            return <blockElements.math key={key} content={block.content} />;
+
         default:
             return <blockElements.unknown key={key} block={block} />;
     }

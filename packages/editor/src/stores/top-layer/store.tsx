@@ -38,6 +38,12 @@ export const EditorTopLayerStore = createTopLayer({
                 onSubmit: undefined as ((text: string, filename: string, language: string) => void) | undefined,
             },
         },
+        EditorMathDialogProvider: {
+            data: {
+                text: "",
+                onSubmit: undefined as ((text: string) => void) | undefined,
+            },
+        },
         EditorImportDialogProvider: {
             data: {
                 url: "",
@@ -53,4 +59,5 @@ export const {
     EditorMediaDialogProvider,
     EditorCodeDialogProvider,
     EditorImportDialogProvider,
+    EditorMathDialogProvider,
 } = EditorTopLayerStore.Dialogs;

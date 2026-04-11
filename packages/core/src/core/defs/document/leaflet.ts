@@ -71,6 +71,11 @@ export interface LeafletIframeBlock {
     height?: number;
 }
 
+export interface LeafletMathBlock {
+    $type: "pub.leaflet.blocks.math";
+    tex: string;
+}
+
 export type LeafletBlock =
     | LeafletTextBlock
     | LeafletHeaderBlock
@@ -82,7 +87,8 @@ export type LeafletBlock =
     | LeafletBskyPostBlock
     | LeafletHorizontalRuleBlock
     | LeafletWebsiteBlock
-    | LeafletIframeBlock;
+    | LeafletIframeBlock
+    | LeafletMathBlock;
 
 export interface LeafletDocumentBlock {
     $type: "pub.leaflet.pages.linearDocument#block";

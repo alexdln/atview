@@ -109,4 +109,23 @@ describe("AtviewProvider.dataToAst", () => {
         expect(ast.map((block) => block.type)).toContain("media");
         expect(ast.map((block) => block.type)).toContain("website");
     });
+
+    test("math and iframe facets", () => {
+        const ast = AtviewProvider.dataToAst({
+            textContent: "E = mc^2\n\nhttps://embed.example/x",
+            facets: [
+                {
+                    index: { byteStart: 0, byteEnd: 8 },
+                    features: [{ $type: "net.atview.richtext.facet#math", tex: "E = mc^2" }],
+                },
+                {
+                    index: { byteStart: 10, byteEnd: 33 },
+                    features: [{ $type: "net.atview.richtext.facet#iframe", url: "https://embed.example/x" }],
+                },
+            ],
+        });
+        expect(ast.map((b) => b.type)).toEqual(["math", "iframe"]);
+        expect(ast[0]).toEqual({ type: "math", content: "E = mc^2" });
+        expect(ast[1]).toEqual({ type: "iframe", url: "https://embed.example/x" });
+    });
 });

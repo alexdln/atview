@@ -114,6 +114,9 @@ importers:
       hast-util-to-jsx-runtime:
         specifier: 2.3.6
         version: 2.3.6
+      katex:
+        specifier: 0.16.45
+        version: 0.16.45
       shiki:
         specifier: 4.0.2
         version: 4.0.2
@@ -169,6 +172,9 @@ importers:
 
   packages/editor:
     dependencies:
+      '@atview/core':
+        specifier: workspace:*
+        version: link:../core
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -182,9 +188,6 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
     devDependencies:
-      '@atview/core':
-        specifier: workspace:*
-        version: link:../core
       '@atview/docs':
         specifier: workspace:*
         version: link:../docs
@@ -1255,6 +1258,10 @@ packages:
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
 
+  commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+
   commondir@1.0.1:
     resolution: {integrity: sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==}
 
@@ -1727,6 +1734,10 @@ packages:
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
+
+  katex@0.16.45:
+    resolution: {integrity: sha512-pQpZbdBu7wCTmQUh7ufPmLr0pFoObnGUoL/yhtwJDgmmQpbkg/0HSVti25Fu4rmd1oCR6NGWe9vqTWuWv3GcNA==}
+    hasBin: true
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -3410,6 +3421,8 @@ snapshots:
 
   commander@2.20.3: {}
 
+  commander@8.3.0: {}
+
   commondir@1.0.1: {}
 
   contection-top-layer@2.3.1(contection@2.3.1(react@19.2.4))(react@19.2.4):
@@ -3902,6 +3915,10 @@ snapshots:
   json-schema-traverse@1.0.0: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
+
+  katex@0.16.45:
+    dependencies:
+      commander: 8.3.0
 
   keyv@4.5.4:
     dependencies:

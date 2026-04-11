@@ -16,6 +16,15 @@ describe("shared html between providers", () => {
         expect(LeafletProvider.dataToAst(LeafletProvider.astToData(parsed))).toEqual(parsed);
         expect(PcktProvider.dataToAst(PcktProvider.astToData(parsed))).toEqual(parsed);
     });
+
+    test("math block roundtrips atview and leaflet", () => {
+        const ast: AstDocument = [{ type: "math", content: "x^2 + y^2 = r^2" }];
+        const parsed = parseAtviewHtmlToAst(astToAtviewHtml(ast));
+        expect(parsed).toEqual(ast);
+        expect(AtviewProvider.dataToAst(AtviewProvider.astToData(parsed))).toEqual(parsed);
+        expect(LeafletProvider.dataToAst(LeafletProvider.astToData(parsed))).toEqual(parsed);
+        expect(PcktProvider.astToData(parsed)).toEqual({ items: [] });
+    });
 });
 
 describe("ast through each provider roundtrip", () => {

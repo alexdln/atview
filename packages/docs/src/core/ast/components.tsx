@@ -2,6 +2,7 @@ import { BskyPost } from "@src/blocks/bsky-post/index.isomorphic";
 import { Media } from "@src/blocks/media";
 import { CodeBlock } from "@src/blocks/code-block";
 import { Website } from "@src/blocks/website";
+import { MathBlock } from "@src/blocks/math-block";
 import {
     Bold,
     Italic,
@@ -54,4 +55,5 @@ export const BlockElements = {
     tableCell: TableCell,
     tableHeadCell: TableHeadCell,
     unknown: UnknownBlock,
+    math: MathBlock,
 };

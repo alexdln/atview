@@ -107,4 +107,29 @@ describe("AtviewProvider dataToAst astToData", () => {
             ],
         });
     });
+
+    test("math facet", () => {
+        expectDataRoundTrip({
+            textContent: "E = mc^2",
+            facets: [
+                {
+                    index: { byteStart: 0, byteEnd: 8 },
+                    features: [{ $type: "net.atview.richtext.facet#math", tex: "E = mc^2" }],
+                },
+            ],
+        });
+    });
+
+    test("iframe facet", () => {
+        const url = "https://embed.example/frame";
+        expectDataRoundTrip({
+            textContent: url,
+            facets: [
+                {
+                    index: { byteStart: 0, byteEnd: 27 },
+                    features: [{ $type: "net.atview.richtext.facet#iframe", url }],
+                },
+            ],
+        });
+    });
 });

@@ -143,6 +143,11 @@ export interface AstIframeNode {
     height?: number;
 }
 
+export interface AstMathNode {
+    type: "math";
+    content: string;
+}
+
 export type AstBlockNode =
     | AstParagraphNode
     | AstHeadingNode
@@ -155,6 +160,7 @@ export type AstBlockNode =
     | AstHorizontalRuleNode
     | AstWebsiteNode
     | AstTableNode
-    | AstIframeNode;
+    | AstIframeNode
+    | AstMathNode;
 
 export type AstDocument = AstBlockNode[];

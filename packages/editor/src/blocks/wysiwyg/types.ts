@@ -62,6 +62,11 @@ export interface DialogCodeData {
     onSubmit: ((text: string, filename: string, language: string) => void) | undefined;
 }
 
+export interface DialogMathData {
+    text: string;
+    onSubmit: ((text: string) => void) | undefined;
+}
+
 export interface DialogImportData {
     url: string;
     onSubmit: ((url: string) => Promise<void>) | undefined;
@@ -73,6 +78,7 @@ export interface DialogSetters {
     setMediaDialog: (value: { open: boolean; data: DialogMediaData }) => void;
     setCodeDialog: (value: { open: boolean; data: DialogCodeData }) => void;
     setImportDialog: (value: { open: boolean; data: DialogImportData }) => void;
+    setMathDialog: (value: { open: boolean; data: DialogMathData }) => void;
 }
 
 export interface PluginFactoryOptions extends DialogSetters {

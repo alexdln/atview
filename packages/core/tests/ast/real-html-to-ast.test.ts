@@ -147,4 +147,10 @@ describe("realHtmlToAst", () => {
             },
         ]);
     });
+
+    test("math element", async () => {
+        const ast = await realHtmlToAst('<p>before</p><math display="block">x^2</math>');
+        expect(ast.map((b) => b.type)).toEqual(["paragraph", "math"]);
+        expect(ast[1]).toEqual({ type: "math", content: "x^2" });
+    });
 });

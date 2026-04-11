@@ -57,7 +57,7 @@ interface RenderContext {
     document: Document;
 }
 
-const flowTagName = (element: HTMLElement) => element.dataset.tag || element.tagName.toLowerCase();
+const flowTagName = (element: HTMLElement) => element.dataset?.tag || element.tagName.toLowerCase();
 
 const textContentWithBr = (node: Node): string => {
     if (node.nodeType === Node.TEXT_NODE) return node.textContent || "";
@@ -229,6 +229,11 @@ const bskyPostFromElement = (element: HTMLElement): AstBlockNode => ({
     text: element.textContent?.trim() || undefined,
 });
 
+const mathFromElement = (element: HTMLElement): AstBlockNode => ({
+    type: "math",
+    content: cleanText(element.textContent || ""),
+});
+
 const walkFlow = async (
     nodes: ChildNode[],
     context: RenderContext,
@@ -328,6 +333,12 @@ const walkFlow = async (
         if (tag === "bsky-post") {
             flushPendingIntoBlocks();
             blocks.push(bskyPostFromElement(element));
+            continue;
+        }
+
+        if (tag === "math") {
+            flushPendingIntoBlocks();
+            blocks.push(mathFromElement(element));
             continue;
         }
 

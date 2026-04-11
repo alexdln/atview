@@ -14,6 +14,7 @@ const BLOCK_TAGS = new Set([
     "bsky-post",
     "website",
     "media",
+    "math",
 ]);
 
 const INLINE_TAG_MAP: Record<string, AstInlineNode["type"]> = {
@@ -170,6 +171,11 @@ export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string
                 alt: record?.alt ? String(record.alt) : undefined,
                 width: record?.width ? String(record.width) : undefined,
                 height: record?.height ? String(record.height) : undefined,
+            });
+        } else if (tag === "math") {
+            blocks.push({
+                type: "math",
+                content: cleanText(el.textContent || ""),
             });
         }
     }
