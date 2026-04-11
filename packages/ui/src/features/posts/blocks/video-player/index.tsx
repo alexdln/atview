@@ -52,5 +52,5 @@ export const VideoPlayer = ({ src, autoPlay, ...props }: VideoPlayerProps) => {
         return () => observer.disconnect();
     }, [targetAutoPlay]);
 
-    return <video ref={videoRef} src={src} {...props} autoPlay={targetAutoPlay} />;
+    return <video ref={videoRef} src={src} {...props} />;
 };

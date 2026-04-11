@@ -237,12 +237,29 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
         [pluginsByHotkey],
     );
 
+    const ctrlOrCmdClickHandler = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        if (!e.ctrlKey && !e.metaKey) return;
+
+        const target = (e.target as HTMLElement).closest("[data-tag]") as HTMLElement | null;
+
+        if (!target || !wysiwygRef.current?.contains(target)) return;
+
+        const tag = target.dataset.tag;
+
+        if (!tag || !editHandlers[tag]) return;
+
+        e.preventDefault();
+        editHandlers[tag](target);
+    }, []);
+
     const dblClickHandler = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
             const target = (e.target as HTMLElement).closest("[data-tag]") as HTMLElement | null;
+
             if (!target || !wysiwygRef.current?.contains(target)) return;
 
             const tag = target.dataset.tag;
+
             if (!tag || !editHandlers[tag]) return;
 
             e.preventDefault();
@@ -347,7 +364,8 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
                         suppressContentEditableWarning
                         onPaste={pasteHandler}
                         onCopy={copyHandler}
-                        onClick={dblClickHandler}
+                        onClick={ctrlOrCmdClickHandler}
+                        onDoubleClick={dblClickHandler}
                         ref={wysiwygRef}
                         onKeyDown={keyDownHandler}
                         onInput={normalizeEditor}
