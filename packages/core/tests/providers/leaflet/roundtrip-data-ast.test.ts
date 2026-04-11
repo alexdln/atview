@@ -32,4 +32,20 @@ describe("LeafletProvider dataToAst astToData", () => {
         const back = LeafletProvider.astToData(ast);
         expect(LeafletProvider.dataToAst(back)).toEqual(ast);
     });
+
+    test("math and iframe", () => {
+        const pages = [
+            linearPage([
+                wrap({ $type: "pub.leaflet.blocks.math", tex: "E = mc^2" }),
+                wrap({
+                    $type: "pub.leaflet.blocks.iframe",
+                    url: "https://embed.example/frame",
+                    height: 400,
+                }),
+            ]),
+        ];
+        const ast = LeafletProvider.dataToAst({ pages });
+        const back = LeafletProvider.astToData(ast);
+        expect(LeafletProvider.dataToAst(back)).toEqual(ast);
+    });
 });

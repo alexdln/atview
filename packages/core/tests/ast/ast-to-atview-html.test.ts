@@ -79,6 +79,13 @@ describe("astToAtviewHtml", () => {
         expect(html).toContain(exampleTitle);
     });
 
+    test("math block", () => {
+        const tex = "a < b";
+        const html = astToAtviewHtml([{ type: "math", content: tex }]);
+        expect(html).toContain('data-tag="math"');
+        expect(html).toContain("&lt;");
+    });
+
     test("table and iframe render empty", () => {
         expect(
             astToAtviewHtml([

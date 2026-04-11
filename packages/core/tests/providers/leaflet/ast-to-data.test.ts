@@ -47,15 +47,18 @@ describe("LeafletProvider.astToData", () => {
         expect(pages[0]?.blocks.length).toBe(4);
     });
 
-    test("bsky website hr iframe drops table", () => {
+    test("bsky website hr iframe math drops table", () => {
         const ast: AstDocument = [
             { type: "bsky-post", uri: "at://example/post", cid: "example-cid" },
             { type: "website", uri: "https://example.com", title: "website-title" },
             { type: "horizontal-rule" },
             { type: "table", rows: [] },
             { type: "iframe", url: "https://embed.example/frame" },
+            { type: "math", content: "x^2" },
         ];
         const { pages } = LeafletProvider.astToData(ast);
-        expect(pages[0]?.blocks.length).toBe(4);
+        expect(pages[0]?.blocks.length).toBe(5);
+        const types = pages[0]?.blocks.map((b) => b.block.$type);
+        expect(types).toContain("pub.leaflet.blocks.math");
     });
 });

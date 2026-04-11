@@ -84,6 +84,10 @@ describe("astToAtviewHtml then atviewHtmlToAst", () => {
         ]);
     });
 
+    test("math block", () => {
+        expectAstHtmlRoundTrip([{ type: "math", content: "x^2 + y^2 = r^2" }]);
+    });
+
     test("double html round trip stable", () => {
         const ast: AstDocument = [
             { type: "paragraph", children: [{ type: "text", value: "first-paragraph" }] },
