@@ -4,7 +4,7 @@
     position: relative;
 }
 
-.thread-view-post_child {
+.thread-view-post_nested {
     padding: 8px 0 0 8px;
 
     @include media.media(md) {
@@ -60,6 +60,8 @@
 
 .thread-view-post__reply {
     position: relative;
+    margin-top: 20px;
+    margin-left: 2px;
 }
 
 .thread-view-post__reply-line-background {

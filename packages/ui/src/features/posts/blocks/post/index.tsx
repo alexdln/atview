@@ -21,20 +21,11 @@ import "./post.scss";
 export interface PostProps {
     item?: BasePost;
     className?: string;
-    isPostPage?: boolean;
-    isCurrentPostPage?: boolean;
-    hideEngagements?: boolean;
-    nested?: boolean;
+    interactions?: "none" | "all" | "actions";
+    plain?: boolean;
 }
 
-export const Post: React.FC<PostProps> = ({
-    item,
-    className,
-    isPostPage,
-    isCurrentPostPage,
-    hideEngagements,
-    nested,
-}) => {
+export const Post: React.FC<PostProps> = ({ item, className, interactions = "actions", plain }) => {
     if (!item) {
         return null;
     }
@@ -65,7 +56,7 @@ export const Post: React.FC<PostProps> = ({
     const { rkey } = new AtUri(uri);
 
     return (
-        <div className={clsx("post", !nested && "post_root", className)}>
+        <div className={clsx("post", !plain && "post_wrapped", className)}>
             <div className="post__header">
                 <a
                     href={`https://bsky.app/profile/${author.handle}`}
@@ -108,7 +99,7 @@ export const Post: React.FC<PostProps> = ({
             </div>
             <PostText text={record.text} facets={record.facets} />
             {(embed || record.embed) && <PostEmbed embed={embed || record.embed} did={author.did} />}
-            {isCurrentPostPage && isInteracted && (
+            {interactions === "all" && isInteracted && (
                 <div className="post__stats">
                     {Boolean(quoteCount) && (
                         <a
@@ -147,15 +138,8 @@ export const Post: React.FC<PostProps> = ({
                     )}
                 </div>
             )}
-            {!hideEngagements && (
-                <PostEngagements
-                    className={clsx(
-                        "post__engagements",
-                        !isInteracted && "post__engagements--spaced",
-                        isPostPage && "post__engagements--post-page",
-                    )}
-                    post={item as PostView}
-                />
+            {(interactions === "all" || interactions === "actions") && (
+                <PostEngagements className="post__engagements" post={item as PostView} />
             )}
         </div>
     );
