@@ -1,16 +1,15 @@
-.engage-reposts__icon {
+.engage-reply__icon {
     display: block;
     transition: all 0.2s;
 }
 
-.engage-reposts {
+.engage-reply {
     display: flex;
     gap: 8px;
     align-items: center;
     text-align: left;
 
-    &:hover,
-    &:focus-within {
+    &:hover {
         color: var(--cl-primary-300);
     }
 
@@ -18,7 +17,7 @@
         cursor: not-allowed;
     }
 
-    &:active .engage-reposts__icon {
+    &:active .engage-reply__icon {
         transform: scale(0.85);
     }
 }

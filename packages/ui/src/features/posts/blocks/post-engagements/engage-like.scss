@@ -1,38 +1,23 @@
-.engage-like {
-    position: relative;
-}
-
-.engage-like__action {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    width: 100%;
-    padding: 4px;
-    text-align: left;
-}
-
-.engage-like__action:hover {
-    color: var(--cl-primary-300);
-}
-
-.engage-like__action:disabled {
-    cursor: not-allowed;
-}
-
 .engage-like__icon {
     display: block;
     transition: all 0.2s;
 }
 
-.engage-like:active .engage-like__icon {
-    transform: scale(0.75);
-}
+.engage-like {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    text-align: left;
 
-.engage-like__count {
-    position: relative;
-    display: block;
-}
+    &:hover {
+        color: var(--cl-primary-300);
+    }
 
-.engage-like__count--active {
-    transition: all 0.1s;
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    &:active .engage-like__icon {
+        transform: scale(0.85);
+    }
 }

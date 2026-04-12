@@ -1,0 +1,17 @@
+@use "../../../../assets/mixins/media";
+
+.engage-external {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    color: var(--cl-main-100);
+    text-align: end;
+
+    &:hover {
+        color: var(--cl-accent-300);
+    }
+}
+
+.engage-external__icon {
+    display: block;
+}
