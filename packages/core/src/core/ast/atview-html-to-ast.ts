@@ -166,11 +166,13 @@ export const atviewHtmlToAst = (atviewHtml: HTMLElement, objectStore: Map<string
         } else if (tag === "media") {
             blocks.push({
                 text: cleanText(el.textContent || ""),
+                caption: record?.caption ? String(record.caption) : undefined,
                 type: "media",
                 image: record?.image || "",
                 alt: record?.alt ? String(record.alt) : undefined,
-                width: record?.width ? String(record.width) : undefined,
-                height: record?.height ? String(record.height) : undefined,
+                title: record?.title ? String(record.title) : undefined,
+                width: record?.width ? Number(record.width) : undefined,
+                height: record?.height ? Number(record.height) : undefined,
             });
         } else if (tag === "math") {
             blocks.push({

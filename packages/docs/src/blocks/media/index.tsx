@@ -11,13 +11,24 @@ export interface MediaProps {
     caption?: string;
     image: Blob | string;
     fullUri?: string;
-    width?: string;
-    height?: string;
+    width?: string | number;
+    height?: string | number;
+    title?: string;
     authorDid?: string;
     className?: string;
 }
 
-export const Media: React.FC<MediaProps> = ({ alt, caption, image, fullUri, width, height, authorDid, className }) => {
+export const Media: React.FC<MediaProps> = ({
+    alt,
+    caption,
+    image,
+    fullUri,
+    width,
+    height,
+    title,
+    authorDid,
+    className,
+}) => {
     const fullUriFinal = fullUri || formatMediaUri(image, { authorDid });
     const thumbnailUri = formatMediaUri(image, { authorDid, thumbnail: true });
 
@@ -30,7 +41,14 @@ export const Media: React.FC<MediaProps> = ({ alt, caption, image, fullUri, widt
             <figure className="atview-media-figure">
                 <div className="atview-media-image-container">
                     <img className="atview-media-image-bg" src={thumbnailUri} alt="" width={width} height={height} />
-                    <img className="atview-media-image" src={thumbnailUri} alt={alt} width={width} height={height} />
+                    <img
+                        className="atview-media-image"
+                        src={thumbnailUri}
+                        alt={alt}
+                        width={width}
+                        height={height}
+                        title={title}
+                    />
                 </div>
                 {caption && <figcaption className="atview-media-caption">{caption}</figcaption>}
             </figure>

@@ -31,6 +31,7 @@ export interface LeafletImageBlock {
     image: Blob | string;
     aspectRatio: { width: number; height: number };
     alt?: string;
+    caption?: string;
 }
 
 export interface LeafletListItem {

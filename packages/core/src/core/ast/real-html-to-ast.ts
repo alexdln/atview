@@ -155,8 +155,8 @@ const mediaFromImage = async (
         figureElement?.getAttribute("data-caption") ||
         "";
     const text = caption || imageElement.alt || src || undefined;
-    const width = figureElement?.getAttribute("data-width") || imageElement.getAttribute("width") || undefined;
-    const height = figureElement?.getAttribute("data-height") || imageElement.getAttribute("height") || undefined;
+    const width = Number(figureElement?.getAttribute("data-width") || imageElement.getAttribute("width") || 0);
+    const height = Number(figureElement?.getAttribute("data-height") || imageElement.getAttribute("height") || 0);
     const image = await context.processImageBlob(src);
     return {
         type: "media",
@@ -165,6 +165,7 @@ const mediaFromImage = async (
         alt,
         ...(width ? { width } : {}),
         ...(height ? { height } : {}),
+        ...(caption ? { caption } : {}),
     };
 };
 

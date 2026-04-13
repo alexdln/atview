@@ -91,12 +91,19 @@ const blockToAst = (block: PcktBlock): AstBlockNode | null => {
         }
 
         case "blog.pckt.block.image":
-            const image = block.blob || block.attrs?.blob;
-            const alt = block.alt || block.attrs?.alt;
+            const image = block.attrs?.blob;
+            const alt = block.attrs?.alt;
+
+            if (!image) return null;
+
             return {
                 type: "media",
                 image,
                 alt: alt,
+                width: block.attrs?.aspectRatio?.width ? Number(block.attrs.aspectRatio.width) : undefined,
+                height: block.attrs?.aspectRatio?.height ? Number(block.attrs.aspectRatio.height) : undefined,
+                ...(block.attrs?.title ? { title: block.attrs.title } : {}),
+                ...(block.attrs?.caption ? { caption: block.attrs.caption } : {}),
             };
 
         case "blog.pckt.block.website":

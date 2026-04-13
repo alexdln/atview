@@ -114,10 +114,11 @@ const blockToLeaflet = (block: AstBlockNode): LeafletDocumentBlock | null => {
                 $type: "pub.leaflet.blocks.image",
                 image: block.image as string,
                 aspectRatio: {
-                    width: Number(block.width) || 0,
-                    height: Number(block.height) || 0,
+                    width: Number(block.width || 0) || 0,
+                    height: Number(block.height || 0) || 0,
                 },
                 ...(block.alt ? { alt: block.alt } : {}),
+                ...(block.caption ? { caption: block.caption } : {}),
             });
 
         case "unordered-list":

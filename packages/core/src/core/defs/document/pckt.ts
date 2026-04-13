@@ -14,13 +14,14 @@ export interface PcktHeadingBlock {
 
 export interface PcktImageBlock {
     $type: "blog.pckt.block.image";
-    blob?: Blob | string;
-    alt?: string;
     attrs: {
         alt?: string;
         src: string;
         blob: Blob | string;
         align?: string;
+        title?: string;
+        caption?: string;
+        aspectRatio?: { width: number; height: number };
     };
 }
 
