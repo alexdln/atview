@@ -1,4 +1,5 @@
 import { type RefObject } from "react";
+import { type Blob } from "@atview/core";
 
 export interface WysiwygSelectionSnapshot {
     selection: Selection;
@@ -48,11 +49,12 @@ export interface DialogPostData {
 }
 
 export interface DialogMediaData {
-    file: File | null;
+    file: Blob | File | null;
+    previewUrl: string;
     text: string;
     altText: string;
     caption: string;
-    onSubmit: ((file: File | null, text: string, altText: string, caption: string) => void) | undefined;
+    onSubmit: ((file: Blob | File | null, text: string, altText: string, caption: string) => void) | undefined;
 }
 
 export interface DialogCodeData {

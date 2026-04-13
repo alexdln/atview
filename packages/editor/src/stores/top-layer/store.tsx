@@ -1,5 +1,6 @@
 "use client";
 
+import { type Blob } from "@atview/core";
 import { createTopLayer } from "contection-top-layer";
 
 export const EditorTopLayerStore = createTopLayer({
@@ -21,12 +22,13 @@ export const EditorTopLayerStore = createTopLayer({
         },
         EditorMediaDialogProvider: {
             data: {
-                file: null as File | null,
+                file: null as Blob | File | null,
+                previewUrl: "",
                 text: "",
                 altText: "",
                 caption: "",
                 onSubmit: undefined as
-                    | ((file: File | null, text: string, altText: string, caption: string) => void)
+                    | ((file: Blob | File | null, text: string, altText: string, caption: string) => void)
                     | undefined,
             },
         },
