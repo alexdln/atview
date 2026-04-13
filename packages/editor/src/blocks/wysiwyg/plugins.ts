@@ -1,6 +1,9 @@
+import { type Blob } from "@atview/core";
+
 import {
     type WysiwygPlugin,
     type FormattingPluginDefinition,
+    type PseudoFacetConfig,
     type WysiwygSelectionSnapshot,
     type PluginFactoryOptions,
 } from "./types";
@@ -111,35 +114,81 @@ const createPostFacetSubmit =
         options.normalizeEditor();
     };
 
+const readImageDimensions = (src: string) =>
+    new Promise<{ width: number; height: number }>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+            resolve({ width: image.naturalWidth || image.width, height: image.naturalHeight || image.height });
+        };
+        image.onerror = () => reject(new Error("Failed to load media preview"));
+        image.src = src;
+    });
+
+const buildMediaFacetConfig = (params: {
+    text: string;
+    altText: string;
+    caption: string;
+    image: string;
+    width?: number;
+    height?: number;
+}): PseudoFacetConfig => ({
+    tag: "media",
+    text: params.text,
+    type: "block",
+    record: {
+        alt: params.altText,
+        caption: params.caption,
+        image: params.image,
+        width: params.width,
+        height: params.height,
+    },
+    styles:
+        params.image && params.width && params.height
+            ? {
+                  "--preview-url": `url(${params.image})`,
+                  "--aspect-ratio": `${Math.round((params.width / params.height) * 100) / 100}`,
+              }
+            : undefined,
+});
+
+const extractCssUrl = (value: string): string => {
+    const match = value.match(/^url\((['"]?)(.*)\1\)$/);
+    return match?.[2] || "";
+};
+
+const getMediaPreviewUrl = (element: HTMLElement, image: unknown): string => {
+    if (typeof image === "string") return image;
+    return extractCssUrl(element.style.getPropertyValue("--preview-url"));
+};
+
+const createMediaFacetFromFile = async (
+    file: File,
+    params: { text: string; altText: string; caption: string },
+): Promise<PseudoFacetConfig> => {
+    const previewUrl = URL.createObjectURL(file);
+
+    try {
+        const { width, height } = await readImageDimensions(previewUrl);
+        return buildMediaFacetConfig({
+            ...params,
+            image: previewUrl,
+            width,
+            height,
+        });
+    } catch (error) {
+        URL.revokeObjectURL(previewUrl);
+        throw error;
+    }
+};
+
 const createMediaSubmit =
     (options: PluginFactoryOptions, snapshot: WysiwygSelectionSnapshot) =>
-    async (file: File | null, text: string, altText: string, caption: string) => {
-        if (!file) return;
+    async (file: Blob | File | null, text: string, altText: string, caption: string) => {
+        if (!file || !(file instanceof File)) return;
 
-        const previewUrl = URL.createObjectURL(file);
-        const image = new Image();
-        image.src = previewUrl;
-        await new Promise<void>((resolve) => {
-            image.onload = () => resolve();
-        });
-
-        options.objectStoreRef.current.set(previewUrl, file);
-        insertFacet(snapshot, {
-            tag: "media",
-            text,
-            type: "block",
-            record: {
-                alt: altText,
-                caption,
-                image: previewUrl,
-                width: image.width,
-                height: image.height,
-            },
-            styles: {
-                "--preview-url": `url(${previewUrl})`,
-                "--aspect-ratio": `${Math.round((image.width / image.height) * 100) / 100}`,
-            },
-        });
+        const facetConfig = await createMediaFacetFromFile(file, { text, altText, caption });
+        options.objectStoreRef.current.set(String(facetConfig.record?.image), file);
+        insertFacet(snapshot, facetConfig);
         options.normalizeEditor();
     };
 
@@ -226,6 +275,7 @@ export const createWysiwygPlugins = (options: PluginFactoryOptions): WysiwygPlug
                 open: true,
                 data: {
                     file: null,
+                    previewUrl: "",
                     text: snapshot.text,
                     altText: "",
                     caption: "",
@@ -290,33 +340,22 @@ const createPostFacetEdit =
 
 const createMediaEdit =
     (options: PluginFactoryOptions, element: HTMLElement) =>
-    async (file: File | null, text: string, altText: string, caption: string) => {
-        if (file) {
-            const previewUrl = URL.createObjectURL(file);
-            const image = new Image();
-            image.src = previewUrl;
-            await new Promise<void>((resolve) => {
-                image.onload = () => resolve();
-            });
-
-            options.objectStoreRef.current.set(previewUrl, file);
-            updateFacet(element as HTMLSpanElement, {
-                tag: "media",
-                text,
-                type: "block",
-                record: { alt: altText, caption, media: previewUrl, width: image.width, height: image.height },
-                styles: {
-                    "--preview-url": `url(${previewUrl})`,
-                    "--aspect-ratio": `${Math.round((image.width / image.height) * 100) / 100}`,
-                },
-            });
+    async (file: Blob | File | null, text: string, altText: string, caption: string) => {
+        if (file instanceof File) {
+            const facetConfig = await createMediaFacetFromFile(file, { text, altText, caption });
+            options.objectStoreRef.current.set(String(facetConfig.record?.image), file);
+            updateFacet(element as HTMLSpanElement, facetConfig);
         } else {
             const existing = parseElementRecord(element) || {};
             updateFacet(element as HTMLSpanElement, {
                 tag: "media",
                 text,
                 type: "block",
-                record: { ...existing, alt: altText, caption },
+                record: {
+                    ...existing,
+                    alt: altText,
+                    caption,
+                },
             });
         }
         options.normalizeEditor();
@@ -370,10 +409,17 @@ export const createBlockEditHandlers = (
     },
     media: (element) => {
         const record = parseElementRecord(element);
+        const previewUrl = getMediaPreviewUrl(element, record?.image);
         options.setMediaDialog({
             open: true,
             data: {
-                file: null,
+                file:
+                    typeof record?.image === "string"
+                        ? previewUrl
+                            ? options.objectStoreRef.current.get(previewUrl) || null
+                            : null
+                        : ((record?.image as Blob | File | null | undefined) ?? null),
+                previewUrl,
                 text: element.textContent || "",
                 altText: String(record?.alt || ""),
                 caption: String(record?.caption || ""),
