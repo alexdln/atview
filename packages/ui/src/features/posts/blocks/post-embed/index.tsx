@@ -283,7 +283,6 @@ const UnknownEmbed: React.FC<{ embed: unknown }> = ({ embed }) => {
 
 type Embed = PostView["embed"] | Record["embed"] | undefined;
 
-// media (images, video, external), reference (post, feeds, packs, etc.)
 export const PostEmbed: React.FC<{ embed: Embed; did: string }> = ({ embed, did }) => {
     if (!embed) return null;
 
@@ -315,8 +314,8 @@ export const PostEmbed: React.FC<{ embed: Embed; did: string }> = ({ embed, did 
                             record: value,
                             author: author,
                         }}
-                        hideEngagements
-                        nested
+                        interactions="none"
+                        plain
                     />
                 </div>,
             );

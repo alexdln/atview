@@ -1,6 +1,10 @@
 @use "../../../../assets/mixins/media";
 
-.post_root {
+.post {
+    position: relative;
+}
+
+.post_wrapped {
     padding: 8px;
     margin-block: 1.5rem;
     background-color: color-mix(in srgb, var(--cl-main-900) 50%, transparent);
@@ -11,10 +15,6 @@
         padding: 16px;
         border-radius: 16px;
     }
-}
-
-.post {
-    position: relative;
 }
 
 .post__header {
@@ -121,13 +121,4 @@
     display: block;
     padding: 6px 0;
     color: var(--cl-main-400);
-}
-
-.post__engagements--spaced {
-    margin-top: 8px;
-}
-
-.post__engagements--post-page {
-    margin-right: -2px;
-    margin-left: -2px;
 }

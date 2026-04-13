@@ -9,18 +9,17 @@ import {
 } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
 import clsx from "clsx";
 
-import { Post } from "@src/features/posts/blocks/post";
+import { Post, type PostProps } from "@src/features/posts/blocks/post";
 
 import "./thread-view-post.scss";
 
 export type ThreadViewPostProps = {
     item: OutputSchema;
     className?: string;
-    isCurrentPostPage?: boolean;
-    root?: boolean;
+    interactions?: PostProps["interactions"];
 };
 
-export const ThreadViewPost: React.FC<ThreadViewPostProps> = ({ item, className, isCurrentPostPage, root }) => {
+export const ThreadViewPost: React.FC<ThreadViewPostProps> = ({ item, className, interactions = "actions" }) => {
     if (isBlockedPost(item.thread)) {
         return <>Blocked</>;
     }
@@ -37,7 +36,7 @@ export const ThreadViewPost: React.FC<ThreadViewPostProps> = ({ item, className,
     const { post, parent, replies } = itemThread;
 
     return (
-        <div className={clsx("thread-view-post mt-4", !root && "thread-view-post_child", className)}>
+        <div className={clsx("thread-view-post mt-4", className)}>
             {parent && (
                 <div className="thread-view-post__parent">
                     {isThreadViewPost(parent) && <ThreadViewPost item={{ thread: parent }} />}
@@ -47,10 +46,10 @@ export const ThreadViewPost: React.FC<ThreadViewPostProps> = ({ item, className,
                     <span className="thread-view-post__parent-corner-right" />
                 </div>
             )}
-            <Post item={post} isCurrentPostPage={isCurrentPostPage} isPostPage nested />
+            <Post item={post} interactions={interactions} plain />
             {replies?.map((replyiedPost, index) => (
                 <div key={"post" in replyiedPost ? replyiedPost.post.cid : index} className="thread-view-post__reply">
-                    <ThreadViewPost item={{ thread: replyiedPost }} />
+                    <ThreadViewPost item={{ thread: replyiedPost }} className="thread-view-post_nested" />
                     <span className="thread-view-post__reply-line-background" />
                     <span className="thread-view-post__reply-line-top" />
                     <span className="thread-view-post__reply-corner" />

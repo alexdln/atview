@@ -24,7 +24,7 @@
     border: 1px solid color-mix(in srgb, var(--cl-main-700) 30%, transparent);
 
     &:hover {
-        color: var(--cl-primary-400);
+        color: var(--cl-accent-400);
         background: var(--cl-main-950);
     }
 }
@@ -76,7 +76,7 @@
 }
 
 .post-embed__video:hover {
-    color: var(--cl-primary-400);
+    color: var(--cl-accent-400);
     background: var(--cl-main-800);
 }
 

@@ -4,7 +4,7 @@
     position: relative;
 }
 
-.thread-view-post_child {
+.thread-view-post_nested {
     padding: 8px 0 0 8px;
 
     @include media.media(md) {
@@ -60,13 +60,15 @@
 
 .thread-view-post__reply {
     position: relative;
+    margin-top: 20px;
+    margin-left: 2px;
 }
 
 .thread-view-post__reply-line-background {
     top: -0.625rem;
     left: 0.125rem;
     width: 1px;
-    height: 100%;
+    height: calc(100% + 0.75rem);
     border-left: 2px solid color-mix(in srgb, var(--cl-main-700) 50%, transparent);
     border-radius: 0.25rem;
 }
@@ -94,7 +96,7 @@
     top: -1.375rem;
     left: 0.125rem;
     width: 1px;
-    height: calc(100% + 1rem);
+    height: calc(100% + 1.375rem);
     border-left: 2px solid var(--cl-main-500);
     border-radius: 0.25rem;
 }
