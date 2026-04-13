@@ -153,4 +153,34 @@ describe("realHtmlToAst", () => {
         expect(ast.map((b) => b.type)).toEqual(["paragraph", "math"]);
         expect(ast[1]).toEqual({ type: "math", content: "x^2" });
     });
+
+    test("figure figcaption sets caption text and display text", async () => {
+        const ast = await realHtmlToAst(
+            '<figure><img src="https://cdn.example/p.png" alt="img-alt" /><figcaption>  Cap line  </figcaption></figure>',
+        );
+        const media = ast[0] as AstMediaNode;
+        expect(media.type).toBe("media");
+        expect(media.caption).toBe("Cap line");
+        expect(media.text).toBe("Cap line");
+        expect(media.alt).toBe("img-alt");
+        expect(media.image).toBe("https://cdn.example/p.png");
+    });
+
+    test("figure data-caption when no figcaption", async () => {
+        const ast = await realHtmlToAst(
+            '<figure data-caption="From data"><img src="https://cdn.example/d.png" alt="a" /></figure>',
+        );
+        const media = ast[0] as AstMediaNode;
+        expect(media.caption).toBe("From data");
+        expect(media.text).toBe("From data");
+    });
+
+    test("figure data-alt overrides img alt for media block", async () => {
+        const ast = await realHtmlToAst(
+            '<figure data-alt="override"><img src="https://cdn.example/e.png" alt="ignored" /></figure>',
+        );
+        const media = ast[0] as AstMediaNode;
+        expect(media.alt).toBe("override");
+        expect(media.text).toBe("ignored");
+    });
 });

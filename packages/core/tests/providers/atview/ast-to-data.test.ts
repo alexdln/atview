@@ -57,8 +57,8 @@ describe("AtviewProvider.astToData", () => {
                 text: "media-caption",
                 image: "media-image-key",
                 alt: "media-alt-text",
-                width: "10",
-                height: "20",
+                width: 10,
+                height: 20,
             },
         ];
         const out = AtviewProvider.astToData(ast);

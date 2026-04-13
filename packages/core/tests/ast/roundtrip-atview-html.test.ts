@@ -68,8 +68,22 @@ describe("astToAtviewHtml then atviewHtmlToAst", () => {
                 image: "bafymedia",
                 text: "image",
                 alt: "pic",
-                width: "400",
-                height: "300",
+                width: 400,
+                height: 300,
+            },
+        ]);
+    });
+
+    test("media caption roundtrips separately from facet text", () => {
+        expectAstHtmlRoundTrip([
+            {
+                type: "media",
+                image: "bafymedia",
+                text: "facet-range-text",
+                caption: "metadata-caption",
+                alt: "alt-text",
+                width: 800,
+                height: 600,
             },
         ]);
     });

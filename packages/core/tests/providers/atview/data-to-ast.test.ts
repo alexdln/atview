@@ -88,8 +88,9 @@ describe("AtviewProvider.dataToAst", () => {
                             $type: "net.atview.richtext.facet#media",
                             image: "bafyimage",
                             altText: "example-alt",
-                            width: "100",
-                            height: "200",
+                            width: 100,
+                            height: 200,
+                            caption: "facet-caption",
                         },
                     ],
                 },
@@ -105,9 +106,12 @@ describe("AtviewProvider.dataToAst", () => {
                 },
             ],
         });
-        expect(ast.map((block) => block.type)).toContain("bsky-post");
-        expect(ast.map((block) => block.type)).toContain("media");
-        expect(ast.map((block) => block.type)).toContain("website");
+        expect(ast.map((block) => block.type)).toEqual(["bsky-post", "media", "website"]);
+        const media = ast[1];
+        expect(media?.type).toBe("media");
+        if (media?.type === "media") {
+            expect(media.caption).toBe("facet-caption");
+        }
     });
 
     test("math and iframe facets", () => {
