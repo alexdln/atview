@@ -6,13 +6,22 @@ import { formatCount } from "@src/features/shared/core/utils/client-tools";
 import "./engage-like.scss";
 
 export interface EngageLikeProps {
-    post: PostView;
+    post: Pick<PostView, "uri" | "cid" | "likeCount" | "viewer">;
+    onClick?: (post: Pick<PostView, "uri" | "cid">) => void;
 }
 
-export const EngageLike: React.FC<EngageLikeProps> = ({ post }) => {
+export const EngageLike: React.FC<EngageLikeProps> = ({ post, onClick }) => {
     const { likeCount, viewer } = post;
+
     return (
-        <div className="engage-like" title="Like">
+        <button
+            tabIndex={onClick ? 0 : -1}
+            disabled={!onClick}
+            type="button"
+            className="engage-like"
+            title="Like"
+            onClick={() => onClick?.(post)}
+        >
             <svg width="16" height="16" viewBox="0 0 24 24" className="engage-like__icon">
                 <path
                     fillRule="evenodd"
@@ -28,6 +37,6 @@ export const EngageLike: React.FC<EngageLikeProps> = ({ post }) => {
             <span title={`Likes count: ${String(likeCount)}`} className="engage-like__count">
                 {likeCount ? formatCount(likeCount) : <>&nbsp;</>}
             </span>
-        </div>
+        </button>
     );
 };

@@ -41,9 +41,12 @@ export const Post: React.FC<PostProps> = ({ item, className, interactions = "act
 
     const {
         uri,
+        cid,
         author,
         record: postRecord,
         embed,
+        viewer,
+        replyCount,
         likeCount,
         quoteCount,
         repostCount,
@@ -139,7 +142,19 @@ export const Post: React.FC<PostProps> = ({ item, className, interactions = "act
                 </div>
             )}
             {(interactions === "all" || interactions === "actions") && (
-                <PostEngagements className="post__engagements" post={item as PostView} />
+                <PostEngagements
+                    className="post__engagements"
+                    post={{
+                        uri,
+                        cid,
+                        author,
+                        likeCount,
+                        replyCount,
+                        repostCount,
+                        quoteCount,
+                        viewer,
+                    }}
+                />
             )}
         </div>
     );
