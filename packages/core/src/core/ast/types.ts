@@ -85,8 +85,10 @@ export interface AstMediaNode {
     text?: string;
     image: string | Blob;
     alt?: string;
-    width?: string;
-    height?: string;
+    width?: number;
+    height?: number;
+    title?: string;
+    caption?: string;
 }
 
 export interface AstListItem {

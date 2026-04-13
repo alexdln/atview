@@ -30,8 +30,8 @@ describe("LeafletProvider.astToData", () => {
                 type: "media",
                 image: "media-key",
                 alt: "media-alt",
-                width: "8",
-                height: "4",
+                width: 8,
+                height: 4,
             },
             {
                 type: "unordered-list",

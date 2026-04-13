@@ -96,12 +96,13 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             const record = JSON.stringify({
                 image: block.image,
                 alt: block.alt || "",
+                caption: block.caption || "",
                 width: block.width || "",
                 height: block.height || "",
             });
-            const w = Number(block.width) || 0;
-            const h = Number(block.height) || 1;
-            const ratio = Math.round((w / h) * 100) / 100;
+            const width = Number(block.width) || 0;
+            const height = Number(block.height) || 1;
+            const ratio = Math.round((width / height) * 100) / 100;
 
             const previewUrl = formatMediaUri(block.image as string, { ...context, thumbnail: true });
             const previewStyle = `--preview-url: url(${previewUrl});--aspect-ratio: ${String(ratio)}`;
@@ -138,8 +139,12 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             return `<span data-tag="math" data-type="block">${escapeHtml(block.content)}</span>`;
         }
 
+        case "iframe": {
+            const record = JSON.stringify({ url: block.url });
+            return `<span data-tag="iframe" data-type="block" data-record='${escapeAttr(record)}'>${escapeHtml(block.url)}</span>`;
+        }
+
         case "table":
-        case "iframe":
             return "";
 
         default:

@@ -109,12 +109,16 @@ const blockToPckt = (block: AstBlockNode): PcktBlock | null => {
             const image = block.image;
             return {
                 $type: "blog.pckt.block.image",
-                blob: image,
-                ...(block.alt ? { alt: block.alt } : {}),
                 attrs: {
                     src: "",
                     blob: image,
+                    aspectRatio: {
+                        width: Number(block.width || 0) || 0,
+                        height: Number(block.height || 0) || 0,
+                    },
                     ...(block.alt ? { alt: block.alt } : {}),
+                    ...(block.title ? { title: block.title } : {}),
+                    ...(block.caption ? { caption: block.caption } : {}),
                 },
             };
         }

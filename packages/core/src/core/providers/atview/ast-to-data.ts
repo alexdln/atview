@@ -122,9 +122,13 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
                     {
                         $type: "net.atview.richtext.facet#media",
                         image: block.image,
+                        aspectRatio: {
+                            width: Number(block.width || 0) || 0,
+                            height: Number(block.height || 0) || 0,
+                        },
+                        ...(block.title ? { title: block.title } : {}),
                         ...(block.alt ? { altText: block.alt } : {}),
-                        ...(block.width ? { width: block.width } : {}),
-                        ...(block.height ? { height: block.height } : {}),
+                        ...(block.caption ? { caption: block.caption } : {}),
                     },
                 ],
             });

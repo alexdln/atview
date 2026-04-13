@@ -53,6 +53,22 @@ describe("atviewHtmlToAst", () => {
         expect(ast[1]?.type).toBe("media");
     });
 
+    test("media data-record caption is distinct from span text", () => {
+        const ast = parseAtviewHtmlToAst(
+            '<span data-tag="media" data-record=\'{"image":"k","alt":"a","caption":"cap","width":"1","height":"2"}\'>visible</span>',
+            new Map(),
+        );
+        const media = ast[0];
+        expect(media?.type).toBe("media");
+        if (media?.type === "media") {
+            expect(media.text).toBe("visible");
+            expect(media.caption).toBe("cap");
+            expect(media.alt).toBe("a");
+            expect(media.width).toBe(1);
+            expect(media.height).toBe(2);
+        }
+    });
+
     test("math block span", () => {
         const ast = parseAtviewHtmlToAst('<span data-tag="math" data-type="block">\\sum_{i=1}^n i</span>');
         expect(ast[0]).toEqual({ type: "math", content: "\\sum_{i=1}^n i" });

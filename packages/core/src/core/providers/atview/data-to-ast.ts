@@ -118,13 +118,16 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
                 blocks.push({ type: "website", uri: String(feature.uri || ""), title: String(feature.title || "") });
                 break;
             case "net.atview.richtext.facet#media":
+                const { width, height } = (feature.aspectRatio as { width: number; height: number }) || {};
                 blocks.push({
                     type: "media",
                     text,
                     image: (feature.image as string | Blob) || "",
                     alt: feature.altText ? String(feature.altText) : undefined,
-                    width: feature.width ? String(feature.width) : undefined,
-                    height: feature.height ? String(feature.height) : undefined,
+                    width: width ? Number(width) : undefined,
+                    height: height ? Number(height) : undefined,
+                    title: feature.title ? String(feature.title) : undefined,
+                    caption: feature.caption ? String(feature.caption) : undefined,
                 });
                 break;
             case "net.atview.richtext.facet#link":

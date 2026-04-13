@@ -91,8 +91,9 @@ const blockToAst = (block: LeafletBlock): AstBlockNode | null => {
                 type: "media",
                 image: block.image,
                 alt: block.alt,
-                width: block.aspectRatio?.width ? String(block.aspectRatio.width) : undefined,
-                height: block.aspectRatio?.height ? String(block.aspectRatio.height) : undefined,
+                caption: block.caption,
+                width: block.aspectRatio?.width ? Number(block.aspectRatio.width) : undefined,
+                height: block.aspectRatio?.height ? Number(block.aspectRatio.height) : undefined,
             };
 
         case "pub.leaflet.blocks.unorderedList":

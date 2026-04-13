@@ -142,6 +142,8 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
                     image={block.image}
                     width={block.width}
                     height={block.height}
+                    title={block.title}
+                    caption={block.caption}
                 />
             );
 

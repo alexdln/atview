@@ -4,7 +4,8 @@ import { type PcktBlock, type PcktImageBlock } from "@src/core/defs/document";
 import { readBlobAsUint8Array } from "@src/core/utils/blob";
 
 const processImageBlob = async (block: PcktImageBlock, objectStore: Map<string, File>, agent: Agent) => {
-    const ref = block.blob ?? block.attrs?.blob;
+    const ref = block.attrs?.blob;
+
     if (typeof ref !== "string") return;
 
     const file = objectStore.get(ref);
@@ -14,8 +15,7 @@ const processImageBlob = async (block: PcktImageBlock, objectStore: Map<string, 
     const { data } = await agent.com.atproto.repo.uploadBlob(bytes, { encoding: file.type });
     const { mimeType, ref: blobRef, size } = data.blob;
     const uploaded = { $type: "blob" as const, mimeType, ref: blobRef, size };
-    const alt = block.alt ?? block.attrs?.alt;
-    block.blob = uploaded;
+    const alt = block.attrs?.alt;
     block.attrs = {
         src: block.attrs?.src ?? "",
         blob: uploaded,

@@ -131,11 +131,12 @@ const renderBlock = (block: AstBlockNode): string => {
         case "media": {
             const src = escapeAttr(mediaSrc(block));
             const alt = escapeAttr(block.alt || "");
-            const w = block.width ? ` width="${escapeAttr(block.width)}"` : "";
-            const h = block.height ? ` height="${escapeAttr(block.height)}"` : "";
-            const img = `<img src="${src}" alt="${alt}"${w}${h} />`;
-            const cap = block.text ? `<figcaption>${escapeHtml(block.text)}</figcaption>` : "";
-            return `<figure>${img}${cap}</figure>`;
+            const width = block.width ? ` width="${block.width}"` : "";
+            const height = block.height ? ` height="${block.height}"` : "";
+            const title = block.title ? ` title="${escapeAttr(block.title)}"` : "";
+            const img = `<img src="${src}" alt="${alt}"${width}${height}${title} />`;
+            const caption = block.caption ? `<figcaption>${escapeHtml(block.caption)}</figcaption>` : "";
+            return `<figure>${img}${caption}</figure>`;
         }
 
         case "unordered-list":
