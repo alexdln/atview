@@ -141,6 +141,23 @@ const parseSrcsetLast = (source?: string | null) => {
     return lastCandidate?.split(" ")[0]?.trim();
 };
 
+/** Paragraph contains only optional whitespace and a single top-level `<img>`. */
+const imageOnlyFromParagraph = (paragraph: HTMLElement): HTMLImageElement | null => {
+    let image: HTMLImageElement | null = null;
+    for (const child of paragraph.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE) {
+            if (cleanText(child.textContent || "").trim() !== "") return null;
+            continue;
+        }
+        if (child.nodeType !== Node.ELEMENT_NODE) return null;
+        const el = child as HTMLElement;
+        if (el.tagName.toLowerCase() !== "img") return null;
+        if (image) return null;
+        image = el as HTMLImageElement;
+    }
+    return image;
+};
+
 const mediaFromImage = async (
     imageElement: HTMLImageElement,
     figureElement: HTMLElement | null,
@@ -291,7 +308,13 @@ const walkFlow = async (
 
         if (tag === "p") {
             flushPendingIntoBlocks();
-            blocks.push(...paragraphBlocksFromElement(element, context));
+            const soleImage = imageOnlyFromParagraph(element);
+            if (soleImage) {
+                const media = await mediaFromImage(soleImage, null, context);
+                blocks.push(media);
+            } else {
+                blocks.push(...paragraphBlocksFromElement(element, context));
+            }
             continue;
         }
 

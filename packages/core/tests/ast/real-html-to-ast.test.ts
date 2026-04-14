@@ -269,4 +269,15 @@ describe("realHtmlToAst", () => {
             },
         ]);
     });
+
+    test("should support images in paragraphs", async () => {
+        const ast = await realHtmlToAst('<p><img src="https://cdn.example/x.png" alt="x" /></p>');
+        expect(ast).toHaveLength(1);
+        expect(ast[0]).toEqual({
+            type: "media",
+            text: "x",
+            image: "https://cdn.example/x.png",
+            alt: "x",
+        });
+    });
 });
