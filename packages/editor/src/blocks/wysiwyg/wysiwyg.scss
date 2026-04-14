@@ -129,6 +129,12 @@
     }
 }
 
+.editor-wysiwyg span[data-tag="ol"],
+.editor-wysiwyg span[data-tag="ul"] {
+    display: block;
+    margin-block: 16px;
+}
+
 .editor-wysiwyg span[data-tag="media"] {
     &::before {
         display: block;
