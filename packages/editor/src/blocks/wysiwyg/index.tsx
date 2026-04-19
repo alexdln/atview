@@ -2,6 +2,9 @@
 
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDialogReducer } from "contection-top-layer";
+import { ENGINES, LeafletProvider, PcktProvider, SiteStandardProvider, AtviewProvider } from "@atview/core";
+
+import { atviewHtmlToAst } from "@src/atview-html";
 
 import {
     EditorLinkDialogProvider,
@@ -21,10 +24,8 @@ import {
     processImportImages,
 } from "./html";
 import { unwrapInvalidRecursive, fixTextNodes, checkRangeFormatting, resetSelectionFormatting } from "./utils";
-import { ENGINES, LeafletProvider, PcktProvider, SiteStandardProvider, AtviewProvider } from "@atview/core";
 
 import "./wysiwyg.scss";
-import { atviewHtmlToAst } from "@src/atview-html";
 
 export type WysiwygEngine = keyof typeof ENGINES;
 export type WysiwygData<Engine extends WysiwygEngine = WysiwygEngine> = Engine extends "leaflet_blocks"
@@ -344,7 +345,7 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
                 node: wysiwygRef.current!,
             };
         }
-    }, [editorRef, astToData]);
+    }, [editorRef, astToData, engine]);
 
     useEffect(() => {
         if (objectStore) return;
