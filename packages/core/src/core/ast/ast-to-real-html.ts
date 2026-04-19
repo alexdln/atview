@@ -63,6 +63,8 @@ const plainBlock = (block: AstBlockNode, context: { authorDid?: string }): strin
         case "media":
             const image = block.image;
             return block.text || formatMediaUri(image, { authorDid: context.authorDid, thumbnail: true });
+        case "hard-break":
+            return "\n";
         case "unordered-list":
             return block.items.map((i) => `- ${plainListItem(i, context)}`).join("\n");
         case "ordered-list": {
@@ -87,7 +89,8 @@ export const astToPlainText = (ast: AstDocument, context: { authorDid?: string }
     ast
         .map((block) => plainBlock(block, context))
         .filter(Boolean)
-        .join("\n\n");
+        .join("\n\n")
+        .replace(/\n{4,}/g, "\n\n\n");
 
 const renderListItem = (item: AstListItem): string => {
     const inline = escapeHtml(item.children.map(plainInline).join(""));

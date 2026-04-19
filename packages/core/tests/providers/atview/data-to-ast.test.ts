@@ -132,4 +132,21 @@ describe("AtviewProvider.dataToAst", () => {
         expect(ast[0]).toEqual({ type: "math", content: "E = mc^2" });
         expect(ast[1]).toEqual({ type: "iframe", url: "https://embed.example/x" });
     });
+
+    test("hard-break facet between paragraphs", () => {
+        const ast = AtviewProvider.dataToAst({
+            textContent: "a\n\n\n\n\nb",
+            facets: [
+                {
+                    index: { byteStart: 3, byteEnd: 4 },
+                    features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+                },
+            ],
+        });
+        expect(ast).toEqual([
+            { type: "paragraph", children: [{ type: "text", value: "a" }] },
+            { type: "hard-break" },
+            { type: "paragraph", children: [{ type: "text", value: "b" }] },
+        ]);
+    });
 });

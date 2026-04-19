@@ -66,7 +66,12 @@ const processBlock = (block: AstBlockNode, collector: { text: string }, isFirst:
         case "website":
             collector.text += block.title || block.uri;
             break;
+        case "hard-break":
+            collector.text += "\n";
+            break;
         case "horizontal-rule":
+            collector.text += "\n---\n";
+            break;
         case "table":
         case "iframe":
             break;
@@ -76,5 +81,5 @@ const processBlock = (block: AstBlockNode, collector: { text: string }, isFirst:
 export const astToData = (ast: AstDocument): { textContent: string } => {
     const collector = { text: "" };
     ast.forEach((block, index) => processBlock(block, collector, index === 0));
-    return { textContent: collector.text };
+    return { textContent: collector.text.replace(/\n{4,}/g, "\n\n\n") };
 };

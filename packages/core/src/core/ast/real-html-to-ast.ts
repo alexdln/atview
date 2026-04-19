@@ -296,13 +296,14 @@ const walkFlow = async (
 
         if (SKIPPED_TAGS.has(tag)) continue;
 
-        if (tag === "br") {
-            pendingNodes.push(context.document.createTextNode("\n"));
+        if (CONTAINER_BLOCKS.has(tag)) {
+            await walkFlow(Array.from(element.childNodes), context, blocks, pendingNodes);
             continue;
         }
 
-        if (CONTAINER_BLOCKS.has(tag)) {
-            await walkFlow(Array.from(element.childNodes), context, blocks, pendingNodes);
+        if (tag === "br") {
+            flushPendingIntoBlocks();
+            blocks.push({ type: "hard-break" });
             continue;
         }
 

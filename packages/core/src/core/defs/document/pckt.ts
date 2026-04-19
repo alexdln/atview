@@ -93,6 +93,10 @@ export interface PcktIframeBlock {
     attrs?: { url?: string };
 }
 
+export interface PcktHardBreakBlock {
+    $type: "blog.pckt.block.hardBreak";
+}
+
 export type PcktBlock =
     | PcktTextBlock
     | PcktHeadingBlock
@@ -105,4 +109,5 @@ export type PcktBlock =
     | PcktOrderedListBlock
     | PcktBulletListBlock
     | PcktTableBlock
-    | PcktIframeBlock;
+    | PcktIframeBlock
+    | PcktHardBreakBlock;

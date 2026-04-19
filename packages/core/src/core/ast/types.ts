@@ -150,6 +150,10 @@ export interface AstMathNode {
     content: string;
 }
 
+export interface AstHardBreakNode {
+    type: "hard-break";
+}
+
 export type AstBlockNode =
     | AstParagraphNode
     | AstHeadingNode
@@ -163,6 +167,7 @@ export type AstBlockNode =
     | AstWebsiteNode
     | AstTableNode
     | AstIframeNode
-    | AstMathNode;
+    | AstMathNode
+    | AstHardBreakNode;
 
 export type AstDocument = AstBlockNode[];

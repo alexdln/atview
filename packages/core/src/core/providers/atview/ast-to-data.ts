@@ -212,6 +212,17 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
             break;
         }
 
+        case "hard-break": {
+            collector.text += "\n";
+            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
+            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
+            collector.facets.push({
+                index: { byteStart, byteEnd },
+                features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+            });
+            break;
+        }
+
         case "table":
             break;
     }
