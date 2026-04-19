@@ -172,7 +172,7 @@ const mediaFromImage = async (
         figureElement?.querySelector("figcaption")?.textContent?.trim() ||
         figureElement?.getAttribute("data-caption") ||
         "";
-    const text = caption || imageElement.alt || src || undefined;
+    const text = caption || imageElement.alt || undefined;
     const width = Number(figureElement?.getAttribute("data-width") || imageElement.getAttribute("width") || 0);
     const height = Number(figureElement?.getAttribute("data-height") || imageElement.getAttribute("height") || 0);
     const image = await context.processImageBlob(src);

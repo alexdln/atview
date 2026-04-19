@@ -67,8 +67,11 @@ export const splitParagraphs = (nodes: AstInlineNode[]): AstBlockNode[] => {
         if (node.type === "text" && node.value.includes("\n\n")) {
             const textParagraphs = node.value.split("\n\n");
             textParagraphs.slice(0, -1).forEach((text) => {
-                if (!text.trim()) return;
-                blocks.push({ type: "paragraph", children: [...queueNodes, { type: "text", value: text }] });
+                if (text.trim()) {
+                    blocks.push({ type: "paragraph", children: [...queueNodes, { type: "text", value: text }] });
+                } else if (queueNodes.length > 0) {
+                    blocks.push({ type: "paragraph", children: queueNodes });
+                }
                 queueNodes = [];
             });
             const paragraphValue = textParagraphs[textParagraphs.length - 1];

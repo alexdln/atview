@@ -95,6 +95,33 @@ describe("atviewHtmlToAst", () => {
         const ast = parseAtviewHtmlToAst('<span data-tag="link" data-record="not-json">fallback-text</span>');
         expect(ast.length).toBeGreaterThan(0);
     });
+
+    test("should separate paragraphs with inline elements", async () => {
+        const ast =
+            parseAtviewHtmlToAst(`<span data-tag="link" data-type="inline" data-record="{&quot;uri&quot;:&quot;https://example.com&quot;}">example.com</span>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
+        expect(ast).toHaveLength(2);
+        expect(ast[0]).toEqual({
+            type: "paragraph",
+            children: [
+                {
+                    type: "link",
+                    uri: "https://example.com",
+                    children: [{ type: "text", value: "example.com" }],
+                },
+            ],
+        });
+        expect(ast[1]).toEqual({
+            type: "paragraph",
+            children: [
+                {
+                    type: "text",
+                    value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                },
+            ],
+        });
+    });
 });
 
 describe("atviewHtmlToAst edge document shapes", () => {
