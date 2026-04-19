@@ -1,9 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { type Facet, AtviewProvider } from "@atview/core";
 
-import { type Facet } from "@src/core/defs/document";
-import { astToAtviewHtml } from "@src/core/ast";
-import { AtviewProvider } from "@src/core/providers";
-
+import { astToAtviewHtml, atviewHtmlToAst } from "../../../src/atview-html";
 import { normalizeAtviewData, parseAtviewHtmlToAst } from "../../helpers";
 
 const expectFullRoundTrip = (
@@ -64,7 +62,7 @@ describe("AtviewProvider.atviewHtmlToData", () => {
         root.innerHTML = astToAtviewHtml([
             { type: "paragraph", children: [{ type: "text", value: "paragraph-sample" }] },
         ]);
-        const via = AtviewProvider.atviewHtmlToData(root, new Map());
+        const via = AtviewProvider.astToData(atviewHtmlToAst(root, new Map()));
         const direct = AtviewProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.textContent).toBe(direct.textContent);
         expect(via.facets).toEqual(direct.facets);

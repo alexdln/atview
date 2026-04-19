@@ -8,6 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist/cjs",
+    "rootDir": "src",
     "declaration": true,
     "declarationDir": "dist/cjs",
     "moduleResolution": "bundler",
@@ -16,5 +17,8 @@
         "./src/*"
       ]
     }
-  }
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }

@@ -1,21 +1,20 @@
 import { describe, expect, test } from "vitest";
+import { PcktProvider } from "@atview/core";
 
-import { astToAtviewHtml } from "@src/core/ast";
-import { getDocumentAtviewHtml, PcktProvider } from "@src/core/providers";
-
-import { minimalStandardPckt, parseAtviewHtmlToAst } from "../../helpers";
+import { astToAtviewHtml, atviewHtmlToAst, getDocumentAtviewHtml } from "../../../src/atview-html";
+import { minimalStandardPckt } from "../../../../core/tests/helpers";
+import { parseAtviewHtmlToAst } from "../../helpers";
 
 describe("PcktProvider dataToAtviewHtml", () => {
     test("renders paragraph from items", () => {
-        const html = PcktProvider.dataToAtviewHtml(
-            { items: [{ $type: "blog.pckt.block.text", plaintext: "pipeline-body" }] },
-            {},
+        const html = astToAtviewHtml(
+            PcktProvider.dataToAst({ items: [{ $type: "blog.pckt.block.text", plaintext: "pipeline-body" }] }),
         );
         expect(html).toContain("pipeline-body");
     });
 
     test("empty items yields empty document html", () => {
-        const html = PcktProvider.dataToAtviewHtml({ items: [] }, {});
+        const html = astToAtviewHtml(PcktProvider.dataToAst({ items: [] }));
         expect(html.trim()).toBe("");
     });
 });
@@ -28,7 +27,7 @@ describe("Pckt REST-style document html", () => {
         ];
         const doc = minimalStandardPckt(items);
         const fromApi = getDocumentAtviewHtml(doc, {});
-        const direct = PcktProvider.dataToAtviewHtml({ items }, {});
+        const direct = astToAtviewHtml(PcktProvider.dataToAst({ items }));
         expect(fromApi).toBe(direct);
     });
 });
@@ -40,7 +39,7 @@ describe("PcktProvider.atviewHtmlToData", () => {
         });
         const root = document.createElement("div");
         root.innerHTML = astToAtviewHtml(ast);
-        const via = PcktProvider.atviewHtmlToData(root, new Map());
+        const via = PcktProvider.astToData(atviewHtmlToAst(root, new Map()));
         const direct = PcktProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.items).toEqual(direct.items);
     });

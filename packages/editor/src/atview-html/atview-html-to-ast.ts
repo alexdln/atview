@@ -1,5 +1,12 @@
-import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "./types";
-import { cleanText, cloneNodesIntoWrapper, splitParagraphs } from "./document-text";
+import {
+    type AstBlockNode,
+    type AstDocument,
+    type AstInlineNode,
+    type AstListItem,
+    cleanText,
+    cloneNodesIntoWrapper,
+    splitParagraphs,
+} from "@atview/core";
 
 const BLOCK_TAGS = new Set([
     "h2",

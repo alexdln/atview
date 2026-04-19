@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { type AstDocument, type Blob } from "@atview/core";
 
-import { type AstDocument, astToAtviewHtml } from "@src/core/ast";
-import { type Blob } from "@src/core/defs/document";
+import { astToAtviewHtml } from "../../src/atview-html";
 
 describe("astToAtviewHtml", () => {
     test("paragraph spacing", () => {

@@ -2,8 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { type Blob } from "@src/core/defs/document";
 import { AstMediaNode, type AstCodeBlockNode, type AstParagraphNode } from "@src/core/ast";
-import { atviewHtmlToAst, realHtmlToAst } from "@src/core/ast";
-import { parseAtviewHtmlToAst } from "../helpers";
+import { realHtmlToAst } from "@src/core/ast";
 
 describe("realHtmlToAst", () => {
     test("paragraphs and emphasis", async () => {
@@ -37,18 +36,6 @@ describe("realHtmlToAst", () => {
         expect((code as AstCodeBlockNode).language).toBe("rs");
     });
 
-    test("aligns with atview pseudo-html for equivalent structure", async () => {
-        const pseudo =
-            '<span data-tag="h3">Title</span><span data-tag="blockquote">Quote</span>Plain <span data-tag="b">bold</span> end';
-        const root = document.createElement("div");
-        root.innerHTML = pseudo;
-        const fromPseudo = atviewHtmlToAst(root, new Map());
-        const fromHtml = await realHtmlToAst(
-            "<h3>Title</h3><blockquote>Quote</blockquote><p>Plain <strong>bold</strong> end</p>",
-        );
-        expect(fromHtml).toEqual(fromPseudo);
-    });
-
     test("objectStore maps blob URL to file on img src", async () => {
         const store = new Map<string, File>();
         // pseudo fetch and object-url generation for the image
@@ -69,12 +56,6 @@ describe("realHtmlToAst", () => {
         expect(media?.type).toBe("media");
         expect((media as AstMediaNode).image).toBe(url);
         expect(store.get((media as AstMediaNode).image as string)).toBe(file);
-    });
-
-    test("matches parseAtviewHtmlToAst for stored pseudo snippet", async () => {
-        const pseudo = parseAtviewHtmlToAst('<span data-tag="link" data-record=\'{"uri":"u"}\'>t</span>');
-        const fromReal = await realHtmlToAst('<p><a href="u">t</a></p>');
-        expect(fromReal).toEqual(pseudo);
     });
 
     test("exact AST for every block type realHtmlToAst emits", async () => {

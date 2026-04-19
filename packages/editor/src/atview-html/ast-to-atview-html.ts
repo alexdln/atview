@@ -1,5 +1,3 @@
-import { formatMediaUri } from "@src/core/utils/media";
-
 import {
     type AstBlockNode,
     type AstDocument,
@@ -7,7 +5,8 @@ import {
     type AstListItem,
     type AstOrderedListNode,
     type AstUnorderedListNode,
-} from "./types";
+    formatMediaUri,
+} from "@atview/core";
 
 const escapeHtml = (text: string) =>
     text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

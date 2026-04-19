@@ -1,8 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { type AstDocument } from "@atview/core";
 
-import { type AstDocument } from "@src/core/ast/types";
-import { astToAtviewHtml } from "@src/core/ast";
-
+import { astToAtviewHtml } from "../../src/atview-html";
 import { parseAtviewHtmlToAst } from "../helpers";
 
 const expectAstHtmlRoundTrip = (ast: AstDocument, context: { authorDid?: string } = {}) => {

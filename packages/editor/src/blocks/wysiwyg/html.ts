@@ -1,12 +1,6 @@
-import {
-    astToAtviewHtml,
-    astToPlainText,
-    astToRealHtml,
-    atviewHtmlToAst,
-    realHtmlToAst,
-    type AstToAtviewHtmlContext,
-    type HtmlToAstOptions,
-} from "@atview/core";
+import { astToPlainText, astToRealHtml, realHtmlToAst, type HtmlToAstOptions } from "@atview/core";
+
+import { astToAtviewHtml, atviewHtmlToAst, type AstToAtviewHtmlContext } from "../../atview-html";
 
 export interface HtmlImportOptions extends AstToAtviewHtmlContext {
     processImageBlob?: HtmlToAstOptions["processImageBlob"];

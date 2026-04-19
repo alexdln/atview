@@ -1,8 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { LeafletProvider } from "@atview/core";
 
-import { astToAtviewHtml } from "@src/core/ast";
-import { LeafletProvider } from "@src/core/providers";
-
+import { astToAtviewHtml, atviewHtmlToAst } from "../../../src/atview-html";
 import { parseAtviewHtmlToAst } from "../../helpers";
 
 describe("LeafletProvider data html pipeline", () => {
@@ -10,7 +9,7 @@ describe("LeafletProvider data html pipeline", () => {
         const ast = [{ type: "paragraph" as const, children: [{ type: "text" as const, value: "paragraph-body" }] }];
         const root = document.createElement("div");
         root.innerHTML = astToAtviewHtml(ast);
-        const via = LeafletProvider.atviewHtmlToData(root, new Map());
+        const via = LeafletProvider.astToData(atviewHtmlToAst(root, new Map()));
         const direct = LeafletProvider.astToData(parseAtviewHtmlToAst(root.innerHTML));
         expect(via.pages).toEqual(direct.pages);
     });
