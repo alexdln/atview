@@ -1,5 +1,5 @@
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "./types";
-import { formatMediaUri } from "../utils";
+import { formatMediaUris, getMediaUri } from "../utils";
 
 const escapeHtml = (text: string) =>
     text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -62,7 +62,11 @@ const plainBlock = (block: AstBlockNode, context: { authorDid?: string }): strin
             return block.text;
         case "media":
             const image = block.image;
-            return block.text || formatMediaUri(image, { authorDid: context.authorDid, thumbnail: true });
+            return (
+                block.text ||
+                getMediaUri(formatMediaUris(image, { authorDid: context.authorDid }), { size: "thumbnail" }) ||
+                ""
+            );
         case "hard-break":
             return "\n";
         case "unordered-list":
