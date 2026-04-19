@@ -5,7 +5,8 @@ import {
     type AstListItem,
     type AstOrderedListNode,
     type AstUnorderedListNode,
-    formatMediaUri,
+    formatMediaUris,
+    getMediaUri,
 } from "@atview/core";
 
 const escapeHtml = (text: string) =>
@@ -103,7 +104,8 @@ const renderBlock = (block: AstBlockNode, context: { authorDid?: string }): stri
             const height = Number(block.height) || 1;
             const ratio = Math.round((width / height) * 100) / 100;
 
-            const previewUrl = formatMediaUri(block.image as string, { ...context, thumbnail: true });
+            const previewUrl =
+                getMediaUri(formatMediaUris(block.image as string, context), { size: "thumbnail" }) || "";
             const previewStyle = `--preview-url: url(${previewUrl});--aspect-ratio: ${String(ratio)}`;
 
             return `<span data-tag="media" data-type="block" data-record='${escapeAttr(record)}' style='${previewStyle}'>${text}</span>`;

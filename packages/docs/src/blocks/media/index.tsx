@@ -2,7 +2,7 @@ import React from "react";
 import { ImageWrapper } from "@atview/ui/posts/blocks/image-wrapper";
 import clsx from "clsx";
 
-import { type Blob, formatMediaUri } from "@atview/core";
+import { type Blob, type MediaUriLoader, formatMediaUris, getMediaUri } from "@atview/core";
 
 import "./media.scss";
 
@@ -10,11 +10,11 @@ export interface MediaProps {
     alt?: string;
     caption?: string;
     image: Blob | string;
-    fullUri?: string;
     width?: string | number;
     height?: string | number;
     title?: string;
     authorDid?: string;
+    loader?: MediaUriLoader;
     className?: string;
 }
 
@@ -22,19 +22,21 @@ export const Media: React.FC<MediaProps> = ({
     alt,
     caption,
     image,
-    fullUri,
     width,
     height,
     title,
     authorDid,
+    loader,
     className,
 }) => {
-    const fullUriFinal = fullUri || formatMediaUri(image, { authorDid });
-    const thumbnailUri = formatMediaUri(image, { authorDid, thumbnail: true });
+    const mediaUris = formatMediaUris(image, { authorDid, formats: ["png", "webp"], loader });
+    const fullUri = getMediaUri(mediaUris);
+    const thumbnailUri = getMediaUri(mediaUris, { size: "thumbnail" }) || fullUri || "";
+    const webpUri = getMediaUri(mediaUris, { format: "webp" });
 
     return (
         <ImageWrapper
-            uris={[{ img: thumbnailUri, alt, fullUri: fullUriFinal }]}
+            uris={[{ img: thumbnailUri, alt, fullUri, webp: webpUri }]}
             index={0}
             className={clsx("atview-media", className)}
         >

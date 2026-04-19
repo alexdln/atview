@@ -172,9 +172,6 @@ importers:
 
   packages/editor:
     dependencies:
-      '@atview/core':
-        specifier: workspace:*
-        version: link:../core
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -188,6 +185,9 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
     devDependencies:
+      '@atview/core':
+        specifier: workspace:*
+        version: link:../core
       '@atview/docs':
         specifier: workspace:*
         version: link:../docs

@@ -9,10 +9,12 @@ import {
     type AstListItem,
     type AstTableRow,
     type AstTaskListItem,
+    type MediaUriLoader,
 } from "@atview/core";
 import { InlineElements, BlockElements } from "./components";
 
 export interface RenderContext {
+    imageLoader?: MediaUriLoader;
     authorDid: string;
     inlineElements?: Partial<typeof InlineElements>;
     blockElements?: Partial<typeof BlockElements>;
@@ -21,7 +23,8 @@ export interface RenderContext {
 
 export type Headings = { id: string; text: string; nested: boolean }[];
 
-export interface RenderContextInternal extends Required<RenderContext> {
+export interface RenderContextInternal extends Omit<Required<RenderContext>, "imageLoader"> {
+    imageLoader?: MediaUriLoader;
     inlineElements: typeof InlineElements;
     blockElements: typeof BlockElements;
     headings: Headings;
@@ -154,6 +157,7 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
                 <blockElements.media
                     key={key}
                     authorDid={ctx.authorDid}
+                    loader={ctx.imageLoader}
                     alt={block.alt}
                     image={block.image}
                     width={block.width}
@@ -226,9 +230,16 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
 };
 
 export const astToJsx = (ast: AstDocument, context: RenderContext) => {
-    const { authorDid = "", inlineElements, blockElements, slugGenerator = createSlugGenerator() } = context;
+    const {
+        authorDid = "",
+        imageLoader,
+        inlineElements,
+        blockElements,
+        slugGenerator = createSlugGenerator(),
+    } = context;
     const fullContext: RenderContextInternal = {
         authorDid,
+        imageLoader,
         headings: [],
         slugGenerator,
         inlineElements: { ...InlineElements, ...inlineElements },
