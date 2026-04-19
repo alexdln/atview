@@ -1,9 +1,28 @@
 import { describe, expect, test } from "vitest";
+import { type AstDocument, realHtmlToAst, AtviewProvider, LeafletProvider, PcktProvider } from "@atview/core";
 
-import { astToAtviewHtml, type AstDocument } from "@src/core/ast";
-import { AtviewProvider, LeafletProvider, PcktProvider } from "@src/core/providers";
-
+import { astToAtviewHtml, atviewHtmlToAst } from "../../src/atview-html";
 import { parseAtviewHtmlToAst } from "../helpers";
+
+describe("realHtmlToAst vs atview pseudo-html", () => {
+    test("aligns with atview pseudo-html for equivalent structure", async () => {
+        const pseudo =
+            '<span data-tag="h3">Title</span><span data-tag="blockquote">Quote</span>Plain <span data-tag="b">bold</span> end';
+        const root = document.createElement("div");
+        root.innerHTML = pseudo;
+        const fromPseudo = atviewHtmlToAst(root, new Map());
+        const fromHtml = await realHtmlToAst(
+            "<h3>Title</h3><blockquote>Quote</blockquote><p>Plain <strong>bold</strong> end</p>",
+        );
+        expect(fromHtml).toEqual(fromPseudo);
+    });
+
+    test("matches parseAtviewHtmlToAst for stored pseudo snippet", async () => {
+        const pseudo = parseAtviewHtmlToAst('<span data-tag="link" data-record=\'{"uri":"u"}\'>t</span>');
+        const fromReal = await realHtmlToAst('<p><a href="u">t</a></p>');
+        expect(fromReal).toEqual(pseudo);
+    });
+});
 
 describe("shared html between providers", () => {
     test("parsed ast roundtrips through atview and leaflet separately", () => {
@@ -24,28 +43,5 @@ describe("shared html between providers", () => {
         expect(AtviewProvider.dataToAst(AtviewProvider.astToData(parsed))).toEqual(parsed);
         expect(LeafletProvider.dataToAst(LeafletProvider.astToData(parsed))).toEqual(parsed);
         expect(PcktProvider.astToData(parsed)).toEqual({ items: [] });
-    });
-});
-
-describe("ast through each provider roundtrip", () => {
-    test("atview", () => {
-        const ast: AstDocument = [{ type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] }];
-        const data = AtviewProvider.astToData(ast);
-        expect(AtviewProvider.dataToAst(data)).toEqual(ast);
-    });
-
-    test("leaflet", () => {
-        const ast: AstDocument = [
-            { type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] },
-            { type: "horizontal-rule" },
-        ];
-        const back = LeafletProvider.dataToAst(LeafletProvider.astToData(ast));
-        expect(back).toEqual(ast);
-    });
-
-    test("pckt", () => {
-        const ast: AstDocument = [{ type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] }];
-        const data = PcktProvider.astToData(ast);
-        expect(PcktProvider.dataToAst(data)).toEqual(ast);
     });
 });

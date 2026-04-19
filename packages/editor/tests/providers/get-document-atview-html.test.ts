@@ -1,8 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { type LeafletBlock, type LeafletDocumentBlock } from "@atview/core";
 
-import { type LeafletBlock, type LeafletDocumentBlock } from "@src/core/defs/document";
-import { getDocumentAtviewHtml } from "@src/core/providers";
-
+import { getDocumentAtviewHtml } from "../../src/atview-html";
 import {
     linearPage,
     minimalLeafletMain,
@@ -10,7 +9,7 @@ import {
     minimalStandardLeaflet,
     minimalStandardPckt,
     minimalStandardPlain,
-} from "../helpers";
+} from "../../../core/tests/helpers";
 
 const wrap = (block: LeafletBlock) =>
     ({

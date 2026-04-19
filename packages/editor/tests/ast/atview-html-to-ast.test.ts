@@ -1,7 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { atviewHtmlToAst } from "@src/core/ast";
-
+import { atviewHtmlToAst } from "../../src/atview-html";
 import { parseAtviewHtmlToAst } from "../helpers";
 
 describe("atviewHtmlToAst", () => {
