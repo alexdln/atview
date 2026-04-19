@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { type Blob } from "@src/core/defs/document";
-import { AstMediaNode, type AstCodeBlockNode } from "@src/core/ast";
+import { AstMediaNode, type AstCodeBlockNode, type AstParagraphNode } from "@src/core/ast";
 import { atviewHtmlToAst, realHtmlToAst } from "@src/core/ast";
 import { parseAtviewHtmlToAst } from "../helpers";
 
@@ -182,5 +182,102 @@ describe("realHtmlToAst", () => {
         const media = ast[0] as AstMediaNode;
         expect(media.alt).toBe("override");
         expect(media.text).toBe("ignored");
+    });
+
+    test("nested container divs: pretty-print whitespace becomes two paragraphs, not noisy newlines", async () => {
+        const html = `
+<div>
+  <div>
+    <div>Hello</div>
+  </div>
+  <div>
+    <div>World</div>
+  </div>
+</div>`;
+        const ast = await realHtmlToAst(html);
+        expect(ast).toHaveLength(2);
+        const first = ast[0] as AstParagraphNode;
+        const second = ast[1] as AstParagraphNode;
+        expect(first).toEqual({ type: "paragraph", children: [{ type: "text", value: "Hello" }] });
+        expect(second).toEqual({ type: "paragraph", children: [{ type: "text", value: "World" }] });
+    });
+
+    test("nested detailed html: should not be merged into one paragraph", async () => {
+        const html = `<p>Lorem Ipsum</p>
+<h3>Sit Amet</h3>
+<p><a href="https://lorem.ipsum">lorem.ipsum</a></p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<h3>Lorem</h3>
+<p><a href="https://lorem.ipsum">lorem.ipsum</a></p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        `;
+        const ast = await realHtmlToAst(html);
+        expect(ast).toHaveLength(9);
+        expect(ast).toEqual([
+            { type: "paragraph", children: [{ type: "text", value: "Lorem Ipsum" }] },
+            { type: "heading", level: 3, children: [{ type: "text", value: "Sit Amet" }] },
+            {
+                type: "paragraph",
+                children: [
+                    { type: "link", uri: "https://lorem.ipsum", children: [{ type: "text", value: "lorem.ipsum" }] },
+                ],
+            },
+            {
+                type: "paragraph",
+                children: [
+                    {
+                        type: "text",
+                        value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    },
+                ],
+            },
+            {
+                type: "paragraph",
+                children: [
+                    {
+                        type: "text",
+                        value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    },
+                ],
+            },
+            {
+                type: "paragraph",
+                children: [
+                    {
+                        type: "text",
+                        value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    },
+                ],
+            },
+            { type: "heading", level: 3, children: [{ type: "text", value: "Lorem" }] },
+            {
+                type: "paragraph",
+                children: [
+                    { type: "link", uri: "https://lorem.ipsum", children: [{ type: "text", value: "lorem.ipsum" }] },
+                ],
+            },
+            {
+                type: "paragraph",
+                children: [
+                    {
+                        type: "text",
+                        value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    },
+                ],
+            },
+        ]);
+    });
+
+    test("should support images in paragraphs", async () => {
+        const ast = await realHtmlToAst('<p><img src="https://cdn.example/x.png" alt="x" /></p>');
+        expect(ast).toHaveLength(1);
+        expect(ast[0]).toEqual({
+            type: "media",
+            text: "x",
+            image: "https://cdn.example/x.png",
+            alt: "x",
+        });
     });
 });

@@ -8,7 +8,7 @@ import {
     type AstUnorderedListNode,
 } from "./types";
 import { type Blob } from "../defs/document";
-import { cleanText, cloneNodesIntoWrapper, splitParagraphs } from "./document-text";
+import { cleanText, cloneNodesIntoWrapper, normalizeInlineParagraphWhitespace, splitParagraphs } from "./document-text";
 import { detectLanguage, LANGUAGE_CLASS_REGEX } from "../utils/code";
 
 const SKIPPED_TAGS = new Set(["script", "style", "noscript"]);
@@ -77,7 +77,8 @@ const plainInlineNodesFromElement = (element: HTMLElement): AstInlineNode[] => {
 
 const inlineFromClonedNodes = (nodes: Node[], context: RenderContext): AstInlineNode[] => {
     if (nodes.length === 0) return [];
-    return collectChildrenInline(cloneNodesIntoWrapper(context.document, nodes), context);
+    const raw = collectChildrenInline(cloneNodesIntoWrapper(context.document, nodes), context);
+    return normalizeInlineParagraphWhitespace(raw);
 };
 
 const walkInline = (node: Node, context: RenderContext): AstInlineNode[] => {
@@ -119,7 +120,7 @@ const flushPending = (pendingNodes: Node[], context: RenderContext): AstBlockNod
 };
 
 const paragraphBlocksFromElement = (element: HTMLElement, context: RenderContext): AstBlockNode[] =>
-    splitParagraphs(collectChildrenInline(element, context));
+    splitParagraphs(normalizeInlineParagraphWhitespace(collectChildrenInline(element, context)));
 
 const codeBlockFromPre = (preElement: HTMLElement): AstBlockNode => {
     const codeElement = preElement.querySelector("code");
@@ -140,6 +141,23 @@ const parseSrcsetLast = (source?: string | null) => {
     return lastCandidate?.split(" ")[0]?.trim();
 };
 
+/** Paragraph contains only optional whitespace and a single top-level `<img>`. */
+const imageOnlyFromParagraph = (paragraph: HTMLElement): HTMLImageElement | null => {
+    let image: HTMLImageElement | null = null;
+    for (const child of paragraph.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE) {
+            if (cleanText(child.textContent || "").trim() !== "") return null;
+            continue;
+        }
+        if (child.nodeType !== Node.ELEMENT_NODE) return null;
+        const el = child as HTMLElement;
+        if (el.tagName.toLowerCase() !== "img") return null;
+        if (image) return null;
+        image = el as HTMLImageElement;
+    }
+    return image;
+};
+
 const mediaFromImage = async (
     imageElement: HTMLImageElement,
     figureElement: HTMLElement | null,
@@ -154,7 +172,7 @@ const mediaFromImage = async (
         figureElement?.querySelector("figcaption")?.textContent?.trim() ||
         figureElement?.getAttribute("data-caption") ||
         "";
-    const text = caption || imageElement.alt || src || undefined;
+    const text = caption || imageElement.alt || undefined;
     const width = Number(figureElement?.getAttribute("data-width") || imageElement.getAttribute("width") || 0);
     const height = Number(figureElement?.getAttribute("data-height") || imageElement.getAttribute("height") || 0);
     const image = await context.processImageBlob(src);
@@ -235,6 +253,21 @@ const mathFromElement = (element: HTMLElement): AstBlockNode => ({
     content: cleanText(element.textContent || ""),
 });
 
+/**
+ * Whitespace-only nodes between `<p>`, `<h3>`, or body edges are dropped as formatting noise.
+ * Between two generic {@link CONTAINER_BLOCKS} siblings we insert a real `\n\n` so pasted branch boundaries
+ * still become separate paragraphs after {@link normalizeInlineParagraphWhitespace} and
+ * {@link splitParagraphs}.
+ */
+const shouldRetainWhitespaceOnlyText = (node: Node): boolean => {
+    const prev = (node as Text).previousElementSibling;
+    const next = (node as Text).nextElementSibling;
+    if (!prev || !next) return false;
+    const prevTag = (prev as HTMLElement).tagName.toLowerCase();
+    const nextTag = (next as HTMLElement).tagName.toLowerCase();
+    return CONTAINER_BLOCKS.has(prevTag) && CONTAINER_BLOCKS.has(nextTag);
+};
+
 const walkFlow = async (
     nodes: ChildNode[],
     context: RenderContext,
@@ -247,7 +280,13 @@ const walkFlow = async (
 
     for (const node of nodes) {
         if (node.nodeType === Node.TEXT_NODE) {
-            if (node.textContent) pendingNodes.push(node);
+            if (!node.textContent) continue;
+            if (cleanText(node.textContent).trim() === "") {
+                if (!shouldRetainWhitespaceOnlyText(node)) continue;
+                pendingNodes.push(context.document.createTextNode("\n\n"));
+                continue;
+            }
+            pendingNodes.push(node);
             continue;
         }
         if (node.nodeType !== Node.ELEMENT_NODE) continue;
@@ -269,7 +308,13 @@ const walkFlow = async (
 
         if (tag === "p") {
             flushPendingIntoBlocks();
-            blocks.push(...paragraphBlocksFromElement(element, context));
+            const soleImage = imageOnlyFromParagraph(element);
+            if (soleImage) {
+                const media = await mediaFromImage(soleImage, null, context);
+                blocks.push(media);
+            } else {
+                blocks.push(...paragraphBlocksFromElement(element, context));
+            }
             continue;
         }
 
