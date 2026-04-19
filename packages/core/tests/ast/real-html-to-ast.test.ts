@@ -280,4 +280,23 @@ describe("realHtmlToAst", () => {
             alt: "x",
         });
     });
+
+    test("flow-level br becomes hard-break between paragraphs", async () => {
+        const ast = await realHtmlToAst("<div>a<br />b</div>");
+        expect(ast).toEqual([
+            { type: "paragraph", children: [{ type: "text", value: "a" }] },
+            { type: "hard-break" },
+            { type: "paragraph", children: [{ type: "text", value: "b" }] },
+        ]);
+    });
+
+    test("br inside p stays inline newline text, not a hard-break block", async () => {
+        const ast = await realHtmlToAst("<p>a<br />b</p>");
+        expect(ast).toEqual([
+            {
+                type: "paragraph",
+                children: [{ type: "text", value: "a\nb" }],
+            },
+        ]);
+    });
 });

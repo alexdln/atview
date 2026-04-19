@@ -15,4 +15,13 @@ describe("SiteStandardProvider.astToData", () => {
         ];
         expect(SiteStandardProvider.astToData(ast)).toEqual({ textContent: "A\n\nB" });
     });
+
+    test("hard-break inserts a single newline with paragraph separators", () => {
+        const ast = [
+            { type: "paragraph" as const, children: [{ type: "text" as const, value: "a" }] },
+            { type: "hard-break" as const },
+            { type: "paragraph" as const, children: [{ type: "text" as const, value: "b" }] },
+        ];
+        expect(SiteStandardProvider.astToData(ast)).toEqual({ textContent: "a\n\n\nb" });
+    });
 });

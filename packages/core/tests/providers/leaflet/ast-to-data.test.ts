@@ -61,4 +61,18 @@ describe("LeafletProvider.astToData", () => {
         const types = pages[0]?.blocks.map((b) => b.block.$type);
         expect(types).toContain("pub.leaflet.blocks.math");
     });
+
+    test("hard-break maps to leaflet text block with newline plaintext", () => {
+        const ast: AstDocument = [{ type: "hard-break" }];
+        const { pages } = LeafletProvider.astToData(ast);
+        expect(pages[0]?.blocks).toEqual([
+            {
+                $type: "pub.leaflet.pages.linearDocument#block",
+                block: {
+                    $type: "pub.leaflet.blocks.text",
+                    plaintext: "\n",
+                },
+            },
+        ]);
+    });
 });

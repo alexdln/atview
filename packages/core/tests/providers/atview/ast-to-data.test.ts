@@ -76,4 +76,20 @@ describe("AtviewProvider.astToData", () => {
         const out = AtviewProvider.astToData(ast);
         expect(out.textContent).toBeDefined();
     });
+
+    test("hard-break emits newline and hard-break facet", () => {
+        const ast: AstDocument = [
+            { type: "paragraph", children: [{ type: "text", value: "a" }] },
+            { type: "hard-break" },
+            { type: "paragraph", children: [{ type: "text", value: "b" }] },
+        ];
+        const out = normalizeAtviewData(AtviewProvider.astToData(ast));
+        expect(out.textContent).toBe("a\n\n\n\n\nb");
+        expect(out.facets).toEqual([
+            {
+                index: { byteStart: 3, byteEnd: 4 },
+                features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+            },
+        ]);
+    });
 });

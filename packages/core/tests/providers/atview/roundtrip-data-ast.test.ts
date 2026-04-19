@@ -133,4 +133,16 @@ describe("AtviewProvider dataToAst astToData", () => {
             ],
         });
     });
+
+    test("hard-break between two paragraphs", () => {
+        expectDataRoundTrip({
+            textContent: "a\n\n\n\n\nb",
+            facets: [
+                {
+                    index: { byteStart: 3, byteEnd: 4 },
+                    features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+                },
+            ],
+        });
+    });
 });
