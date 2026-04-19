@@ -141,6 +141,9 @@ const blockToAst = (block: PcktBlock): AstBlockNode | null => {
         case "blog.pckt.block.codeBlock":
             return { type: "code-block", text: block.plaintext, language: block.language };
 
+        case "blog.pckt.block.hardBreak":
+            return { type: "hard-break" };
+
         default:
             return null;
     }

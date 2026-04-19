@@ -170,6 +170,9 @@ const blockToPckt = (block: AstBlockNode): PcktBlock | null => {
         case "iframe":
             return { $type: "blog.pckt.block.iframe", url: block.url };
 
+        case "hard-break":
+            return { $type: "blog.pckt.block.hardBreak" };
+
         default:
             return null;
     }

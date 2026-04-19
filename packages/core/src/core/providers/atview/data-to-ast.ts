@@ -18,6 +18,7 @@ const BLOCK_FACET_TYPES = new Set([
     "net.atview.richtext.facet#horizontal-rule",
     "net.atview.richtext.facet#iframe",
     "net.atview.richtext.facet#math",
+    "net.atview.richtext.facet#hard-break",
 ]);
 
 const HEADING_LEVELS: Record<string, 2 | 3 | 4 | 5 | 6> = {
@@ -158,6 +159,9 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
                 break;
             case "net.atview.richtext.facet#math":
                 blocks.push({ type: "math", content: text });
+                break;
+            case "net.atview.richtext.facet#hard-break":
+                blocks.push({ type: "hard-break" });
                 break;
             default:
                 break;

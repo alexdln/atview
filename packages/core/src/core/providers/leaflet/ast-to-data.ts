@@ -163,6 +163,9 @@ const blockToLeaflet = (block: AstBlockNode): LeafletDocumentBlock | null => {
                 tex: block.content,
             });
 
+        case "hard-break":
+            return wrap({ $type: "pub.leaflet.blocks.text", plaintext: "\n" });
+
         case "table":
             return null;
     }
