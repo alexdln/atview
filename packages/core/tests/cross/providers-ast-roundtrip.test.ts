@@ -20,7 +20,16 @@ describe("ast through each provider roundtrip", () => {
     });
 
     test("pckt", () => {
-        const ast: AstDocument = [{ type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] }];
+        const ast: AstDocument = [
+            { type: "paragraph", children: [{ type: "text", value: "sample-paragraph" }] },
+            {
+                type: "task-list",
+                items: [
+                    { checked: false, children: [{ type: "text", value: "a" }] },
+                    { checked: true, children: [{ type: "text", value: "b" }] },
+                ],
+            },
+        ];
         const data = PcktProvider.astToData(ast);
         expect(PcktProvider.dataToAst(data)).toEqual(ast);
     });

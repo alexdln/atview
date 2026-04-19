@@ -71,6 +71,17 @@ export interface PcktBulletListBlock {
     content: PcktListItem[];
 }
 
+export interface PcktTaskItem {
+    $type: "blog.pckt.block.taskItem";
+    checked: boolean;
+    content: PcktBlock[];
+}
+
+export interface PcktTaskListBlock {
+    $type: "blog.pckt.block.taskList";
+    content: PcktTaskItem[];
+}
+
 export interface PcktTableCell {
     $type: "blog.pckt.block.tableCell";
     attrs?: { colspan?: number; rowspan?: number };
@@ -108,6 +119,7 @@ export type PcktBlock =
     | PcktHorizontalRuleBlock
     | PcktOrderedListBlock
     | PcktBulletListBlock
+    | PcktTaskListBlock
     | PcktTableBlock
     | PcktIframeBlock
     | PcktHardBreakBlock;

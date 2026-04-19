@@ -71,6 +71,10 @@ const plainBlock = (block: AstBlockNode, context: { authorDid?: string }): strin
             const start = block.start ?? 1;
             return block.items.map((i, j) => `${String(start + j)}. ${plainListItem(i, context)}`).join("\n");
         }
+        case "task-list":
+            return block.items
+                .map((i) => `${i.checked ? "- [x] " : "- [ ] "}${i.children.map(plainInline).join("")}`)
+                .join("\n");
         case "bsky-post":
             return block.text || "";
         case "horizontal-rule":
@@ -108,6 +112,14 @@ const renderOrderedList = (block: Extract<AstBlockNode, { type: "ordered-list" }
     const startAttr = start !== 1 ? ` start="${String(start)}"` : "";
     return `<ol${startAttr}>${block.items.map(renderListItem).join("")}</ol>`;
 };
+
+const renderTaskList = (block: Extract<AstBlockNode, { type: "task-list" }>): string =>
+    `<ul class="task-list">${block.items
+        .map((item) => {
+            const checkedAttr = item.checked ? " checked" : "";
+            return `<li><label><input type="checkbox" disabled${checkedAttr} /> <span>${renderInlineChildren(item.children)}</span></label></li>`;
+        })
+        .join("")}</ul>`;
 
 const mediaSrc = (image: AstBlockNode): string =>
     "image" in image && typeof image.image === "string" ? image.image : "";
@@ -147,6 +159,9 @@ const renderBlock = (block: AstBlockNode): string => {
 
         case "ordered-list":
             return renderOrderedList(block);
+
+        case "task-list":
+            return renderTaskList(block);
 
         case "bsky-post": {
             const text = block.text ? escapeHtml(block.text) : "";
