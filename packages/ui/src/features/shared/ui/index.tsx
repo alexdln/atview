@@ -16,6 +16,8 @@ export * from "./ordered-list";
 export * from "./paragraph";
 export * from "./select";
 export * from "./strikethrough";
+export * from "./task-list";
+export * from "./task-list-item";
 export * from "./table";
 export * from "./table-cell";
 export * from "./table-head-cell";

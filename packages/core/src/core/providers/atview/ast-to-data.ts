@@ -10,6 +10,11 @@ const INLINE_TYPE_TO_FACET: Record<string, string> = {
     "inline-code": "net.atview.richtext.facet#code",
 };
 
+const plainInline = (node: AstInlineNode): string => {
+    if (node.type === "text") return node.value;
+    return node.children.map(plainInline).join("");
+};
+
 interface Collector {
     text: string;
     facets: Facet[];
@@ -155,6 +160,13 @@ const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolea
                 index: { byteStart, byteEnd },
                 features: [{ $type: "net.atview.richtext.facet#ol" }],
             });
+            break;
+        }
+
+        case "task-list": {
+            collector.text += block.items
+                .map((item) => `${item.checked ? "- [x] " : "- [ ] "}${item.children.map(plainInline).join("")}`)
+                .join("\n");
             break;
         }
 

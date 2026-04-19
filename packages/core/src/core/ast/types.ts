@@ -107,6 +107,16 @@ export interface AstOrderedListNode {
     start?: number;
 }
 
+export interface AstTaskListItem {
+    checked: boolean;
+    children: AstInlineNode[];
+}
+
+export interface AstTaskListNode {
+    type: "task-list";
+    items: AstTaskListItem[];
+}
+
 export interface AstBskyPostNode {
     type: "bsky-post";
     text?: string;
@@ -162,6 +172,7 @@ export type AstBlockNode =
     | AstMediaNode
     | AstUnorderedListNode
     | AstOrderedListNode
+    | AstTaskListNode
     | AstBskyPostNode
     | AstHorizontalRuleNode
     | AstWebsiteNode

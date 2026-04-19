@@ -27,6 +27,11 @@ const plainFromBlock = (block: PcktBlock): string => {
                 .flatMap((item) => item.content.map(plainFromBlock))
                 .filter(Boolean)
                 .join("\n");
+        case "blog.pckt.block.taskList":
+            return (block.content ?? [])
+                .map((item) => item.content.map(plainFromBlock).filter(Boolean).join("\n"))
+                .filter(Boolean)
+                .join("\n");
         case "blog.pckt.block.table":
             return (block.content ?? [])
                 .flatMap((row) => row.content.flatMap((cell) => cell.content.map(plainFromBlock)))

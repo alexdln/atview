@@ -8,6 +8,7 @@ import {
     type AstInlineNode,
     type AstListItem,
     type AstTableRow,
+    type AstTaskListItem,
 } from "@atview/core";
 import { InlineElements, BlockElements } from "./components";
 
@@ -75,6 +76,21 @@ const renderListItems = (items: AstListItem[], keyPrefix: string, ctx: RenderCon
                 {content}
                 {nested}
             </ctx.blockElements.listItem>
+        );
+    });
+
+const renderTaskListItems = (
+    items: AstTaskListItem[],
+    keyPrefix: string,
+    ctx: RenderContextInternal,
+): React.ReactNode[] =>
+    items.map((item, i) => {
+        const itemKey = `${keyPrefix}-${i.toString()}`;
+        const content = renderInlineList(item.children, itemKey, ctx);
+        return (
+            <ctx.blockElements.taskListItem key={itemKey} checked={item.checked}>
+                {content}
+            </ctx.blockElements.taskListItem>
         );
     });
 
@@ -161,6 +177,11 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
                 </blockElements.orderedList>
             );
 
+        case "task-list":
+            return (
+                <blockElements.taskList key={key}>{renderTaskListItems(block.items, key, ctx)}</blockElements.taskList>
+            );
+
         case "bsky-post":
             return <blockElements.bskyPost key={key} uri={block.uri} cid={block.cid} />;
 
@@ -195,6 +216,9 @@ const renderBlock = (block: AstBlockNode, key: string, ctx: RenderContextInterna
 
         case "math":
             return <blockElements.math key={key} content={block.content} />;
+
+        case "hard-break":
+            return <blockElements.hardBreak key={key} />;
 
         default:
             return <blockElements.unknown key={key} block={block} />;

@@ -17,6 +17,8 @@ import {
     Blockquote,
     UnorderedList,
     OrderedList,
+    TaskList,
+    TaskListItem,
     Iframe,
     Table,
     TableCell,
@@ -44,6 +46,8 @@ export const BlockElements = {
     unorderedList: UnorderedList,
     orderedList: OrderedList,
     listItem: "li" as React.ElementType,
+    taskList: TaskList,
+    taskListItem: TaskListItem,
     bskyPost: BskyPost,
     horizontalRule: "hr" as React.ElementType,
     website: Website,
@@ -56,4 +60,5 @@ export const BlockElements = {
     tableHeadCell: TableHeadCell,
     unknown: UnknownBlock,
     math: MathBlock,
+    hardBreak: "br" as React.ElementType,
 };

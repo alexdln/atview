@@ -93,6 +93,32 @@ describe("PcktProvider.dataToAst", () => {
         expect(ast[1]?.type).toBe("unordered-list");
     });
 
+    test("task list", () => {
+        const items: PcktBlock[] = [
+            {
+                $type: "blog.pckt.block.taskList",
+                content: [
+                    {
+                        $type: "blog.pckt.block.taskItem",
+                        checked: false,
+                        content: [{ $type: "blog.pckt.block.text", plaintext: "Todo" }],
+                    },
+                    {
+                        $type: "blog.pckt.block.taskItem",
+                        checked: true,
+                        content: [{ $type: "blog.pckt.block.text", plaintext: "Done" }],
+                    },
+                ],
+            },
+        ];
+        const ast = PcktProvider.dataToAst({ items });
+        expect(ast[0]?.type).toBe("task-list");
+        if (ast[0]?.type === "task-list") {
+            expect(ast[0].items[0]?.checked).toBe(false);
+            expect(ast[0].items[1]?.checked).toBe(true);
+        }
+    });
+
     test("table and iframe", () => {
         const items: PcktBlock[] = [
             {

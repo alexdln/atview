@@ -134,6 +134,9 @@ const blockToLeaflet = (block: AstBlockNode): LeafletDocumentBlock | null => {
                 ...(block.start ? { startIndex: block.start } : {}),
             });
 
+        case "task-list":
+            return null;
+
         case "bsky-post":
             return wrap({
                 $type: "pub.leaflet.blocks.bskyPost",

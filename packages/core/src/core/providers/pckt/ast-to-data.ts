@@ -1,7 +1,13 @@
-import { type Facet, type PcktBlock, type PcktListItem } from "@src/core/defs/document";
+import { type Facet, type PcktBlock, type PcktListItem, type PcktTaskItem } from "@src/core/defs/document";
 import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
 
-import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "../../ast/types";
+import {
+    type AstBlockNode,
+    type AstDocument,
+    type AstInlineNode,
+    type AstListItem,
+    type AstTaskListItem,
+} from "../../ast/types";
 
 const INLINE_TYPE_TO_FACET: Record<string, string> = {
     bold: "blog.pckt.richtext.facet#bold",
@@ -73,6 +79,12 @@ const listItemToPckt = (item: AstListItem): PcktListItem => ({
     content: [textBlockFromInlines(item.children)],
 });
 
+const taskItemToPckt = (item: AstTaskListItem): PcktTaskItem => ({
+    $type: "blog.pckt.block.taskItem",
+    checked: item.checked,
+    content: [textBlockFromInlines(item.children)],
+});
+
 const blockToPckt = (block: AstBlockNode): PcktBlock | null => {
     switch (block.type) {
         case "paragraph": {
@@ -134,6 +146,12 @@ const blockToPckt = (block: AstBlockNode): PcktBlock | null => {
                 $type: "blog.pckt.block.orderedList",
                 content: block.items.map(listItemToPckt),
                 ...(block.start !== undefined ? { attrs: { start: block.start } } : {}),
+            };
+
+        case "task-list":
+            return {
+                $type: "blog.pckt.block.taskList",
+                content: block.items.map(taskItemToPckt),
             };
 
         case "bsky-post":

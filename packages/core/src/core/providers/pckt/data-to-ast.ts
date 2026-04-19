@@ -1,4 +1,10 @@
-import { type Facet, type PcktBlock, type PcktListItem, type PcktTableRow } from "@src/core/defs/document";
+import {
+    type Facet,
+    type PcktBlock,
+    type PcktListItem,
+    type PcktTableRow,
+    type PcktTaskItem,
+} from "@src/core/defs/document";
 import { bytePositionToCharPosition } from "@src/core/utils/byte-helpers";
 
 import {
@@ -8,6 +14,7 @@ import {
     type AstListItem,
     type AstTableCell,
     type AstTableRow,
+    type AstTaskListItem,
 } from "../../ast/types";
 
 const INLINE_FACET_MAP: Record<string, AstInlineNode["type"]> = {
@@ -65,6 +72,11 @@ const blocksToInline = (blocks: PcktBlock[]): AstInlineNode[] =>
     });
 
 const listItemToAst = (item: PcktListItem): AstListItem => ({
+    children: blocksToInline(item.content),
+});
+
+const taskItemToAst = (item: PcktTaskItem): AstTaskListItem => ({
+    checked: item.checked,
     children: blocksToInline(item.content),
 });
 
@@ -130,6 +142,9 @@ const blockToAst = (block: PcktBlock): AstBlockNode | null => {
 
         case "blog.pckt.block.bulletList":
             return { type: "unordered-list", items: block.content?.map(listItemToAst) };
+
+        case "blog.pckt.block.taskList":
+            return { type: "task-list", items: block.content?.map(taskItemToAst) ?? [] };
 
         case "blog.pckt.block.table":
             return { type: "table", rows: block.content?.map(tableRowToAst) };

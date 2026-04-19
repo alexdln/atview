@@ -1,0 +1,21 @@
+.atview-task-list-item {
+    margin-block: 0.25rem;
+}
+
+.atview-task-list-item__label {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    cursor: default;
+}
+
+.atview-task-list-item__checkbox {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.2rem;
+}
+
+.atview-task-list-item__text {
+    min-width: 0;
+}

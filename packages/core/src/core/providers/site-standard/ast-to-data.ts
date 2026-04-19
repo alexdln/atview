@@ -60,6 +60,11 @@ const processBlock = (block: AstBlockNode, collector: { text: string }, isFirst:
             collector.text += renderListText(block.items, (i) => `${String(start + i)}. `);
             break;
         }
+        case "task-list":
+            collector.text += block.items
+                .map((item) => `${item.checked ? "- [x] " : "- [ ] "}${item.children.map(plainInline).join("")}`)
+                .join("\n");
+            break;
         case "bsky-post":
             collector.text += block.text ?? "";
             break;
