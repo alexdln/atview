@@ -1,10 +1,7 @@
-import { AtUri } from "@atproto/api";
+import { AtUri } from "@atproto/syntax";
 
-import {
-    type LeafletDocument,
-    type StandardDocumentLeaflet,
-    type LeafletLinearDocument,
-} from "@src/core/defs/document";
+import { type LeafletDocument, type StandardDocumentLeaflet, type LeafletLinearDocument } from "../../defs/document";
+import * as site from "../../../lexicons/site";
 
 export interface BuildParams {
     pages: LeafletLinearDocument[];
@@ -63,7 +60,7 @@ export function formatDocument(
     }
 
     return {
-        $type: "site.standard.document",
+        $type: site.standard.document.$type,
         site: metadata.siteUri,
         path: metadata.path,
         title: metadata.title,

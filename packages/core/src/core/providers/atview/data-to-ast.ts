@@ -1,5 +1,5 @@
-import { type AtviewFacet, type AtviewFeature } from "@src/core/defs/document";
-import { bytePositionToCharPosition } from "@src/core/utils/byte-helpers";
+import { type AtviewFacet, type AtviewFeature } from "../../defs/document";
+import { bytePositionToCharPosition } from "../../utils/byte-helpers";
 
 import { type AstBlockNode, type AstDocument, type AstInlineNode } from "../../ast/types";
 
@@ -10,16 +10,16 @@ const BLOCK_FACET_TYPES = new Set<AtviewFeature["$type"]>([
     "net.atview.richtext.facet#h5",
     "net.atview.richtext.facet#h6",
     "net.atview.richtext.facet#blockquote",
-    "net.atview.richtext.facet#code-block",
+    "net.atview.richtext.facet#codeBlock",
     "net.atview.richtext.facet#media",
-    "net.atview.richtext.facet#bsky-post",
+    "net.atview.richtext.facet#bskyPost",
     "net.atview.richtext.facet#ul",
     "net.atview.richtext.facet#ol",
     "net.atview.richtext.facet#website",
-    "net.atview.richtext.facet#horizontal-rule",
+    "net.atview.richtext.facet#horizontalRule",
     "net.atview.richtext.facet#iframe",
     "net.atview.richtext.facet#math",
-    "net.atview.richtext.facet#hard-break",
+    "net.atview.richtext.facet#hardBreak",
 ]);
 
 const HEADING_LEVELS: Record<string, 2 | 3 | 4 | 5 | 6> = {
@@ -67,7 +67,7 @@ const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | nu
         case "net.atview.richtext.facet#blockquote":
             return { type: "blockquote", children: [{ type: "text", value: text }] };
 
-        case "net.atview.richtext.facet#code-block":
+        case "net.atview.richtext.facet#codeBlock":
             return {
                 type: "code-block",
                 text,
@@ -80,7 +80,7 @@ const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | nu
         case "net.atview.richtext.facet#ol":
             return { type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) };
 
-        case "net.atview.richtext.facet#bsky-post":
+        case "net.atview.richtext.facet#bskyPost":
             return { type: "bsky-post", uri: feature.uri, cid: feature.cid ?? "" };
 
         case "net.atview.richtext.facet#website":
@@ -98,7 +98,7 @@ const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | nu
                 caption: feature.caption,
             };
 
-        case "net.atview.richtext.facet#horizontal-rule":
+        case "net.atview.richtext.facet#horizontalRule":
             return { type: "horizontal-rule" };
 
         case "net.atview.richtext.facet#iframe":
@@ -107,7 +107,7 @@ const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | nu
         case "net.atview.richtext.facet#math":
             return { type: "math", content: text };
 
-        case "net.atview.richtext.facet#hard-break":
+        case "net.atview.richtext.facet#hardBreak":
             return { type: "hard-break" };
 
         default:
@@ -115,8 +115,8 @@ const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | nu
     }
 };
 
-export const dataToAst = (data: { textContent: string; facets?: AtviewFacet[] }): AstDocument => {
-    const { textContent, facets = [] } = data;
+export const dataToAst = (data: { textContent?: string; facets?: AtviewFacet[] }): AstDocument => {
+    const { textContent = "", facets = [] } = data;
 
     const blocks: AstBlockNode[] = [];
     let pendingInlines: AstInlineNode[] = [];

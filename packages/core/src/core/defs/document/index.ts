@@ -1,5 +1,4 @@
-import { type Record } from "@atproto/api/dist/client/types/com/atproto/repo/listRecords";
-
+import * as SiteStandardDocument from "../../../lexicons/site/standard/document";
 import {
     type LeafletContent,
     type PcktContent,
@@ -23,31 +22,36 @@ export * from "./shared";
 
 export type Document = LeafletDocument | StandardDocumentExtended | StandardDocument;
 
-export const isLeafletContent = (data: Record["value"]): data is LeafletContent => data.$type === "pub.leaflet.content";
+export type DocumentRecord = {
+    [x: string]: unknown;
+};
 
-export const isPcktContent = (data: Record["value"]): data is PcktContent => data.$type === "blog.pckt.content";
+export const isLeafletContent = (data: DocumentRecord): data is LeafletContent => data.$type === "pub.leaflet.content";
 
-export const isOffprintContent = (data: Record["value"]): data is OffprintContent =>
+export const isPcktContent = (data: DocumentRecord): data is PcktContent => data.$type === "blog.pckt.content";
+
+export const isOffprintContent = (data: DocumentRecord): data is OffprintContent =>
     data.$type === "app.offprint.content";
 
-export const isAtviewContent = (data: Record["value"]): data is AtviewContent => data.$type === "net.atview.document";
+export const isAtviewContent = (data: DocumentRecord): data is AtviewContent => data.$type === "net.atview.document";
 
-export const isLeafletMain = (data: Record["value"]): data is LeafletDocument => data.$type === "pub.leaflet.document";
+export const isLeafletMain = (data: DocumentRecord): data is LeafletDocument => data.$type === "pub.leaflet.document";
 
-export const isStandardSiteMain = (data: Record["value"]): data is StandardDocument =>
-    data.$type === "site.standard.document";
+// Delegate to the generated Lexicon discriminator so the $type literal is always kept in sync.
+export const isStandardSiteMain = (data: DocumentRecord): data is StandardDocument =>
+    SiteStandardDocument.$isTypeOf(data);
 
-export const isStandardSiteDetailed = (data: Record["value"]): data is StandardDocumentExtended =>
-    data.$type === "site.standard.document" && "content" in data;
+export const isStandardSiteDetailed = (data: DocumentRecord): data is StandardDocumentExtended =>
+    isStandardSiteMain(data) && "content" in data;
 
-export const isStandardSiteLeaflet = (data: Record["value"]): data is StandardDocumentLeaflet =>
+export const isStandardSiteLeaflet = (data: DocumentRecord): data is StandardDocumentLeaflet =>
     isStandardSiteDetailed(data) && Boolean(data.content && isLeafletContent(data.content));
 
-export const isStandardSitePckt = (data: Record["value"]): data is StandardDocumentPckt =>
+export const isStandardSitePckt = (data: DocumentRecord): data is StandardDocumentPckt =>
     isStandardSiteDetailed(data) && Boolean(data.content && isPcktContent(data.content));
 
-export const isStandardSiteOffprint = (data: Record["value"]): data is StandardDocumentOffprint =>
+export const isStandardSiteOffprint = (data: DocumentRecord): data is StandardDocumentOffprint =>
     isStandardSiteDetailed(data) && Boolean(data.content && isOffprintContent(data.content));
 
-export const isStandardSiteAtview = (data: Record["value"]): data is StandardDocumentAtview =>
+export const isStandardSiteAtview = (data: DocumentRecord): data is StandardDocumentAtview =>
     isStandardSiteDetailed(data) && Boolean(data.content && isAtviewContent(data.content));

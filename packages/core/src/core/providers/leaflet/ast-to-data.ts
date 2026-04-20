@@ -1,7 +1,6 @@
-import { type Facet, type LeafletDocumentBlock, type LeafletLinearDocument } from "@src/core/defs/document";
-import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
-
+import { type Facet, type LeafletDocumentBlock, type LeafletLinearDocument } from "../../defs/document";
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "../../ast/types";
+import { charPositionToBytePosition } from "../../utils/byte-helpers";
 
 const INLINE_TYPE_TO_FACET: Record<string, string> = {
     bold: "pub.leaflet.richtext.facet#bold",

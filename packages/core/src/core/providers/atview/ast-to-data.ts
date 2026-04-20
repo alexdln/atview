@@ -1,5 +1,5 @@
-import { type AtviewFacet, type AtviewFeature, type AtviewHeadingFeature } from "@src/core/defs/document";
-import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
+import { type AtviewFacet, type AtviewFeature, type AtviewHeadingFeature } from "../../defs/document";
+import { charPositionToBytePosition } from "../../utils/byte-helpers";
 
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "../../ast/types";
 
@@ -101,7 +101,7 @@ const processBlock = (block: AstBlockNode, richText: RichText, isFirst: boolean)
             richText.textContent += block.text;
             pushBlockFacet(richText, blockStartChar, [
                 {
-                    $type: "net.atview.richtext.facet#code-block",
+                    $type: "net.atview.richtext.facet#codeBlock",
                     ...(block.language ? { language: block.language } : {}),
                 },
             ]);
@@ -144,9 +144,7 @@ const processBlock = (block: AstBlockNode, richText: RichText, isFirst: boolean)
 
         case "bsky-post":
             richText.textContent += block.text ?? "";
-            pushBlockFacet(richText, blockStartChar, [
-                { $type: "net.atview.richtext.facet#bsky-post", uri: block.uri },
-            ]);
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#bskyPost", uri: block.uri }]);
             return;
 
         case "website":
@@ -156,7 +154,7 @@ const processBlock = (block: AstBlockNode, richText: RichText, isFirst: boolean)
 
         case "horizontal-rule":
             richText.textContent += "\n\n";
-            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#horizontal-rule" }]);
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#horizontalRule" }]);
             return;
 
         case "iframe":
@@ -171,7 +169,7 @@ const processBlock = (block: AstBlockNode, richText: RichText, isFirst: boolean)
 
         case "hard-break":
             richText.textContent += "\n";
-            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#hard-break" }]);
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#hardBreak" }]);
             return;
 
         case "table":

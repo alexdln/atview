@@ -66,7 +66,7 @@ describe("AtviewProvider dataToAst astToData", () => {
                 },
                 {
                     index: { byteStart: 14, byteEnd: 25 },
-                    features: [{ $type: "net.atview.richtext.facet#code-block", language: "ts" }],
+                    features: [{ $type: "net.atview.richtext.facet#codeBlock", language: "ts" }],
                 },
             ],
         });
@@ -140,7 +140,7 @@ describe("AtviewProvider dataToAst astToData", () => {
             facets: [
                 {
                     index: { byteStart: 3, byteEnd: 4 },
-                    features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+                    features: [{ $type: "net.atview.richtext.facet#hardBreak" }],
                 },
             ],
         });

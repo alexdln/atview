@@ -4,9 +4,7 @@ import {
     type OffprintListItem,
     type OffprintTaskItem,
     type OffprintTextBlock,
-} from "@src/core/defs/document";
-import { bytePositionToCharPosition } from "@src/core/utils/byte-helpers";
-
+} from "../../defs/document";
 import {
     type AstBlockNode,
     type AstDocument,
@@ -16,6 +14,7 @@ import {
     type AstTaskListItem,
     type AstUnorderedListNode,
 } from "../../ast/types";
+import { bytePositionToCharPosition } from "../../utils/byte-helpers";
 
 const INLINE_FACET_MAP: Record<string, AstInlineNode["type"]> = {
     "app.offprint.richtext.facet#bold": "bold",

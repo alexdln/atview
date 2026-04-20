@@ -1,4 +1,4 @@
-import { type Blob } from "@src/core/defs/document";
+import { type Blob } from "../defs/document";
 
 export type MediaUriCollection = Record<string, Record<string, string>>;
 

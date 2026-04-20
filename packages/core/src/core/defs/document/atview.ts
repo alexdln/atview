@@ -1,109 +1,62 @@
+import { type l } from "@atproto/lex";
+
+import * as RichtextFacet from "../../../lexicons/net/atview/richtext/facet";
 import { type Blob } from "./shared";
 
-export interface AtviewAspectRatio {
-    width: number;
-    height: number;
-}
+export type AtviewAspectRatio = RichtextFacet.AspectRatio;
 
-export interface AtviewBoldFeature {
-    $type: "net.atview.richtext.facet#b";
-}
+export type AtviewBoldFeature = l.$Typed<RichtextFacet.B, "net.atview.richtext.facet#b">;
+export type AtviewItalicFeature = l.$Typed<RichtextFacet.I, "net.atview.richtext.facet#i">;
+export type AtviewUnderlineFeature = l.$Typed<RichtextFacet.U, "net.atview.richtext.facet#u">;
+export type AtviewInlineCodeFeature = l.$Typed<RichtextFacet.Code, "net.atview.richtext.facet#code">;
+export type AtviewStrikethroughFeature = l.$Typed<
+    RichtextFacet.Strikethrough,
+    "net.atview.richtext.facet#strikethrough"
+>;
+export type AtviewHighlightFeature = l.$Typed<RichtextFacet.Highlight, "net.atview.richtext.facet#highlight">;
 
-export interface AtviewItalicFeature {
-    $type: "net.atview.richtext.facet#i";
-}
-
-export interface AtviewUnderlineFeature {
-    $type: "net.atview.richtext.facet#u";
-}
-
-export interface AtviewInlineCodeFeature {
-    $type: "net.atview.richtext.facet#code";
-}
-
-export interface AtviewStrikethroughFeature {
-    $type: "net.atview.richtext.facet#strikethrough";
-}
-
-export interface AtviewHighlightFeature {
-    $type: "net.atview.richtext.facet#highlight";
-}
-
-export interface AtviewLinkFeature {
-    $type: "net.atview.richtext.facet#link";
+export type AtviewLinkFeature = l.$Typed<Omit<RichtextFacet.Link, "uri">, "net.atview.richtext.facet#link"> & {
     uri: string;
-}
-
-export interface AtviewMentionFeature {
-    $type: "net.atview.richtext.facet#mention";
+};
+export type AtviewMentionFeature = l.$Typed<Omit<RichtextFacet.Mention, "did">, "net.atview.richtext.facet#mention"> & {
     did: string;
-}
+};
 
-export interface AtviewHeadingFeature {
-    $type:
-        | "net.atview.richtext.facet#h2"
-        | "net.atview.richtext.facet#h3"
-        | "net.atview.richtext.facet#h4"
-        | "net.atview.richtext.facet#h5"
-        | "net.atview.richtext.facet#h6";
-}
+export type AtviewHeadingFeature =
+    | l.$Typed<RichtextFacet.H2, "net.atview.richtext.facet#h2">
+    | l.$Typed<RichtextFacet.H3, "net.atview.richtext.facet#h3">
+    | l.$Typed<RichtextFacet.H4, "net.atview.richtext.facet#h4">
+    | l.$Typed<RichtextFacet.H5, "net.atview.richtext.facet#h5">
+    | l.$Typed<RichtextFacet.H6, "net.atview.richtext.facet#h6">;
 
-export interface AtviewBlockquoteFeature {
-    $type: "net.atview.richtext.facet#blockquote";
-}
+export type AtviewBlockquoteFeature = l.$Typed<RichtextFacet.Blockquote, "net.atview.richtext.facet#blockquote">;
+export type AtviewCodeBlockFeature = l.$Typed<RichtextFacet.CodeBlock, "net.atview.richtext.facet#codeBlock">;
 
-export interface AtviewCodeBlockFeature {
-    $type: "net.atview.richtext.facet#code-block";
-    language?: string;
-}
-
-export interface AtviewMediaFeature {
-    $type: "net.atview.richtext.facet#media";
+export type AtviewMediaFeature = l.$Typed<Omit<RichtextFacet.Media, "image">, "net.atview.richtext.facet#media"> & {
     image: Blob | string;
-    aspectRatio?: AtviewAspectRatio;
-    altText?: string;
-    caption?: string;
-    title?: string;
-}
+};
 
-export interface AtviewBskyPostFeature {
-    $type: "net.atview.richtext.facet#bsky-post";
+export type AtviewBskyPostFeature = l.$Typed<
+    Omit<RichtextFacet.BskyPost, "uri" | "cid">,
+    "net.atview.richtext.facet#bskyPost"
+> & { uri: string; cid?: string };
+
+export type AtviewUnorderedListFeature = l.$Typed<RichtextFacet.Ul, "net.atview.richtext.facet#ul">;
+export type AtviewOrderedListFeature = l.$Typed<RichtextFacet.Ol, "net.atview.richtext.facet#ol">;
+
+export type AtviewWebsiteFeature = l.$Typed<Omit<RichtextFacet.Website, "uri">, "net.atview.richtext.facet#website"> & {
     uri: string;
-    cid?: string;
-}
+};
 
-export interface AtviewUnorderedListFeature {
-    $type: "net.atview.richtext.facet#ul";
-}
-
-export interface AtviewOrderedListFeature {
-    $type: "net.atview.richtext.facet#ol";
-}
-
-export interface AtviewWebsiteFeature {
-    $type: "net.atview.richtext.facet#website";
-    uri: string;
-    title?: string;
-}
-
-export interface AtviewHorizontalRuleFeature {
-    $type: "net.atview.richtext.facet#horizontal-rule";
-}
-
-export interface AtviewIframeFeature {
-    $type: "net.atview.richtext.facet#iframe";
+export type AtviewHorizontalRuleFeature = l.$Typed<
+    RichtextFacet.HorizontalRule,
+    "net.atview.richtext.facet#horizontalRule"
+>;
+export type AtviewIframeFeature = l.$Typed<Omit<RichtextFacet.Iframe, "url">, "net.atview.richtext.facet#iframe"> & {
     url: string;
-    height?: number;
-}
-
-export interface AtviewMathFeature {
-    $type: "net.atview.richtext.facet#math";
-    tex: string;
-}
-
-export interface AtviewHardBreakFeature {
-    $type: "net.atview.richtext.facet#hard-break";
-}
+};
+export type AtviewMathFeature = l.$Typed<RichtextFacet.Math, "net.atview.richtext.facet#math">;
+export type AtviewHardBreakFeature = l.$Typed<RichtextFacet.HardBreak, "net.atview.richtext.facet#hardBreak">;
 
 export type AtviewInlineFeature =
     | AtviewBoldFeature
@@ -131,10 +84,9 @@ export type AtviewBlockFeature =
 
 export type AtviewFeature = AtviewInlineFeature | AtviewBlockFeature;
 
+export type AtviewByteSlice = RichtextFacet.ByteSlice;
+
 export interface AtviewFacet {
-    index: {
-        byteStart: number;
-        byteEnd: number;
-    };
+    index: { byteStart: number; byteEnd: number };
     features: AtviewFeature[];
 }

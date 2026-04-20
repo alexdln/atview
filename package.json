@@ -10,7 +10,8 @@
         "stylelint": "stylelint",
         "eslint": "eslint",
         "check": "concurrently -n lint:code,lint:css \"pnpm run lint:code\" \"pnpm run lint:css\"",
-        "prepare": "husky"
+        "prepare": "husky",
+        "postinstall": "cd packages/core && pnpm exec lex build --clear"
     },
     "lint-staged": {
         "*.{ts,tsx,js,jsx,json}": [

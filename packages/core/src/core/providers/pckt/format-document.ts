@@ -1,4 +1,5 @@
-import { type PcktBlock } from "@src/core/defs/document";
+import { type PcktBlock, type StandardDocumentPckt } from "../../defs/document";
+import * as site from "../../../lexicons/site";
 
 export interface BuildParams {
     items: PcktBlock[];
@@ -40,9 +41,9 @@ const plainFromBlock = (block: PcktBlock): string => {
 
 const extractPlainText = (items: PcktBlock[]) => items.map(plainFromBlock).filter(Boolean).join("\n\n");
 
-export const formatDocument = (data: BuildParams, metadata: Metadata) =>
+export const formatDocument = (data: BuildParams, metadata: Metadata): StandardDocumentPckt =>
     ({
-        $type: "site.standard.document",
+        $type: site.standard.document.$type,
         site: metadata.siteUri,
         path: metadata.path,
         title: metadata.title,
@@ -55,4 +56,4 @@ export const formatDocument = (data: BuildParams, metadata: Metadata) =>
             $type: "blog.pckt.content",
             items: data.items,
         },
-    }) as const;
+    }) as StandardDocumentPckt;

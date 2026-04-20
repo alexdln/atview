@@ -1,4 +1,5 @@
-import { type AtviewFacet, type StandardDocumentAtview } from "@src/core/defs/document";
+import * as site from "../../../lexicons/site";
+import { type AtviewFacet, type StandardDocumentAtview } from "../../defs/document";
 
 export interface BuildParams {
     textContent: string;
@@ -19,7 +20,7 @@ export interface Metadata {
 
 export const formatDocument = (data: BuildParams, metadata: Metadata): StandardDocumentAtview =>
     ({
-        $type: "site.standard.document",
+        $type: site.standard.document.$type,
         site: metadata.siteUri,
         path: metadata.path,
         title: metadata.title,

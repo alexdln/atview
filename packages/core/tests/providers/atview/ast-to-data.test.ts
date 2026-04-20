@@ -88,7 +88,7 @@ describe("AtviewProvider.astToData", () => {
         expect(out.facets).toEqual([
             {
                 index: { byteStart: 3, byteEnd: 4 },
-                features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+                features: [{ $type: "net.atview.richtext.facet#hardBreak" }],
             },
         ]);
     });

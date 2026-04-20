@@ -1,3 +1,5 @@
+import * as site from "../../../lexicons/site";
+
 export interface BuildParams {
     textContent: string;
 }
@@ -14,7 +16,7 @@ export interface Metadata {
 
 export const formatDocument = (data: BuildParams, metadata: Metadata) =>
     ({
-        $type: "site.standard.document",
+        $type: site.standard.document.$type,
         site: metadata.siteUri,
         path: metadata.path,
         title: metadata.title,

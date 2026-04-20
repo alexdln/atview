@@ -16,7 +16,10 @@ import { astToAtviewHtml, type AstToAtviewHtmlContext } from "./ast-to-atview-ht
 
 export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstToAtviewHtmlContext): string => {
     if (isStandardSiteAtview(post)) {
-        return astToAtviewHtml(AtviewProvider.dataToAst(post), context);
+        return astToAtviewHtml(
+            AtviewProvider.dataToAst({ textContent: post.textContent, facets: post.content.facets }),
+            context,
+        );
     }
     if (isLeafletMain(post)) {
         return astToAtviewHtml(LeafletProvider.dataToAst(post), context);
@@ -30,7 +33,7 @@ export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstT
     if (isStandardSiteOffprint(post)) {
         return astToAtviewHtml(OffprintProvider.dataToAst({ items: post.content.items }), context);
     }
-    return astToAtviewHtml(SiteStandardProvider.dataToAst(post), context);
+    return astToAtviewHtml(SiteStandardProvider.dataToAst({ textContent: post.textContent }), context);
 };
 
 export { type AstToAtviewHtmlContext } from "./ast-to-atview-html";

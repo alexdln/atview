@@ -42,7 +42,7 @@ describe("AtviewProvider data html pipeline", () => {
                 },
                 {
                     index: { byteStart: 17, byteEnd: 18 },
-                    features: [{ $type: "net.atview.richtext.facet#code-block" }],
+                    features: [{ $type: "net.atview.richtext.facet#codeBlock" }],
                 },
             ],
         });

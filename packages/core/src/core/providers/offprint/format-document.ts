@@ -1,4 +1,10 @@
-import { type OffprintBlock, type OffprintListItem, type OffprintTaskItem } from "@src/core/defs/document";
+import {
+    type OffprintBlock,
+    type OffprintListItem,
+    type OffprintTaskItem,
+    type StandardDocumentOffprint,
+} from "../../defs/document";
+import * as site from "../../../lexicons/site";
 
 export interface BuildParams {
     items: OffprintBlock[];
@@ -43,9 +49,9 @@ const plainFromBlock = (block: OffprintBlock): string => {
 
 const extractPlainText = (items: OffprintBlock[]) => items.map(plainFromBlock).filter(Boolean).join("\n\n");
 
-export const formatDocument = (data: BuildParams, metadata: Metadata) =>
+export const formatDocument = (data: BuildParams, metadata: Metadata): StandardDocumentOffprint =>
     ({
-        $type: "site.standard.document",
+        $type: site.standard.document.$type,
         site: metadata.siteUri,
         path: metadata.path,
         title: metadata.title,
@@ -58,4 +64,4 @@ export const formatDocument = (data: BuildParams, metadata: Metadata) =>
             $type: "app.offprint.content",
             items: data.items,
         },
-    }) as const;
+    }) as StandardDocumentOffprint;

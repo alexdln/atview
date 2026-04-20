@@ -1,0 +1,32 @@
+{
+  "id": "net.atview.document",
+  "defs": {
+    "main": {
+      "type": "object",
+      "description": "Atview content payload. Slots into the `content` open union of a site.standard.document record. Provides a compact, stream-friendly representation of rich text as a plain `textContent` string paired with an array of byte-indexed facets.",
+      "properties": {
+        "facets": {
+          "type": "array",
+          "description": "Rich-text facets marking byte ranges of the parent record's `textContent` with inline and block-level features.",
+          "items": {
+            "type": "ref",
+            "ref": "net.atview.richtext.facet"
+          }
+        },
+        "coverImageAlt": {
+          "type": "string",
+          "description": "Alt text for the parent record's `coverImage` blob.",
+          "maxLength": 5000,
+          "maxGraphemes": 500
+        },
+        "language": {
+          "type": "string",
+          "description": "BCP-47 language tag describing the primary language of `textContent` (e.g. `en`, `en-US`).",
+          "maxLength": 32
+        }
+      }
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

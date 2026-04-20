@@ -4,9 +4,7 @@ import {
     type PcktListItem,
     type PcktTableRow,
     type PcktTaskItem,
-} from "@src/core/defs/document";
-import { bytePositionToCharPosition } from "@src/core/utils/byte-helpers";
-
+} from "../../defs/document";
 import {
     type AstBlockNode,
     type AstDocument,
@@ -16,6 +14,7 @@ import {
     type AstTableRow,
     type AstTaskListItem,
 } from "../../ast/types";
+import { bytePositionToCharPosition } from "../../utils/byte-helpers";
 
 const INLINE_FACET_MAP: Record<string, AstInlineNode["type"]> = {
     "blog.pckt.richtext.facet#bold": "bold",

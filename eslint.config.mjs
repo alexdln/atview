@@ -15,7 +15,7 @@ const eslintConfig = defineConfig([
             "@typescript-eslint/no-unused-expressions": 0,
         },
     },
-    globalIgnores(["**/dist/**", "**/node_modules/**"]),
+    globalIgnores(["**/dist/**", "**/node_modules/**", "**/lexicons/**"]),
 ]);
 
 export default eslintConfig;
