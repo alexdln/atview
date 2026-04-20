@@ -31,4 +31,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 # lexicons
-src/lexicons
+**/src/lexicons
