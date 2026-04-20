@@ -1,12 +1,14 @@
 import {
     type Document,
-    AtviewProvider,
     isLeafletMain,
     isStandardSiteAtview,
     isStandardSiteLeaflet,
     isStandardSitePckt,
+    isStandardSiteOffprint,
+    AtviewProvider,
     LeafletProvider,
     PcktProvider,
+    OffprintProvider,
     SiteStandardProvider,
 } from "@atview/core";
 
@@ -24,6 +26,9 @@ export const getDocumentAtviewHtml = <T extends Document>(post: T, context: AstT
     }
     if (isStandardSitePckt(post)) {
         return astToAtviewHtml(PcktProvider.dataToAst({ items: post.content.items }), context);
+    }
+    if (isStandardSiteOffprint(post)) {
+        return astToAtviewHtml(OffprintProvider.dataToAst({ items: post.content.items }), context);
     }
     return astToAtviewHtml(SiteStandardProvider.dataToAst(post), context);
 };

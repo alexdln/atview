@@ -6,6 +6,7 @@ import {
     type StandardDocument,
     type StandardDocumentAtview,
     type StandardDocumentLeaflet,
+    type StandardDocumentOffprint,
     type StandardDocumentPckt,
 } from "@src/core/defs/document";
 
@@ -72,6 +73,21 @@ export const minimalStandardPckt = (items: StandardDocumentPckt["content"]["item
     tags: [],
     publishedAt: "2026-01-01T00:00:00.000Z",
     content: { $type: "blog.pckt.content", items },
+});
+
+export const minimalStandardOffprint = (
+    items: StandardDocumentOffprint["content"]["items"],
+): StandardDocumentOffprint => ({
+    $type: "site.standard.document",
+    site: "at://did:plc:test",
+    path: "/example-path",
+    title: "example-title",
+    description: "example-description",
+    coverImage: "bafycover",
+    textContent: "derived",
+    tags: [],
+    publishedAt: "2026-01-01T00:00:00.000Z",
+    content: { $type: "app.offprint.content", items },
 });
 
 export const minimalLeafletMain = (pages: LeafletDocument["pages"]): LeafletDocument => ({

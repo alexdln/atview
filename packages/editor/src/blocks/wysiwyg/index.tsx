@@ -2,7 +2,14 @@
 
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDialogReducer } from "contection-top-layer";
-import { ENGINES, LeafletProvider, PcktProvider, SiteStandardProvider, AtviewProvider } from "@atview/core";
+import {
+    ENGINES,
+    LeafletProvider,
+    PcktProvider,
+    SiteStandardProvider,
+    AtviewProvider,
+    OffprintProvider,
+} from "@atview/core";
 
 import { atviewHtmlToAst } from "@src/atview-html";
 
@@ -36,7 +43,9 @@ export type WysiwygData<Engine extends WysiwygEngine = WysiwygEngine> = Engine e
         ? ReturnType<typeof PcktProvider.astToData> & { engine: "pckt_blocks" }
         : Engine extends "atview_facets"
           ? ReturnType<typeof AtviewProvider.astToData> & { engine: "atview_facets" }
-          : ReturnType<typeof SiteStandardProvider.astToData> & { engine: "site_standard_plain" };
+          : Engine extends "offprint_blocks"
+            ? ReturnType<typeof OffprintProvider.astToData> & { engine: "offprint_blocks" }
+            : ReturnType<typeof SiteStandardProvider.astToData> & { engine: "site_standard_plain" };
 
 export type EditorRef<Engine extends WysiwygEngine = WysiwygEngine> = {
     getData: () => WysiwygData<Engine>;
@@ -74,7 +83,6 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
 
     const astToData = useMemo(() => {
         if (engine === "pckt_blocks") {
-            // .astToData(atviewHtmlToAst(html, objectStore))
             return PcktProvider.astToData;
         }
         if (engine === "leaflet_blocks" || engine === "leaflet_blocks_old") {
@@ -82,6 +90,9 @@ export const Wysiwyg = <Engine extends WysiwygEngine>({
         }
         if (engine === "atview_facets") {
             return AtviewProvider.astToData;
+        }
+        if (engine === "offprint_blocks") {
+            return OffprintProvider.astToData;
         }
         return SiteStandardProvider.astToData;
     }, [engine]);
