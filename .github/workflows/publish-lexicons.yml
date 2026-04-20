@@ -35,7 +35,7 @@ jobs:
           goat --help >/dev/null
 
       - name: Lint lexicons
-        run: goat lex lint
+        run: goat lex lint "$LEXICONS_DIR/net/atview"
 
       - name: Publish lexicons
         env:
