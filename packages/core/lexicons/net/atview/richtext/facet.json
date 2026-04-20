@@ -265,7 +265,8 @@
       "properties": {
         "tex": {
           "type": "string",
-          "maxLength": 100000
+          "maxLength": 20000,
+          "maxGraphemes": 10000
         }
       }
     },
