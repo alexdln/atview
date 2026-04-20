@@ -3,11 +3,13 @@ import { type Record } from "@atproto/api/dist/client/types/com/atproto/repo/lis
 import {
     type LeafletContent,
     type PcktContent,
+    type OffprintContent,
     type AtviewContent,
     type StandardDocumentExtended,
     type StandardDocument,
     type StandardDocumentLeaflet,
     type StandardDocumentPckt,
+    type StandardDocumentOffprint,
     type StandardDocumentAtview,
 } from "./standard";
 import { type LeafletDocument } from "./leaflet";
@@ -15,6 +17,7 @@ import { type LeafletDocument } from "./leaflet";
 export * from "./standard";
 export * from "./leaflet";
 export * from "./pckt";
+export * from "./offprint";
 export * from "./shared";
 
 export type Document = LeafletDocument | StandardDocumentExtended | StandardDocument;
@@ -22,6 +25,9 @@ export type Document = LeafletDocument | StandardDocumentExtended | StandardDocu
 export const isLeafletContent = (data: Record["value"]): data is LeafletContent => data.$type === "pub.leaflet.content";
 
 export const isPcktContent = (data: Record["value"]): data is PcktContent => data.$type === "blog.pckt.content";
+
+export const isOffprintContent = (data: Record["value"]): data is OffprintContent =>
+    data.$type === "app.offprint.content";
 
 export const isAtviewContent = (data: Record["value"]): data is AtviewContent => data.$type === "net.atview.document";
 
@@ -38,6 +44,9 @@ export const isStandardSiteLeaflet = (data: Record["value"]): data is StandardDo
 
 export const isStandardSitePckt = (data: Record["value"]): data is StandardDocumentPckt =>
     isStandardSiteDetailed(data) && Boolean(data.content && isPcktContent(data.content));
+
+export const isStandardSiteOffprint = (data: Record["value"]): data is StandardDocumentOffprint =>
+    isStandardSiteDetailed(data) && Boolean(data.content && isOffprintContent(data.content));
 
 export const isStandardSiteAtview = (data: Record["value"]): data is StandardDocumentAtview =>
     isStandardSiteDetailed(data) && Boolean(data.content && isAtviewContent(data.content));

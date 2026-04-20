@@ -1,5 +1,6 @@
 import { LeafletProvider } from "../providers/leaflet";
 import { AtviewProvider } from "../providers/atview";
+import { OffprintProvider } from "../providers/offprint";
 import { PcktProvider } from "../providers/pckt";
 import { SiteStandardProvider } from "../providers/site-standard";
 
@@ -27,6 +28,12 @@ export const ENGINES = {
         documentType: "site.standard.document",
         publicationType: "site.standard.publication",
         provider: PcktProvider,
+    },
+    offprint_blocks: {
+        label: "site.standard.document [Offprint/Blocks]",
+        documentType: "site.standard.document",
+        publicationType: "site.standard.publication",
+        provider: OffprintProvider,
     },
     site_standard_plain: {
         label: "site.standard.document [Site Standard/Plain]",

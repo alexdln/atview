@@ -78,7 +78,7 @@ describe("astToAtviewHtml", () => {
                 { authorDid: "did:plc:example-author" },
             ),
         ).toBe(
-            `<span data-tag="media" data-type="block" data-record='{&quot;image&quot;:{&quot;$type&quot;:&quot;blob&quot;,&quot;ref&quot;:&quot;bafyref&quot;,&quot;mimeType&quot;:&quot;image/png&quot;,&quot;size&quot;:10},&quot;alt&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;width&quot;:400,&quot;height&quot;:200}' style='--preview-url: url(https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:example-author/bafyref@jpeg);--aspect-ratio: 2'>caption</span>`,
+            `<span data-tag="media" data-type="block" data-record='{&quot;image&quot;:{&quot;$type&quot;:&quot;blob&quot;,&quot;ref&quot;:&quot;bafyref&quot;,&quot;mimeType&quot;:&quot;image/png&quot;,&quot;size&quot;:10},&quot;alt&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;width&quot;:400,&quot;height&quot;:200}' style='--preview-url: url(https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:example-author/bafyref@png);--aspect-ratio: 2'>caption</span>`,
         );
     });
 
@@ -104,7 +104,7 @@ describe("astToAtviewHtml", () => {
                 { authorDid: "did:plc:example-author" },
             ),
         ).toBe(
-            `<span data-tag="media" data-type="block" data-record='{&quot;image&quot;:{&quot;$type&quot;:&quot;blob&quot;,&quot;ref&quot;:&quot;bafythumb&quot;,&quot;mimeType&quot;:&quot;image/png&quot;,&quot;size&quot;:10},&quot;alt&quot;:&quot;&quot;,&quot;caption&quot;:&quot;stored-caption&quot;,&quot;width&quot;:400,&quot;height&quot;:200}' style='--preview-url: url(https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:example-author/bafythumb@jpeg);--aspect-ratio: 2'>shown</span>`,
+            `<span data-tag="media" data-type="block" data-record='{&quot;image&quot;:{&quot;$type&quot;:&quot;blob&quot;,&quot;ref&quot;:&quot;bafythumb&quot;,&quot;mimeType&quot;:&quot;image/png&quot;,&quot;size&quot;:10},&quot;alt&quot;:&quot;&quot;,&quot;caption&quot;:&quot;stored-caption&quot;,&quot;width&quot;:400,&quot;height&quot;:200}' style='--preview-url: url(https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:example-author/bafythumb@png);--aspect-ratio: 2'>shown</span>`,
         );
     });
 

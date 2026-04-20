@@ -1,4 +1,5 @@
 import { type LeafletLinearDocument } from "./leaflet";
+import { type OffprintBlock } from "./offprint";
 import { type PcktBlock } from "./pckt";
 import { type Blob, type Facet } from "./shared";
 
@@ -18,6 +19,7 @@ export type StandardDocument = {
 
 export type LeafletContent = { $type: "pub.leaflet.content"; pages: LeafletLinearDocument[] };
 export type PcktContent = { $type: "blog.pckt.content"; items: PcktBlock[] };
+export type OffprintContent = { $type: "app.offprint.content"; items: OffprintBlock[] };
 export type AtviewContent = {
     $type: "net.atview.document";
     facets?: Facet[];
@@ -33,8 +35,16 @@ export type StandardDocumentPckt = StandardDocument & {
     content: PcktContent;
 };
 
+export type StandardDocumentOffprint = StandardDocument & {
+    content: OffprintContent;
+};
+
 export type StandardDocumentAtview = StandardDocument & {
     content: AtviewContent;
 };
 
-export type StandardDocumentExtended = StandardDocumentLeaflet | StandardDocumentPckt | StandardDocumentAtview;
+export type StandardDocumentExtended =
+    | StandardDocumentLeaflet
+    | StandardDocumentPckt
+    | StandardDocumentOffprint
+    | StandardDocumentAtview;

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { LeafletProvider, AtviewProvider, PcktProvider, SiteStandardProvider } from "@atview/core";
+import { LeafletProvider, AtviewProvider, PcktProvider, SiteStandardProvider, OffprintProvider } from "@atview/core";
 import { astToJsx } from "@atview/docs";
 
 import { WysiwygData } from "../wysiwyg";
@@ -20,6 +20,9 @@ export const EditorRenderer: React.FC<EditorRendererProps> = ({ data, authorDid 
         }
         if (data.engine === "pckt_blocks") {
             return astToJsx(PcktProvider.dataToAst(data), { authorDid }).jsx;
+        }
+        if (data.engine === "offprint_blocks") {
+            return astToJsx(OffprintProvider.dataToAst(data), { authorDid }).jsx;
         }
         return astToJsx(SiteStandardProvider.dataToAst(data), { authorDid }).jsx;
     }, [data, authorDid]);
