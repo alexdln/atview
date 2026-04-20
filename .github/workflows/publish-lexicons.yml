@@ -1,0 +1,52 @@
+name: Publish Lexicons
+
+on:
+  workflow_dispatch:
+    inputs:
+      update:
+        description: Update existing schema records
+        type: boolean
+        default: false
+      skip-dns-check:
+        description: Skip NSID DNS resolution check (use with care)
+        type: boolean
+        default: false
+
+jobs:
+  publish-lexicons:
+    name: Publish lexicons from @atview/core
+    runs-on: ubuntu-latest
+
+    env:
+      GOAT_VERSION: "0.2.3"
+      LEXICONS_DIR: packages/core/lexicons
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install goat
+        run: |
+          curl -fsSL -o goat.tar.gz \
+            "https://github.com/bluesky-social/goat/releases/download/v${GOAT_VERSION}/goat_Linux_x86_64.tar.gz"
+          tar -xzf goat.tar.gz goat
+          sudo install -m 0755 goat /usr/local/bin/goat
+          rm -f goat goat.tar.gz
+          goat --help >/dev/null
+
+      - name: Lint lexicons
+        run: goat lex lint
+
+      - name: Publish lexicons
+        env:
+          GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
+          GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
+        run: |
+          args=()
+          if [ "${{ inputs.update }}" = "true" ]; then
+            args+=(--update)
+          fi
+          if [ "${{ inputs.skip-dns-check }}" = "true" ]; then
+            args+=(--skip-dns-check)
+          fi
+          goat lex publish "${args[@]}"
