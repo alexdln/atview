@@ -1,4 +1,4 @@
-import { type Blob } from "@src/core/defs/document";
+import { type Blob } from "../defs/document";
 
 export interface AstTextNode {
     type: "text";

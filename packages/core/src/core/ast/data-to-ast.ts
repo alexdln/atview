@@ -14,7 +14,7 @@ import { SiteStandardProvider } from "../providers/site-standard";
 
 export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSiteAtview(post)) {
-        return AtviewProvider.dataToAst({ textContent: post.textContent, facets: post.content.facets });
+        return AtviewProvider.dataToAst({ textContent: post.textContent ?? "", facets: post.content.facets });
     }
     if (isLeafletMain(post)) {
         return LeafletProvider.dataToAst(post);
@@ -28,5 +28,5 @@ export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSiteOffprint(post)) {
         return OffprintProvider.dataToAst({ items: post.content.items });
     }
-    return SiteStandardProvider.dataToAst({ textContent: post.textContent });
+    return SiteStandardProvider.dataToAst({ textContent: post.textContent ?? "" });
 };

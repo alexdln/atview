@@ -1,17 +1,16 @@
-import { type $Typed } from "@atproto/api";
-import { type CID } from "multiformats/cid";
+import { type Cid, type l } from "@atproto/lex";
 
 export interface Facet {
     index: {
         byteStart: number;
         byteEnd: number;
     };
-    features: $Typed<{ [key: string]: unknown }>[];
+    features: l.$Typed<{ [key: string]: unknown }>[];
 }
 
 export interface Blob {
     $type: "blob";
-    ref: string | CID;
+    ref: string | Cid;
     mimeType: string;
     size: number;
 }

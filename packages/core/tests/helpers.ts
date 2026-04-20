@@ -8,7 +8,10 @@ import {
     type StandardDocumentLeaflet,
     type StandardDocumentOffprint,
     type StandardDocumentPckt,
-} from "@src/core/defs/document";
+} from "../src/core/defs/document";
+import * as site from "../src/lexicons/site";
+
+const SITE_STANDARD_DOCUMENT = site.standard.document.$type;
 
 export const sortFacets = <T extends AtviewFacet>(facets: T[]): T[] =>
     [...facets].sort((first, second) =>
@@ -22,71 +25,47 @@ export const normalizeAtviewData = (data: { textContent: string; facets?: Atview
     facets: sortFacets(data.facets ?? []),
 });
 
-export const minimalStandardPlain = (textContent: string): StandardDocument => ({
-    $type: "site.standard.document",
+const baseStandard = (): Omit<StandardDocument, "textContent"> => ({
+    $type: SITE_STANDARD_DOCUMENT,
     site: "at://did:plc:test",
     path: "/example-path",
     title: "example-title",
     description: "example-description",
     coverImage: "bafycover",
-    textContent,
     tags: [],
     publishedAt: "2026-01-01T00:00:00.000Z",
 });
 
-export const minimalStandardAtview = (textContent: string, facets: AtviewFacet[] = []): StandardDocumentAtview => ({
-    $type: "site.standard.document",
-    site: "at://did:plc:test",
-    path: "/example-path",
-    title: "example-title",
-    description: "example-description",
-    coverImage: "bafycover",
+export const minimalStandardPlain = (textContent: string): StandardDocument => ({
+    ...baseStandard(),
     textContent,
-    tags: [],
-    publishedAt: "2026-01-01T00:00:00.000Z",
+});
+
+export const minimalStandardAtview = (textContent: string, facets: AtviewFacet[] = []): StandardDocumentAtview => ({
+    ...baseStandard(),
+    textContent,
     content: { $type: "net.atview.document", facets },
 });
 
 export const minimalStandardLeaflet = (
     pages: StandardDocumentLeaflet["content"]["pages"],
 ): StandardDocumentLeaflet => ({
-    $type: "site.standard.document",
-    site: "at://did:plc:test",
-    path: "/example-path",
-    title: "example-title",
-    description: "example-description",
-    coverImage: "bafycover",
+    ...baseStandard(),
     textContent: "derived",
-    tags: [],
-    publishedAt: "2026-01-01T00:00:00.000Z",
     content: { $type: "pub.leaflet.content", pages },
 });
 
 export const minimalStandardPckt = (items: StandardDocumentPckt["content"]["items"]): StandardDocumentPckt => ({
-    $type: "site.standard.document",
-    site: "at://did:plc:test",
-    path: "/example-path",
-    title: "example-title",
-    description: "example-description",
-    coverImage: "bafycover",
+    ...baseStandard(),
     textContent: "derived",
-    tags: [],
-    publishedAt: "2026-01-01T00:00:00.000Z",
     content: { $type: "blog.pckt.content", items },
 });
 
 export const minimalStandardOffprint = (
     items: StandardDocumentOffprint["content"]["items"],
 ): StandardDocumentOffprint => ({
-    $type: "site.standard.document",
-    site: "at://did:plc:test",
-    path: "/example-path",
-    title: "example-title",
-    description: "example-description",
-    coverImage: "bafycover",
+    ...baseStandard(),
     textContent: "derived",
-    tags: [],
-    publishedAt: "2026-01-01T00:00:00.000Z",
     content: { $type: "app.offprint.content", items },
 });
 

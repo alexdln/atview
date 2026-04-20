@@ -1,46 +1,42 @@
+import { type l } from "@atproto/lex";
+
+import { type Main as NetAtviewDocumentMain } from "../../../lexicons/net/atview/document";
+import { type Main as SiteStandardDocumentMain } from "../../../lexicons/site/standard/document";
 import { type AtviewFacet } from "./atview";
 import { type LeafletLinearDocument } from "./leaflet";
 import { type OffprintBlock } from "./offprint";
 import { type PcktBlock } from "./pckt";
 import { type Blob } from "./shared";
 
-export type StandardDocument = {
-    $type: "site.standard.document";
-    site: string;
-    path: string;
-    title: string;
-    description: string;
-    coverImage: Blob | string;
-    textContent: string;
-    tags: string[];
-    publishedAt: string;
-    updatedAt?: string;
-    bskyPostRef?: { uri: string };
+export type StandardDocument = Omit<SiteStandardDocumentMain, "coverImage" | "bskyPostRef"> & {
+    coverImage?: Blob | string;
+    bskyPostRef?: { uri: string; cid?: string };
 };
 
 export type LeafletContent = { $type: "pub.leaflet.content"; pages: LeafletLinearDocument[] };
 export type PcktContent = { $type: "blog.pckt.content"; items: PcktBlock[] };
 export type OffprintContent = { $type: "app.offprint.content"; items: OffprintBlock[] };
-export type AtviewContent = {
-    $type: "net.atview.document";
+// Derive from the generated lexicon but narrow `facets` to our branded
+// `AtviewFacet` union and promote the optional `$type` to required.
+export type AtviewContent = l.$Typed<Omit<NetAtviewDocumentMain, "facets">, "net.atview.document"> & {
     facets?: AtviewFacet[];
-    coverImageAlt?: string;
-    language?: string;
 };
 
-export type StandardDocumentLeaflet = StandardDocument & {
+// Extend via `Omit` rather than intersection so we replace the open
+// `Unknown$TypedObject` content slot with our concrete, branded-free types.
+export type StandardDocumentLeaflet = Omit<StandardDocument, "content"> & {
     content: LeafletContent;
 };
 
-export type StandardDocumentPckt = StandardDocument & {
+export type StandardDocumentPckt = Omit<StandardDocument, "content"> & {
     content: PcktContent;
 };
 
-export type StandardDocumentOffprint = StandardDocument & {
+export type StandardDocumentOffprint = Omit<StandardDocument, "content"> & {
     content: OffprintContent;
 };
 
-export type StandardDocumentAtview = StandardDocument & {
+export type StandardDocumentAtview = Omit<StandardDocument, "content"> & {
     content: AtviewContent;
 };
 

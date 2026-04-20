@@ -1,0 +1,280 @@
+{
+  "id": "net.atview.richtext.facet",
+  "defs": {
+    "main": {
+      "type": "object",
+      "description": "Annotation of a sub-string within the parent record's `textContent`. Byte offsets refer to a UTF-8 encoding of the string. A single facet may carry multiple features that all apply to the same byte range.",
+      "required": ["index", "features"],
+      "properties": {
+        "index": {
+          "type": "ref",
+          "ref": "#byteSlice"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "union",
+            "refs": [
+              "#b",
+              "#i",
+              "#u",
+              "#code",
+              "#strikethrough",
+              "#highlight",
+              "#link",
+              "#mention",
+              "#h2",
+              "#h3",
+              "#h4",
+              "#h5",
+              "#h6",
+              "#blockquote",
+              "#codeBlock",
+              "#media",
+              "#bskyPost",
+              "#ul",
+              "#ol",
+              "#website",
+              "#horizontalRule",
+              "#iframe",
+              "#math",
+              "#hardBreak"
+            ]
+          }
+        }
+      }
+    },
+    "byteSlice": {
+      "type": "object",
+      "description": "Specifies the sub-string range a facet feature applies to. Start index is inclusive, end index is exclusive. Indices are in UTF-8 bytes.",
+      "required": ["byteStart", "byteEnd"],
+      "properties": {
+        "byteStart": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byteEnd": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "aspectRatio": {
+      "type": "object",
+      "description": "Width/height ratio of an image, in arbitrary same-unit pixels.",
+      "required": ["width", "height"],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "b": {
+      "type": "object",
+      "description": "Bold inline emphasis.",
+      "properties": {}
+    },
+    "i": {
+      "type": "object",
+      "description": "Italic inline emphasis.",
+      "properties": {}
+    },
+    "u": {
+      "type": "object",
+      "description": "Underline inline emphasis.",
+      "properties": {}
+    },
+    "code": {
+      "type": "object",
+      "description": "Inline monospace / code span.",
+      "properties": {}
+    },
+    "strikethrough": {
+      "type": "object",
+      "description": "Strikethrough inline emphasis.",
+      "properties": {}
+    },
+    "highlight": {
+      "type": "object",
+      "description": "Highlighted inline emphasis.",
+      "properties": {}
+    },
+    "link": {
+      "type": "object",
+      "description": "Hyperlink inline feature.",
+      "required": ["uri"],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "mention": {
+      "type": "object",
+      "description": "Mention of an account by DID.",
+      "required": ["did"],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        }
+      }
+    },
+    "h2": {
+      "type": "object",
+      "description": "Level 2 heading block.",
+      "properties": {}
+    },
+    "h3": {
+      "type": "object",
+      "description": "Level 3 heading block.",
+      "properties": {}
+    },
+    "h4": {
+      "type": "object",
+      "description": "Level 4 heading block.",
+      "properties": {}
+    },
+    "h5": {
+      "type": "object",
+      "description": "Level 5 heading block.",
+      "properties": {}
+    },
+    "h6": {
+      "type": "object",
+      "description": "Level 6 heading block.",
+      "properties": {}
+    },
+    "blockquote": {
+      "type": "object",
+      "description": "Blockquote block.",
+      "properties": {}
+    },
+    "codeBlock": {
+      "type": "object",
+      "description": "Fenced code block with optional language hint.",
+      "properties": {
+        "language": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+    "media": {
+      "type": "object",
+      "description": "Inline/embedded media (image) with optional metadata.",
+      "required": ["image"],
+      "properties": {
+        "image": {
+          "type": "blob",
+          "accept": ["image/*"],
+          "maxSize": 5000000
+        },
+        "aspectRatio": {
+          "type": "ref",
+          "ref": "#aspectRatio"
+        },
+        "altText": {
+          "type": "string",
+          "maxLength": 10000,
+          "maxGraphemes": 1000
+        },
+        "caption": {
+          "type": "string",
+          "maxLength": 10000,
+          "maxGraphemes": 1000
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 5000,
+          "maxGraphemes": 500
+        }
+      }
+    },
+    "bskyPost": {
+      "type": "object",
+      "description": "Embedded reference to a Bluesky post (app.bsky.feed.post).",
+      "required": ["uri"],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri"
+        },
+        "cid": {
+          "type": "string",
+          "format": "cid"
+        }
+      }
+    },
+    "ul": {
+      "type": "object",
+      "description": "Unordered list item block.",
+      "properties": {}
+    },
+    "ol": {
+      "type": "object",
+      "description": "Ordered list item block.",
+      "properties": {}
+    },
+    "website": {
+      "type": "object",
+      "description": "External website embed.",
+      "required": ["uri"],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 5000,
+          "maxGraphemes": 500
+        }
+      }
+    },
+    "horizontalRule": {
+      "type": "object",
+      "description": "Horizontal rule / thematic break block.",
+      "properties": {}
+    },
+    "iframe": {
+      "type": "object",
+      "description": "Embedded iframe block.",
+      "required": ["url"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "math": {
+      "type": "object",
+      "description": "Math block expressed as TeX source.",
+      "required": ["tex"],
+      "properties": {
+        "tex": {
+          "type": "string",
+          "maxLength": 100000
+        }
+      }
+    },
+    "hardBreak": {
+      "type": "object",
+      "description": "Hard line break within a paragraph.",
+      "properties": {}
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

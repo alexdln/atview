@@ -1,6 +1,4 @@
-import { type Facet, type PcktBlock, type PcktListItem, type PcktTaskItem } from "@src/core/defs/document";
-import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
-
+import { type Facet, type PcktBlock, type PcktListItem, type PcktTaskItem } from "../../defs/document";
 import {
     type AstBlockNode,
     type AstDocument,
@@ -8,6 +6,7 @@ import {
     type AstListItem,
     type AstTaskListItem,
 } from "../../ast/types";
+import { charPositionToBytePosition } from "../../utils/byte-helpers";
 
 const INLINE_TYPE_TO_FACET: Record<string, string> = {
     bold: "blog.pckt.richtext.facet#bold",

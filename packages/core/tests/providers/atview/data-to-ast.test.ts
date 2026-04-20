@@ -52,7 +52,7 @@ describe("AtviewProvider.dataToAst", () => {
                 },
                 {
                     index: { byteStart: 14, byteEnd: 25 },
-                    features: [{ $type: "net.atview.richtext.facet#code-block", language: "ts" }],
+                    features: [{ $type: "net.atview.richtext.facet#codeBlock", language: "ts" }],
                 },
                 { index: { byteStart: 27, byteEnd: 34 }, features: [{ $type: "net.atview.richtext.facet#ul" }] },
                 { index: { byteStart: 36, byteEnd: 49 }, features: [{ $type: "net.atview.richtext.facet#ol" }] },
@@ -75,7 +75,7 @@ describe("AtviewProvider.dataToAst", () => {
                     index: { byteStart: 0, byteEnd: 9 },
                     features: [
                         {
-                            $type: "net.atview.richtext.facet#bsky-post",
+                            $type: "net.atview.richtext.facet#bskyPost",
                             uri: "at://example/post",
                             cid: "example-cid",
                         },
@@ -88,8 +88,7 @@ describe("AtviewProvider.dataToAst", () => {
                             $type: "net.atview.richtext.facet#media",
                             image: "bafyimage",
                             altText: "example-alt",
-                            width: 100,
-                            height: 200,
+                            aspectRatio: { width: 100, height: 200 },
                             caption: "facet-caption",
                         },
                     ],
@@ -139,7 +138,7 @@ describe("AtviewProvider.dataToAst", () => {
             facets: [
                 {
                     index: { byteStart: 3, byteEnd: 4 },
-                    features: [{ $type: "net.atview.richtext.facet#hard-break" }],
+                    features: [{ $type: "net.atview.richtext.facet#hardBreak" }],
                 },
             ],
         });

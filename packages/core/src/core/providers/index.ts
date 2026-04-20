@@ -5,8 +5,7 @@ import {
     isStandardSiteLeaflet,
     isStandardSiteOffprint,
     isStandardSitePckt,
-} from "@src/core/defs/document";
-
+} from "../defs/document";
 import { LeafletProvider } from "./leaflet";
 import { AtviewProvider } from "./atview";
 import { OffprintProvider } from "./offprint";

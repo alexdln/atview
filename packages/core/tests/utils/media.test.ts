@@ -1,4 +1,4 @@
-import { CID } from "multiformats/cid";
+import { type Cid } from "@atproto/lex";
 import { describe, expect, test } from "vitest";
 
 import { formatMediaUri, formatMediaUris, getMediaUri } from "@src/core/utils/media";
@@ -15,7 +15,7 @@ describe("formatMediaUri", () => {
     test("blob ref builds cdn url", () => {
         const blob = {
             $type: "blob" as const,
-            ref: "bafyref" as unknown as CID,
+            ref: "bafyref" as unknown as Cid,
             mimeType: "image/png",
             size: 10,
         };
@@ -27,7 +27,7 @@ describe("formatMediaUri", () => {
     test("thumbnail preview uses feed_thumbnail path (cover-style preview)", () => {
         const blob = {
             $type: "blob" as const,
-            ref: "bafyref" as unknown as CID,
+            ref: "bafyref" as unknown as Cid,
             mimeType: "image/png",
             size: 10,
         };
@@ -42,7 +42,7 @@ describe("formatMediaUris", () => {
     test("returns default thumbnail and fullsize urls", () => {
         const blob = {
             $type: "blob" as const,
-            ref: "bafyref" as unknown as CID,
+            ref: "bafyref" as unknown as Cid,
             mimeType: "image/png",
             size: 10,
         };
@@ -61,7 +61,7 @@ describe("formatMediaUris", () => {
     test("supports custom loader and multiple formats", () => {
         const blob = {
             $type: "blob" as const,
-            ref: "bafyref" as unknown as CID,
+            ref: "bafyref" as unknown as Cid,
             mimeType: "image/png",
             size: 10,
         };

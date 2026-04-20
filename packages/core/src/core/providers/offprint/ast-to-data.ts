@@ -4,9 +4,7 @@ import {
     type OffprintListItem,
     type OffprintTaskItem,
     type OffprintTextBlock,
-} from "@src/core/defs/document";
-import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
-
+} from "../../defs/document";
 import {
     type AstBlockNode,
     type AstDocument,
@@ -14,6 +12,7 @@ import {
     type AstListItem,
     type AstTaskListItem,
 } from "../../ast/types";
+import { charPositionToBytePosition } from "../../utils/byte-helpers";
 
 const INLINE_TYPE_TO_FACET: Record<string, string> = {
     bold: "app.offprint.richtext.facet#bold",
