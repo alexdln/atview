@@ -89,7 +89,6 @@ const blockToPckt = (block: AstBlockNode): PcktBlock | null => {
     switch (block.type) {
         case "paragraph": {
             const richText = inlinesToRichText(block.children);
-            if (!richText.plaintext) return null;
             return {
                 $type: "blog.pckt.block.text",
                 plaintext: richText.plaintext,
