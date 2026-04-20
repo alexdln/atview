@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { type Facet, AtviewProvider } from "@atview/core";
+import { type AtviewFacet, AtviewProvider } from "@atview/core";
 
 import { astToAtviewHtml, atviewHtmlToAst } from "../../../src/atview-html";
 import { normalizeAtviewData, parseAtviewHtmlToAst } from "../../helpers";
 
 const expectFullRoundTrip = (
-    initial: { textContent: string; facets?: Facet[] },
+    initial: { textContent: string; facets?: AtviewFacet[] },
     context: { authorDid?: string } = {},
 ) => {
     const ast = AtviewProvider.dataToAst(initial);

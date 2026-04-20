@@ -14,7 +14,7 @@ import { SiteStandardProvider } from "../providers/site-standard";
 
 export const dataToAst = <T extends Document>(post: T) => {
     if (isStandardSiteAtview(post)) {
-        return AtviewProvider.dataToAst(post);
+        return AtviewProvider.dataToAst({ textContent: post.textContent, facets: post.content.facets });
     }
     if (isLeafletMain(post)) {
         return LeafletProvider.dataToAst(post);

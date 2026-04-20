@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { type Facet } from "@src/core/defs/document";
+import { type AtviewFacet } from "@src/core/defs/document";
 import { AtviewProvider } from "@src/core/providers";
 
 import { normalizeAtviewData } from "../../helpers";
 
-const expectDataRoundTrip = (initial: { textContent: string; facets?: Facet[] }) => {
+const expectDataRoundTrip = (initial: { textContent: string; facets?: AtviewFacet[] }) => {
     const ast = AtviewProvider.dataToAst(initial);
     const back = AtviewProvider.astToData(ast);
     expect(normalizeAtviewData(back)).toEqual(normalizeAtviewData(initial));

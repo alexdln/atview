@@ -18,6 +18,7 @@ export * from "./standard";
 export * from "./leaflet";
 export * from "./pckt";
 export * from "./offprint";
+export * from "./atview";
 export * from "./shared";
 
 export type Document = LeafletDocument | StandardDocumentExtended | StandardDocument;

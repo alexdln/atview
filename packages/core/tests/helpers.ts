@@ -1,5 +1,5 @@
 import {
-    type Facet,
+    type AtviewFacet,
     type LeafletDocument,
     type LeafletDocumentBlock,
     type LeafletLinearDocument,
@@ -10,14 +10,14 @@ import {
     type StandardDocumentPckt,
 } from "@src/core/defs/document";
 
-export const sortFacets = (facets: Facet[]) =>
+export const sortFacets = <T extends AtviewFacet>(facets: T[]): T[] =>
     [...facets].sort((first, second) =>
         first.index.byteStart !== second.index.byteStart
             ? first.index.byteStart - second.index.byteStart
             : first.index.byteEnd - second.index.byteEnd,
     );
 
-export const normalizeAtviewData = (data: { textContent: string; facets?: Facet[] }) => ({
+export const normalizeAtviewData = (data: { textContent: string; facets?: AtviewFacet[] }) => ({
     textContent: data.textContent,
     facets: sortFacets(data.facets ?? []),
 });
@@ -34,7 +34,7 @@ export const minimalStandardPlain = (textContent: string): StandardDocument => (
     publishedAt: "2026-01-01T00:00:00.000Z",
 });
 
-export const minimalStandardAtview = (textContent: string, facets: Facet[] = []): StandardDocumentAtview => ({
+export const minimalStandardAtview = (textContent: string, facets: AtviewFacet[] = []): StandardDocumentAtview => ({
     $type: "site.standard.document",
     site: "at://did:plc:test",
     path: "/example-path",
