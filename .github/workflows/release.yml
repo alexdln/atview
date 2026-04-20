@@ -1,0 +1,16 @@
+name: Release
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  verify-and-publish:
+    name: Verify & Publish
+    uses: ./.github/workflows/verify-publish.yml
+    with:
+      publish: true
+      dist-tag: ${{ contains(github.event.release.tag_name, 'canary') && 'canary' || 'latest' }}
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,18 @@
+name: PR
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  verify-and-publish:
+    name: Verify & Publish (experimental)
+    if: |
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      ${{ github.head_ref != 'main' && !startsWith(github.head_ref, 'canary') }}
+    uses: ./.github/workflows/verify-publish.yml
+    with:
+      publish: true
+      dist-tag: experimental
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

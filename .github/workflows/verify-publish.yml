@@ -1,0 +1,73 @@
+name: Verify & Publish
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        description: Whether to publish packages to npm after build and test
+        type: boolean
+        default: false
+      dist-tag:
+        description: npm dist-tag to publish under (experimental, canary, latest, ...)
+        type: string
+        default: ''
+    secrets:
+      NPM_TOKEN:
+        description: npm auth token used when publish is true
+        required: false
+
+jobs:
+  verify-and-publish:
+    name: Verify & Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build package
+        run: pnpm -r build
+
+      - name: Run tests
+        run: pnpm -r test
+
+      # - name: Compute publish version
+      #   if: ${{ inputs.publish }}
+      #   id: version
+      #   env:
+      #     RELEASE_TAG: ${{ github.event.release.tag_name }}
+      #     COMMIT_SHA: ${{ github.sha }}
+      #     DIST_TAG: ${{ inputs.dist-tag }}
+      #   run: |
+      #     if [ "$DIST_TAG" = "experimental" ]; then
+      #       value="0.0.0-experimental-${COMMIT_SHA:0:7}"
+      #     elif [ -n "$RELEASE_TAG" ]; then
+      #       value="$RELEASE_TAG"
+      #     else
+      #       echo "release tag is required for non-experimental publish" >&2
+      #       exit 1
+      #     fi
+      #     echo "value=$value" >> "$GITHUB_OUTPUT"
+
+      # - name: Apply publish version
+      #   if: ${{ inputs.publish }}
+      #   env:
+      #     PUBLISH_VERSION: ${{ steps.version.outputs.value }}
+      #   run: pnpm -r --filter "./packages/*" version "$PUBLISH_VERSION" --no-git-tag-version
+
+      # - name: Publish packages
+      #   if: ${{ inputs.publish }}
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: pnpm -r publish --access public --tag "${{ inputs.dist-tag }}" --no-git-checks
