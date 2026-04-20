@@ -1,8 +1,8 @@
-import { type Facet } from "@src/core/defs/document";
+import { type AtviewFacet, type StandardDocumentAtview } from "@src/core/defs/document";
 
 export interface BuildParams {
     textContent: string;
-    facets: Facet[];
+    facets: AtviewFacet[];
 }
 
 export interface Metadata {
@@ -14,9 +14,10 @@ export interface Metadata {
     publishedAt: string;
     coverImage?: unknown;
     coverImageAlt?: string;
+    language?: string;
 }
 
-export const formatDocument = (data: BuildParams, metadata: Metadata) =>
+export const formatDocument = (data: BuildParams, metadata: Metadata): StandardDocumentAtview =>
     ({
         $type: "site.standard.document",
         site: metadata.siteUri,
@@ -29,8 +30,8 @@ export const formatDocument = (data: BuildParams, metadata: Metadata) =>
         ...(metadata.coverImage ? { coverImage: metadata.coverImage } : {}),
         content: {
             $type: "net.atview.document",
-            facets: data.facets,
-            coverImageAlt: metadata.coverImageAlt,
-            // language: metadata.language,
+            ...(data.facets.length > 0 ? { facets: data.facets } : {}),
+            ...(metadata.coverImageAlt ? { coverImageAlt: metadata.coverImageAlt } : {}),
+            ...(metadata.language ? { language: metadata.language } : {}),
         },
-    }) as const;
+    }) as StandardDocumentAtview;

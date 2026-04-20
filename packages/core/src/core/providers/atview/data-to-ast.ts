@@ -1,9 +1,9 @@
-import { type Blob, type Facet } from "@src/core/defs/document";
+import { type AtviewFacet, type AtviewFeature } from "@src/core/defs/document";
 import { bytePositionToCharPosition } from "@src/core/utils/byte-helpers";
 
 import { type AstBlockNode, type AstDocument, type AstInlineNode } from "../../ast/types";
 
-const BLOCK_FACET_TYPES = new Set([
+const BLOCK_FACET_TYPES = new Set<AtviewFeature["$type"]>([
     "net.atview.richtext.facet#h2",
     "net.atview.richtext.facet#h3",
     "net.atview.richtext.facet#h4",
@@ -15,6 +15,7 @@ const BLOCK_FACET_TYPES = new Set([
     "net.atview.richtext.facet#bsky-post",
     "net.atview.richtext.facet#ul",
     "net.atview.richtext.facet#ol",
+    "net.atview.richtext.facet#website",
     "net.atview.richtext.facet#horizontal-rule",
     "net.atview.richtext.facet#iframe",
     "net.atview.richtext.facet#math",
@@ -34,6 +35,8 @@ const INLINE_FACET_MAP: Record<string, AstInlineNode["type"]> = {
     "net.atview.richtext.facet#i": "italic",
     "net.atview.richtext.facet#u": "underline",
     "net.atview.richtext.facet#code": "inline-code",
+    "net.atview.richtext.facet#strikethrough": "strikethrough",
+    "net.atview.richtext.facet#highlight": "highlight",
 };
 
 const wrapInline = (type: AstInlineNode["type"], text: string): AstInlineNode => {
@@ -48,7 +51,71 @@ const parseListItems = (text: string, marker: RegExp) =>
         .filter(Boolean)
         .map((item) => ({ children: [{ type: "text" as const, value: item }] }));
 
-export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstDocument => {
+const featureToBlock = (feature: AtviewFeature, text: string): AstBlockNode | null => {
+    switch (feature.$type) {
+        case "net.atview.richtext.facet#h2":
+        case "net.atview.richtext.facet#h3":
+        case "net.atview.richtext.facet#h4":
+        case "net.atview.richtext.facet#h5":
+        case "net.atview.richtext.facet#h6":
+            return {
+                type: "heading",
+                level: HEADING_LEVELS[feature.$type],
+                children: [{ type: "text", value: text }],
+            };
+
+        case "net.atview.richtext.facet#blockquote":
+            return { type: "blockquote", children: [{ type: "text", value: text }] };
+
+        case "net.atview.richtext.facet#code-block":
+            return {
+                type: "code-block",
+                text,
+                ...(feature.language ? { language: feature.language } : {}),
+            };
+
+        case "net.atview.richtext.facet#ul":
+            return { type: "unordered-list", items: parseListItems(text, /^- /) };
+
+        case "net.atview.richtext.facet#ol":
+            return { type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) };
+
+        case "net.atview.richtext.facet#bsky-post":
+            return { type: "bsky-post", uri: feature.uri, cid: feature.cid ?? "" };
+
+        case "net.atview.richtext.facet#website":
+            return { type: "website", uri: feature.uri, title: feature.title ?? "" };
+
+        case "net.atview.richtext.facet#media":
+            return {
+                type: "media",
+                text,
+                image: feature.image,
+                alt: feature.altText,
+                width: feature.aspectRatio?.width ? Number(feature.aspectRatio.width) : undefined,
+                height: feature.aspectRatio?.height ? Number(feature.aspectRatio.height) : undefined,
+                title: feature.title,
+                caption: feature.caption,
+            };
+
+        case "net.atview.richtext.facet#horizontal-rule":
+            return { type: "horizontal-rule" };
+
+        case "net.atview.richtext.facet#iframe":
+            return { type: "iframe", url: feature.url };
+
+        case "net.atview.richtext.facet#math":
+            return { type: "math", content: text };
+
+        case "net.atview.richtext.facet#hard-break":
+            return { type: "hard-break" };
+
+        default:
+            return null;
+    }
+};
+
+export const dataToAst = (data: { textContent: string; facets?: AtviewFacet[] }): AstDocument => {
     const { textContent, facets = [] } = data;
 
     const blocks: AstBlockNode[] = [];
@@ -59,6 +126,9 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
         const startChar = bytePositionToCharPosition(textContent, facet.index.byteStart);
         const endChar = bytePositionToCharPosition(textContent, facet.index.byteEnd);
         const feature = facet.features[0];
+
+        if (!feature) continue;
+
         const isBlock = BLOCK_FACET_TYPES.has(feature.$type);
         const text = textContent.substring(startChar, endChar);
 
@@ -81,90 +151,23 @@ export const dataToAst = (data: { textContent: string; facets?: Facet[] }): AstD
             pendingInlines = [];
         }
 
-        switch (feature.$type) {
-            case "net.atview.richtext.facet#h2":
-            case "net.atview.richtext.facet#h3":
-            case "net.atview.richtext.facet#h4":
-            case "net.atview.richtext.facet#h5":
-            case "net.atview.richtext.facet#h6":
-                blocks.push({
-                    type: "heading",
-                    level: HEADING_LEVELS[feature.$type],
-                    children: [{ type: "text", value: text }],
-                });
-                break;
-            case "net.atview.richtext.facet#blockquote":
-                blocks.push({
-                    type: "blockquote",
-                    children: [{ type: "text", value: text }],
-                });
-                break;
-            case "net.atview.richtext.facet#code-block":
-                blocks.push({
-                    type: "code-block",
-                    text,
-                    ...(feature.language ? { language: String(feature.language) } : {}),
-                });
-                break;
-            case "net.atview.richtext.facet#ul":
-                blocks.push({ type: "unordered-list", items: parseListItems(text, /^- /) });
-                break;
-            case "net.atview.richtext.facet#ol":
-                blocks.push({ type: "ordered-list", items: parseListItems(text, /^[0-9]+\. /) });
-                break;
-            case "net.atview.richtext.facet#bsky-post":
-                blocks.push({ type: "bsky-post", uri: String(feature.uri || ""), cid: String(feature.cid || "") });
-                break;
-            case "net.atview.richtext.facet#website":
-                blocks.push({ type: "website", uri: String(feature.uri || ""), title: String(feature.title || "") });
-                break;
-            case "net.atview.richtext.facet#media":
-                const { width, height } = (feature.aspectRatio as { width: number; height: number }) || {};
-                blocks.push({
-                    type: "media",
-                    text,
-                    image: (feature.image as string | Blob) || "",
-                    alt: feature.altText ? String(feature.altText) : undefined,
-                    width: width ? Number(width) : undefined,
-                    height: height ? Number(height) : undefined,
-                    title: feature.title ? String(feature.title) : undefined,
-                    caption: feature.caption ? String(feature.caption) : undefined,
-                });
-                break;
-            case "net.atview.richtext.facet#link":
-                pendingInlines.push({
-                    type: "link",
-                    uri: String(feature.uri || ""),
-                    children: [{ type: "text", value: text }],
-                });
-                break;
-            case "net.atview.richtext.facet#mention":
-                pendingInlines.push({
-                    type: "mention",
-                    did: String(feature.did || ""),
-                    children: [{ type: "text", value: text }],
-                });
-                break;
-            case "net.atview.richtext.facet#b":
-            case "net.atview.richtext.facet#i":
-            case "net.atview.richtext.facet#u":
-            case "net.atview.richtext.facet#code":
-                pendingInlines.push(wrapInline(INLINE_FACET_MAP[feature.$type], text));
-                break;
-            case "net.atview.richtext.facet#horizontal-rule":
-                blocks.push({ type: "horizontal-rule" });
-                break;
-            case "net.atview.richtext.facet#iframe":
-                blocks.push({ type: "iframe", url: String(feature.url || "") });
-                break;
-            case "net.atview.richtext.facet#math":
-                blocks.push({ type: "math", content: text });
-                break;
-            case "net.atview.richtext.facet#hard-break":
-                blocks.push({ type: "hard-break" });
-                break;
-            default:
-                break;
+        if (isBlock) {
+            const block = featureToBlock(feature, text);
+            if (block) blocks.push(block);
+        } else if (feature.$type === "net.atview.richtext.facet#link") {
+            pendingInlines.push({
+                type: "link",
+                uri: feature.uri,
+                children: [{ type: "text", value: text }],
+            });
+        } else if (feature.$type === "net.atview.richtext.facet#mention") {
+            pendingInlines.push({
+                type: "mention",
+                did: feature.did,
+                children: [{ type: "text", value: text }],
+            });
+        } else if (feature.$type in INLINE_FACET_MAP) {
+            pendingInlines.push(wrapInline(INLINE_FACET_MAP[feature.$type], text));
         }
 
         prevEndChar = endChar;

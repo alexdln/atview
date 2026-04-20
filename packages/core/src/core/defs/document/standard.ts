@@ -1,7 +1,8 @@
+import { type AtviewFacet } from "./atview";
 import { type LeafletLinearDocument } from "./leaflet";
 import { type OffprintBlock } from "./offprint";
 import { type PcktBlock } from "./pckt";
-import { type Blob, type Facet } from "./shared";
+import { type Blob } from "./shared";
 
 export type StandardDocument = {
     $type: "site.standard.document";
@@ -22,7 +23,7 @@ export type PcktContent = { $type: "blog.pckt.content"; items: PcktBlock[] };
 export type OffprintContent = { $type: "app.offprint.content"; items: OffprintBlock[] };
 export type AtviewContent = {
     $type: "net.atview.document";
-    facets?: Facet[];
+    facets?: AtviewFacet[];
     coverImageAlt?: string;
     language?: string;
 };

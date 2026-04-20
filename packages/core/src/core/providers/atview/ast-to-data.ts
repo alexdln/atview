@@ -1,255 +1,194 @@
-import { type Facet } from "@src/core/defs/document";
+import { type AtviewFacet, type AtviewFeature, type AtviewHeadingFeature } from "@src/core/defs/document";
 import { charPositionToBytePosition } from "@src/core/utils/byte-helpers";
 
 import { type AstBlockNode, type AstDocument, type AstInlineNode, type AstListItem } from "../../ast/types";
 
-const INLINE_TYPE_TO_FACET: Record<string, string> = {
-    bold: "net.atview.richtext.facet#b",
-    italic: "net.atview.richtext.facet#i",
-    underline: "net.atview.richtext.facet#u",
-    "inline-code": "net.atview.richtext.facet#code",
+const INLINE_TYPE_TO_FACET = {
+    bold: "net.atview.richtext.facet#b" as const,
+    italic: "net.atview.richtext.facet#i" as const,
+    underline: "net.atview.richtext.facet#u" as const,
+    "inline-code": "net.atview.richtext.facet#code" as const,
+    strikethrough: "net.atview.richtext.facet#strikethrough" as const,
+    highlight: "net.atview.richtext.facet#highlight" as const,
 };
+
+const HEADING_FACETS: Record<2 | 3 | 4 | 5 | 6, AtviewHeadingFeature["$type"]> = {
+    2: "net.atview.richtext.facet#h2",
+    3: "net.atview.richtext.facet#h3",
+    4: "net.atview.richtext.facet#h4",
+    5: "net.atview.richtext.facet#h5",
+    6: "net.atview.richtext.facet#h6",
+};
+
+export interface RichText {
+    textContent: string;
+    facets: AtviewFacet[];
+}
 
 const plainInline = (node: AstInlineNode): string => {
     if (node.type === "text") return node.value;
     return node.children.map(plainInline).join("");
 };
 
-interface Collector {
-    text: string;
-    facets: Facet[];
-}
-
-const collectInline = (node: AstInlineNode, collector: Collector) => {
+const collectInline = (node: AstInlineNode, richText: RichText) => {
     if (node.type === "text") {
-        collector.text += node.value;
+        richText.textContent += node.value;
         return;
     }
 
-    const startChar = collector.text.length;
-
-    for (const child of node.children) {
-        collectInline(child, collector);
-    }
-
-    const endChar = collector.text.length;
+    const startChar = richText.textContent.length;
+    for (const child of node.children) collectInline(child, richText);
+    const endChar = richText.textContent.length;
     if (endChar <= startChar) return;
 
-    const byteStart = charPositionToBytePosition(collector.text, startChar);
-    const byteEnd = charPositionToBytePosition(collector.text, endChar);
+    const byteStart = charPositionToBytePosition(richText.textContent, startChar);
+    const byteEnd = charPositionToBytePosition(richText.textContent, endChar);
 
     if (node.type === "link") {
-        collector.facets.push({
+        richText.facets.push({
             index: { byteStart, byteEnd },
             features: [{ $type: "net.atview.richtext.facet#link", uri: node.uri }],
         });
     } else if (node.type === "mention") {
-        collector.facets.push({
+        richText.facets.push({
             index: { byteStart, byteEnd },
             features: [{ $type: "net.atview.richtext.facet#mention", did: node.did }],
         });
     } else if (node.type in INLINE_TYPE_TO_FACET) {
-        collector.facets.push({
+        richText.facets.push({
             index: { byteStart, byteEnd },
             features: [{ $type: INLINE_TYPE_TO_FACET[node.type] }],
         });
     }
 };
 
-const collectInlines = (nodes: AstInlineNode[], collector: Collector) => {
-    for (const node of nodes) collectInline(node, collector);
+const collectInlines = (nodes: AstInlineNode[], richText: RichText) => {
+    for (const node of nodes) collectInline(node, richText);
+};
+
+const pushBlockFacet = (richText: RichText, startChar: number, features: AtviewFeature[]) => {
+    const byteStart = charPositionToBytePosition(richText.textContent, startChar);
+    const byteEnd = charPositionToBytePosition(richText.textContent, richText.textContent.length);
+    richText.facets.push({ index: { byteStart, byteEnd }, features });
 };
 
 const renderListText = (items: AstListItem[], marker: (index: number) => string): string =>
-    items
-        .map((item, index) => {
-            const text = item.children.map((node) => (node.type === "text" ? node.value : "")).join("");
-            return `${marker(index)}${text}`;
-        })
-        .join("\n");
+    items.map((item, index) => `${marker(index)}${item.children.map(plainInline).join("")}`).join("\n");
 
-const processBlock = (block: AstBlockNode, collector: Collector, isFirst: boolean) => {
-    if (!isFirst && collector.text.length > 0) {
-        collector.text += "\n\n";
+const processBlock = (block: AstBlockNode, richText: RichText, isFirst: boolean) => {
+    if (!isFirst && richText.textContent.length > 0) {
+        richText.textContent += "\n\n";
     }
 
-    const blockStartChar = collector.text.length;
+    const blockStartChar = richText.textContent.length;
 
     switch (block.type) {
-        case "paragraph": {
-            collectInlines(block.children, collector);
-            break;
-        }
+        case "paragraph":
+            collectInlines(block.children, richText);
+            return;
 
-        case "heading": {
-            const facetType = `net.atview.richtext.facet#h${String(block.level)}`;
-            collectInlines(block.children, collector);
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({ index: { byteStart, byteEnd }, features: [{ $type: facetType }] });
-            break;
-        }
+        case "heading":
+            collectInlines(block.children, richText);
+            pushBlockFacet(richText, blockStartChar, [{ $type: HEADING_FACETS[block.level] }]);
+            return;
 
-        case "blockquote": {
-            collectInlines(block.children, collector);
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#blockquote" }],
-            });
-            break;
-        }
+        case "blockquote":
+            collectInlines(block.children, richText);
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#blockquote" }]);
+            return;
 
-        case "code-block": {
-            collector.text += block.text;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [
-                    {
-                        $type: "net.atview.richtext.facet#code-block",
-                        ...(block.language ? { language: block.language } : {}),
+        case "code-block":
+            richText.textContent += block.text;
+            pushBlockFacet(richText, blockStartChar, [
+                {
+                    $type: "net.atview.richtext.facet#code-block",
+                    ...(block.language ? { language: block.language } : {}),
+                },
+            ]);
+            return;
+
+        case "media":
+            richText.textContent += block.text ?? "";
+            pushBlockFacet(richText, blockStartChar, [
+                {
+                    $type: "net.atview.richtext.facet#media",
+                    image: block.image,
+                    aspectRatio: {
+                        width: Number(block.width || 0) || 0,
+                        height: Number(block.height || 0) || 0,
                     },
-                ],
-            });
-            break;
-        }
+                    ...(block.title ? { title: block.title } : {}),
+                    ...(block.alt ? { altText: block.alt } : {}),
+                    ...(block.caption ? { caption: block.caption } : {}),
+                },
+            ]);
+            return;
 
-        case "media": {
-            collector.text += block.text;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [
-                    {
-                        $type: "net.atview.richtext.facet#media",
-                        image: block.image,
-                        aspectRatio: {
-                            width: Number(block.width || 0) || 0,
-                            height: Number(block.height || 0) || 0,
-                        },
-                        ...(block.title ? { title: block.title } : {}),
-                        ...(block.alt ? { altText: block.alt } : {}),
-                        ...(block.caption ? { caption: block.caption } : {}),
-                    },
-                ],
-            });
-            break;
-        }
-
-        case "unordered-list": {
-            collector.text += renderListText(block.items, () => "- ");
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#ul" }],
-            });
-            break;
-        }
+        case "unordered-list":
+            richText.textContent += renderListText(block.items, () => "- ");
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#ul" }]);
+            return;
 
         case "ordered-list": {
             const start = block.start ?? 1;
-            collector.text += renderListText(block.items, (i) => `${String(start + i)}. `);
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#ol" }],
-            });
-            break;
+            richText.textContent += renderListText(block.items, (i) => `${String(start + i)}. `);
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#ol" }]);
+            return;
         }
 
-        case "task-list": {
-            collector.text += block.items
+        case "task-list":
+            richText.textContent += block.items
                 .map((item) => `${item.checked ? "- [x] " : "- [ ] "}${item.children.map(plainInline).join("")}`)
                 .join("\n");
-            break;
-        }
+            return;
 
-        case "bsky-post": {
-            collector.text += block.text;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#bsky-post", uri: block.uri }],
-            });
-            break;
-        }
+        case "bsky-post":
+            richText.textContent += block.text ?? "";
+            pushBlockFacet(richText, blockStartChar, [
+                { $type: "net.atview.richtext.facet#bsky-post", uri: block.uri },
+            ]);
+            return;
 
-        case "website": {
-            collector.text += block.title || block.uri;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#website", uri: block.uri }],
-            });
-            break;
-        }
+        case "website":
+            richText.textContent += block.title || block.uri;
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#website", uri: block.uri }]);
+            return;
 
-        case "horizontal-rule": {
-            collector.text += "\n\n";
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#horizontal-rule" }],
-            });
-            break;
-        }
+        case "horizontal-rule":
+            richText.textContent += "\n\n";
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#horizontal-rule" }]);
+            return;
 
         case "iframe":
-            collector.text += block.url;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#iframe", url: block.url }],
-            });
-            break;
+            richText.textContent += block.url;
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#iframe", url: block.url }]);
+            return;
 
-        case "math": {
-            collector.text += block.content;
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#math", tex: block.content }],
-            });
-            break;
-        }
+        case "math":
+            richText.textContent += block.content;
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#math", tex: block.content }]);
+            return;
 
-        case "hard-break": {
-            collector.text += "\n";
-            const byteStart = charPositionToBytePosition(collector.text, blockStartChar);
-            const byteEnd = charPositionToBytePosition(collector.text, collector.text.length);
-            collector.facets.push({
-                index: { byteStart, byteEnd },
-                features: [{ $type: "net.atview.richtext.facet#hard-break" }],
-            });
-            break;
-        }
+        case "hard-break":
+            richText.textContent += "\n";
+            pushBlockFacet(richText, blockStartChar, [{ $type: "net.atview.richtext.facet#hard-break" }]);
+            return;
 
         case "table":
-            break;
+            return;
     }
 };
 
-export const astToData = (ast: AstDocument): { textContent: string; facets: Facet[] } => {
-    const collector: Collector = { text: "", facets: [] };
+export const astToData = (ast: AstDocument): RichText => {
+    const richText: RichText = { textContent: "", facets: [] };
 
-    ast.forEach((block, index) => processBlock(block, collector, index === 0));
+    ast.forEach((block, index) => processBlock(block, richText, index === 0));
 
-    collector.facets.sort((a, b) =>
+    richText.facets.sort((a, b) =>
         a.index.byteStart !== b.index.byteStart
             ? a.index.byteStart - b.index.byteStart
             : a.index.byteEnd - b.index.byteEnd,
     );
 
-    return { textContent: collector.text, facets: collector.facets };
+    return richText;
 };

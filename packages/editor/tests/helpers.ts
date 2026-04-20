@@ -1,15 +1,15 @@
-import { type Facet } from "@atview/core";
+import { type AtviewFacet } from "@atview/core";
 
 import { atviewHtmlToAst } from "../src/atview-html";
 
-export const sortFacets = (facets: Facet[]) =>
+export const sortFacets = <T extends AtviewFacet>(facets: T[]): T[] =>
     [...facets].sort((first, second) =>
         first.index.byteStart !== second.index.byteStart
             ? first.index.byteStart - second.index.byteStart
             : first.index.byteEnd - second.index.byteEnd,
     );
 
-export const normalizeAtviewData = (data: { textContent: string; facets?: Facet[] }) => ({
+export const normalizeAtviewData = (data: { textContent: string; facets?: AtviewFacet[] }) => ({
     textContent: data.textContent,
     facets: sortFacets(data.facets ?? []),
 });
