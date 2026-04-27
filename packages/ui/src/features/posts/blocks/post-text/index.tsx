@@ -1,7 +1,8 @@
 import { type AppBskyRichtextFacet } from "@atproto/api";
 import React, { Fragment } from "react";
 
-import { bytePositionToCharPosition, getFacetLink } from "@src/features/posts/core/utils/rich-text";
+import { bytePositionToCharPosition } from "@src/features/posts/core/utils/rich-text";
+import { RichTextFeature } from "@src/features/posts/blocks/rich-text-feature";
 
 import "./post-text.scss";
 
@@ -24,29 +25,13 @@ export const PostText: React.FC<PostTextProps> = ({ text, facets = [] }) => {
                 ? bytePositionToCharPosition(text, facetsSorted[index + 1].index.byteStart)
                 : undefined;
 
-            const href = getFacetLink(facet.features[0]);
             acc.push(
-                href ? (
-                    <a
-                        key={facet.index.byteStart + index}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="post-text__link"
-                    >
-                        {text.substring(
-                            bytePositionToCharPosition(text, facet.index.byteStart),
-                            bytePositionToCharPosition(text, facet.index.byteEnd),
-                        )}
-                    </a>
-                ) : (
-                    <Fragment key={`${facet.index.byteStart}_${index}`}>
-                        {text.substring(
-                            bytePositionToCharPosition(text, facet.index.byteStart),
-                            bytePositionToCharPosition(text, facet.index.byteEnd),
-                        )}
-                    </Fragment>
-                ),
+                <RichTextFeature key={facet.index.byteStart + index} features={facet.features}>
+                    {text.substring(
+                        bytePositionToCharPosition(text, facet.index.byteStart),
+                        bytePositionToCharPosition(text, facet.index.byteEnd),
+                    )}
+                </RichTextFeature>,
                 <Fragment key={`${facet.index.byteStart}_${index}_next`}>
                     {text.substring(bytePositionToCharPosition(text, facet.index.byteEnd), nextFacetStart)}
                 </Fragment>,

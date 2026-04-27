@@ -8,9 +8,13 @@ export interface Facet {
     features: l.$Typed<{ [key: string]: unknown }>[];
 }
 
+export interface StringifiedCid {
+    $link: string;
+}
+
 export interface Blob {
     $type: "blob";
-    ref: string | Cid;
+    ref: string | Cid | StringifiedCid;
     mimeType: string;
     size: number;
 }
