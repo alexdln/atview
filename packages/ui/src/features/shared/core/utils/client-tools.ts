@@ -5,16 +5,3 @@ export const formatCount = (count: number) => {
 
     return count;
 };
-
-export const normalizeNumber = (number: number) => (number < 10 ? `0${number}` : number);
-
-export const parseDate = (date: Date) => {
-    const dateString = `${date.getFullYear()}-${normalizeNumber(date.getMonth() + 1)}-${normalizeNumber(date.getDate())}`;
-
-    return {
-        dateString,
-        tz: String(new Date().getTimezoneOffset() / 60),
-    };
-};
-
-export const normalizeDate = (d: number | string) => (+d < 10 ? `0${d}` : d.toString());

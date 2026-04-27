@@ -1,0 +1,13 @@
+.rich-text-feature__link {
+    display: inline-block;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+    color: var(--cl-accent-200);
+    text-decoration: none;
+
+    & rich-text-feature__link:hover {
+        text-decoration: underline;
+    }
+}

@@ -26,7 +26,7 @@ type MediaUriContext = {
 };
 
 const defaultMediaUriLoader: MediaUriLoader = ({ authorDid, image, format, size }) =>
-    `https://cdn.bsky.app/img/${size === "thumbnail" ? "feed_thumbnail" : "feed_fullsize"}/plain/${authorDid}/${image.ref.toString()}@${format}`;
+    `https://cdn.bsky.app/img/${size === "thumbnail" ? "feed_thumbnail" : "feed_fullsize"}/plain/${authorDid}/${typeof image.ref === "object" && "$link" in image.ref ? image.ref.$link : image.ref.toString()}@${format}`;
 
 export function formatMediaUris(image: Blob | string, context?: MediaUrisContext): MediaUriCollection;
 export function formatMediaUris(image?: undefined, context?: MediaUrisContext): undefined;
