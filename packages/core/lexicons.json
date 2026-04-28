@@ -2,6 +2,8 @@
   "version": 1,
   "lexicons": [
     "net.atview.document",
+    "net.atview.external.figmaplugin",
+    "net.atview.external.npmpackage",
     "net.atview.richtext.facet",
     "site.standard.document"
   ],
