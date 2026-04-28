@@ -1,0 +1,47 @@
+{
+  "id": "net.atview.external.figmaplugin",
+  "defs": {
+    "main": {
+      "type": "object",
+      "description": "External reference to a Figma plugin. Captures the canonical plugin identifier alongside human-friendly metadata and links.",
+      "required": ["name", "id"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display name of the plugin as shown in user interfaces.",
+          "maxLength": 1000,
+          "maxGraphemes": 100
+        },
+        "id": {
+          "type": "string",
+          "description": "Canonical Figma plugin identifier (the numeric id from the Figma Community plugin URL).",
+          "maxLength": 1000,
+          "maxGraphemes": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the plugin.",
+          "maxLength": 10000,
+          "maxGraphemes": 1000
+        },
+        "href": {
+          "type": "string",
+          "description": "Primary external URL for the plugin (e.g. Figma Community page).",
+          "format": "uri"
+        },
+        "github": {
+          "type": "string",
+          "description": "URL of the plugin's GitHub repository.",
+          "format": "uri"
+        },
+        "docs": {
+          "type": "string",
+          "description": "URL of the plugin's documentation.",
+          "format": "uri"
+        }
+      }
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}
