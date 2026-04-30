@@ -14,7 +14,7 @@
         },
         "id": {
           "type": "string",
-          "description": "Canonical npm package identifier (e.g. `react` or `@scope/name`).",
+          "description": "Canonical npm package identifier (e.g. `name` or `@scope/name`).",
           "maxLength": 1000,
           "maxGraphemes": 214
         },

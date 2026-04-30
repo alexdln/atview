@@ -1,0 +1,48 @@
+{
+  "id": "net.atview.project",
+  "defs": {
+    "main": {
+      "type": "object",
+      "description": "Reference to a project. Identified by a handle and enriched with optional human-friendly metadata, links and visuals.",
+      "required": ["handle"],
+      "properties": {
+        "handle": {
+          "type": "string",
+          "format": "handle",
+          "description": "Canonical handle identifying the project (e.g. `myproject.example.com`)."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the project as shown in user interfaces.",
+          "maxLength": 1000,
+          "maxGraphemes": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the project.",
+          "maxLength": 10000,
+          "maxGraphemes": 1000
+        },
+        "href": {
+          "type": "string",
+          "format": "uri",
+          "description": "Primary external URL for the project (e.g. project homepage)."
+        },
+        "banner": {
+          "type": "blob",
+          "accept": ["image/*"],
+          "maxSize": 1000000,
+          "description": "Banner image used as the project's cover. Less than 1MB in size."
+        },
+        "avatar": {
+          "type": "blob",
+          "accept": ["image/*"],
+          "maxSize": 1000000,
+          "description": "Avatar image representing the project. Less than 1MB in size."
+        }
+      }
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}
