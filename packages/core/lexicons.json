@@ -4,6 +4,7 @@
     "net.atview.document",
     "net.atview.external.figmaplugin",
     "net.atview.external.npmpackage",
+    "net.atview.project",
     "net.atview.richtext.facet",
     "site.standard.document"
   ],
