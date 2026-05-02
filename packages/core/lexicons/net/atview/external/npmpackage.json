@@ -1,47 +1,58 @@
 {
-  "id": "net.atview.external.npmpackage",
   "defs": {
     "main": {
-      "type": "object",
       "description": "External reference to an npm package. Captures the canonical package identifier alongside human-friendly metadata and links.",
-      "required": ["name", "id"],
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Display name of the package as shown in user interfaces.",
-          "maxLength": 1000,
-          "maxGraphemes": 100
+      "key": "tid",
+      "record": {
+        "properties": {
+          "createdAt": {
+            "format": "datetime",
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Canonical npm package identifier (e.g. `name` or `@scope/name`).",
+            "maxGraphemes": 214
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the package's documentation."
+          },
+          "href": {
+            "type": "string",
+            "format": "uri",
+            "description": "Primary external URL for the package (e.g. project homepage or registry page)."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Display name of the package as shown in user interfaces.",
+            "maxGraphemes": 100
+          },
+          "github": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the package's GitHub repository."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "description": "Short description of the package.",
+            "maxGraphemes": 1000
+          }
         },
-        "id": {
-          "type": "string",
-          "description": "Canonical npm package identifier (e.g. `name` or `@scope/name`).",
-          "maxLength": 1000,
-          "maxGraphemes": 214
-        },
-        "description": {
-          "type": "string",
-          "description": "Short description of the package.",
-          "maxLength": 10000,
-          "maxGraphemes": 1000
-        },
-        "href": {
-          "type": "string",
-          "description": "Primary external URL for the package (e.g. project homepage or registry page).",
-          "format": "uri"
-        },
-        "github": {
-          "type": "string",
-          "description": "URL of the package's GitHub repository.",
-          "format": "uri"
-        },
-        "docs": {
-          "type": "string",
-          "description": "URL of the package's documentation.",
-          "format": "uri"
-        }
-      }
+        "required": [
+          "createdAt",
+          "name",
+          "id"
+        ],
+        "type": "object"
+      },
+      "type": "record"
     }
   },
-  "$type": "com.atproto.lexicon.schema",
+  "id": "net.atview.external.npmpackage",
   "lexicon": 1
 }
