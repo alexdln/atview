@@ -1,48 +1,69 @@
 {
-  "id": "net.atview.project",
   "defs": {
     "main": {
-      "type": "object",
       "description": "Reference to a project. Identified by a handle and enriched with optional human-friendly metadata, links and visuals.",
-      "required": ["handle"],
-      "properties": {
-        "handle": {
-          "type": "string",
-          "format": "handle",
-          "description": "Canonical handle identifying the project (e.g. `myproject.example.com`)."
+      "key": "tid",
+      "record": {
+        "properties": {
+          "createdAt": {
+            "format": "datetime",
+            "type": "string"
+          },
+          "handle": {
+            "type": "string",
+            "format": "handle",
+            "description": "Canonical handle identifying the project (e.g. `myproject.example.com`)."
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the project's documentation."
+          },
+          "href": {
+            "type": "string",
+            "format": "uri",
+            "description": "Primary external URL for the project (e.g. project homepage)."
+          },
+          "displayName": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Display name of the project as shown in user interfaces.",
+            "maxGraphemes": 100
+          },
+          "github": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the project's GitHub repository."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "description": "Short description of the project.",
+            "maxGraphemes": 1000
+          },
+          "banner": {
+            "type": "blob",
+            "accept": ["image/*"],
+            "maxSize": 1000000,
+            "description": "Banner image used as the project's cover. Less than 1MB in size."
+          },
+          "avatar": {
+            "type": "blob",
+            "accept": ["image/*"],
+            "maxSize": 1000000,
+            "description": "Avatar image representing the project. Less than 1MB in size."
+          }
         },
-        "displayName": {
-          "type": "string",
-          "description": "Display name of the project as shown in user interfaces.",
-          "maxLength": 1000,
-          "maxGraphemes": 100
-        },
-        "description": {
-          "type": "string",
-          "description": "Short description of the project.",
-          "maxLength": 10000,
-          "maxGraphemes": 1000
-        },
-        "href": {
-          "type": "string",
-          "format": "uri",
-          "description": "Primary external URL for the project (e.g. project homepage)."
-        },
-        "banner": {
-          "type": "blob",
-          "accept": ["image/*"],
-          "maxSize": 1000000,
-          "description": "Banner image used as the project's cover. Less than 1MB in size."
-        },
-        "avatar": {
-          "type": "blob",
-          "accept": ["image/*"],
-          "maxSize": 1000000,
-          "description": "Avatar image representing the project. Less than 1MB in size."
-        }
-      }
+        "required": [
+          "createdAt",
+          "handle",
+          "displayName"
+        ],
+        "type": "object"
+      },
+      "type": "record"
     }
   },
-  "$type": "com.atproto.lexicon.schema",
+  "id": "net.atview.project",
   "lexicon": 1
 }
