@@ -1,0 +1,33 @@
+{
+    "defs": {
+        "main": {
+            "description": "Account Role experiment",
+            "key": "tid",
+            "record": {
+                "properties": {
+                    "createdAt": {
+                        "format": "datetime",
+                        "type": "string"
+                    },
+                    "role": {
+                        "ref": "net.atview.managed.role",
+                        "type": "ref"
+                    },
+                    "account": {
+                        "ref": "net.atview.account.actor",
+                        "type": "ref"
+                    }
+                },
+                "required": [
+                    "createdAt",
+                    "role",
+                    "account"
+                ],
+                "type": "object"
+            },
+            "type": "record"
+        }
+    },
+    "id": "net.atview.account.role",
+    "lexicon": 1
+}

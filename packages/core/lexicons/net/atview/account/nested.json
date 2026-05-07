@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Ecosystem experiment",
+            "description": "Account Nested experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -9,23 +9,25 @@
                         "format": "datetime",
                         "type": "string"
                     },
-                    "accounts": {
-                        "type": "array",
-                        "items": {
-                            "ref": "net.atview.experimental.account",
-                            "type": "ref"
-                        }
+                    "account": {
+                        "ref": "net.atview.account.actor",
+                        "type": "ref"
+                    },
+                    "note": {
+                        "type": "string",
+                        "maxLength": 2560,
+                        "maxGraphemes": 256
                     }
                 },
                 "required": [
                     "createdAt",
-                    "accounts"
+                    "account"
                 ],
                 "type": "object"
             },
             "type": "record"
         }
     },
-    "id": "net.atview.experimental.ecosystem",
+    "id": "net.atview.account.nested",
     "lexicon": 1
 }
