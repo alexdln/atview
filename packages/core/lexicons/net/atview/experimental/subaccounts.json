@@ -1,0 +1,31 @@
+{
+    "defs": {
+        "main": {
+            "description": "Subaccounts experiment",
+            "key": "tid",
+            "record": {
+                "properties": {
+                    "createdAt": {
+                        "format": "datetime",
+                        "type": "string"
+                    },
+                    "accounts": {
+                        "type": "array",
+                        "items": {
+                            "ref": "net.atview.experimental.account",
+                            "type": "ref"
+                        }
+                    }
+                },
+                "required": [
+                    "createdAt",
+                    "accounts"
+                ],
+                "type": "object"
+            },
+            "type": "record"
+        }
+    },
+    "id": "net.atview.experimental.subaccounts",
+    "lexicon": 1
+}

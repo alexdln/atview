@@ -1,0 +1,57 @@
+{
+    "defs": {
+        "main": {
+            "description": "Account experiment",
+            "key": "tid",
+            "record": {
+                "properties": {
+                    "createdAt": {
+                        "format": "datetime",
+                        "type": "string"
+                    },
+                    "actor": {
+                        "refs": [
+                            "app.bsky.actor.defs",
+                            "net.atview.experimental.managedprofile"
+                        ],
+                        "description": "Reference to a user's profile or managed profile",
+                        "type": "union"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of the account",
+                        "enum": [
+                            "project",
+                            "user",
+                            "organisation",
+                            "collective"
+                        ]
+                    },
+                    "overrides": {
+                        "type": "object",
+                        "description": "Overrides for the profile",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "avatar": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "createdAt",
+                    "actor"
+                ],
+                "type": "object"
+            },
+            "type": "record"
+        }
+    },
+    "id": "net.atview.experimental.account",
+    "lexicon": 1
+}
