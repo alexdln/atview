@@ -20,7 +20,7 @@
                     "type": {
                         "type": "string",
                         "description": "Type of the account",
-                        "enum": [
+                        "knownValues": [
                             "project",
                             "user",
                             "organisation",
@@ -45,13 +45,19 @@
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 640,
+                    "maxGraphemes": 64
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 2560,
+                    "maxGraphemes": 256
                 },
                 "avatar": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
                 }
             },
             "additionalProperties": false

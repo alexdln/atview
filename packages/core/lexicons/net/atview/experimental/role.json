@@ -10,10 +10,14 @@
                         "type": "string"
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 640,
+                        "maxGraphemes": 64
                     },
                     "description": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 2560,
+                        "maxGraphemes": 256
                     },
                     "accounts": {
                         "type": "array",
