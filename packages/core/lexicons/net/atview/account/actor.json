@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Account experiment",
+            "description": "Account Actor experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -12,7 +12,7 @@
                     "actor": {
                         "refs": [
                             "app.bsky.actor.defs#profileViewDetailed",
-                            "net.atview.experimental.managedprofile"
+                            "net.atview.managed.profile"
                         ],
                         "description": "Reference to a user's profile or managed profile",
                         "type": "union"
@@ -66,6 +66,6 @@
             "additionalProperties": false
         }
     },
-    "id": "net.atview.experimental.account",
+    "id": "net.atview.account.actor",
     "lexicon": 1
 }

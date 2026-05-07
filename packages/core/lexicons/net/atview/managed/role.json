@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Role experiment",
+            "description": "Managed Role experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -19,24 +19,21 @@
                         "maxLength": 2560,
                         "maxGraphemes": 256
                     },
-                    "accounts": {
-                        "type": "array",
-                        "items": {
-                            "ref": "net.atview.experimental.account",
-                            "type": "ref"
-                        }
+                    "color": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "description": "Hex color code"
                     }
                 },
                 "required": [
                     "createdAt",
-                    "name",
-                    "accounts"
+                    "name"
                 ],
                 "type": "object"
             },
             "type": "record"
         }
     },
-    "id": "net.atview.experimental.role",
+    "id": "net.atview.managed.role",
     "lexicon": 1
 }

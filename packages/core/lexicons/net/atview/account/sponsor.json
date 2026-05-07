@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Subaccounts experiment",
+            "description": "Account Sponsor experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -9,23 +9,24 @@
                         "format": "datetime",
                         "type": "string"
                     },
-                    "accounts": {
-                        "type": "array",
-                        "items": {
-                            "ref": "net.atview.experimental.account",
-                            "type": "ref"
-                        }
+                    "amount": {
+                        "type": "integer"
+                    },
+                    "account": {
+                        "ref": "net.atview.account.actor",
+                        "type": "ref"
                     }
                 },
                 "required": [
                     "createdAt",
-                    "accounts"
+                    "amount",
+                    "account"
                 ],
                 "type": "object"
             },
             "type": "record"
         }
     },
-    "id": "net.atview.experimental.subaccounts",
+    "id": "net.atview.account.sponsor",
     "lexicon": 1
 }

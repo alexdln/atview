@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Sponsor experiment",
+            "description": "Account Ecosystem experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -9,17 +9,18 @@
                         "format": "datetime",
                         "type": "string"
                     },
-                    "amount": {
-                        "type": "integer"
-                    },
                     "account": {
-                        "ref": "net.atview.experimental.account",
+                        "ref": "net.atview.account.actor",
                         "type": "ref"
+                    },
+                    "note": {
+                        "type": "string",
+                        "maxLength": 2560,
+                        "maxGraphemes": 256
                     }
                 },
                 "required": [
                     "createdAt",
-                    "amount",
                     "account"
                 ],
                 "type": "object"
@@ -27,6 +28,6 @@
             "type": "record"
         }
     },
-    "id": "net.atview.experimental.sponsor",
+    "id": "net.atview.account.ecosystem",
     "lexicon": 1
 }

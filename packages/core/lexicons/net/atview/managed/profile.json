@@ -1,7 +1,7 @@
 {
     "defs": {
         "main": {
-            "description": "Managed profile experiment",
+            "description": "Managed Profile experiment",
             "key": "tid",
             "record": {
                 "properties": {
@@ -35,6 +35,6 @@
             "type": "record"
         }
     },
-    "id": "net.atview.experimental.managedprofile",
+    "id": "net.atview.managed.profile",
     "lexicon": 1
 }
