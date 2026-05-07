@@ -10,7 +10,7 @@
                         "type": "string"
                     },
                     "amount": {
-                        "type": "number"
+                        "type": "integer"
                     },
                     "account": {
                         "ref": "net.atview.experimental.account",
