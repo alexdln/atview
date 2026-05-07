@@ -25,7 +25,10 @@
                             "user",
                             "organisation",
                             "collective"
-                        ]
+                        ],
+                        "default": "user",
+                        "maxLength": 640,
+                        "maxGraphemes": 64
                     },
                     "overrides": {
                         "type": "ref",
