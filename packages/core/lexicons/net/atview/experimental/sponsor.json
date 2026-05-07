@@ -1,0 +1,32 @@
+{
+    "defs": {
+        "main": {
+            "description": "Sponsor experiment",
+            "key": "tid",
+            "record": {
+                "properties": {
+                    "createdAt": {
+                        "format": "datetime",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "account": {
+                        "ref": "net.atview.experimental.account",
+                        "type": "ref"
+                    }
+                },
+                "required": [
+                    "createdAt",
+                    "name",
+                    "actor"
+                ],
+                "type": "object"
+            },
+            "type": "record"
+        }
+    },
+    "id": "net.atview.experimental.sponsor",
+    "lexicon": 1
+}

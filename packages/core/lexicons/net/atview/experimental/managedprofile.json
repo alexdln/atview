@@ -1,0 +1,34 @@
+{
+    "defs": {
+        "main": {
+            "description": "Managed profile experiment",
+            "key": "tid",
+            "record": {
+                "properties": {
+                    "createdAt": {
+                        "format": "datetime",
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "createdAt",
+                    "name",
+                    "description"
+                ],
+                "type": "object"
+            },
+            "type": "record"
+        }
+    },
+    "id": "net.atview.experimental.managedprofile",
+    "lexicon": 1
+}
