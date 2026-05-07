@@ -19,8 +19,8 @@
                 },
                 "required": [
                     "createdAt",
-                    "name",
-                    "actor"
+                    "amount",
+                    "account"
                 ],
                 "type": "object"
             },
