@@ -10,13 +10,19 @@
                         "type": "string"
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 640,
+                        "maxGraphemes": 64
                     },
                     "description": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 2560,
+                        "maxGraphemes": 256
                     },
                     "avatar": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "uri",
+                        "maxLength": 2048
                     }
                 },
                 "required": [
