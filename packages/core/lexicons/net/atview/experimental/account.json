@@ -11,7 +11,7 @@
                     },
                     "actor": {
                         "refs": [
-                            "app.bsky.actor.defs",
+                            "app.bsky.actor.defs#profileViewDetailed",
                             "net.atview.experimental.managedprofile"
                         ],
                         "description": "Reference to a user's profile or managed profile",
@@ -28,19 +28,9 @@
                         ]
                     },
                     "overrides": {
-                        "type": "object",
-                        "description": "Overrides for the profile",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "description": {
-                                "type": "string"
-                            },
-                            "avatar": {
-                                "type": "string"
-                            }
-                        }
+                        "type": "ref",
+                        "ref": "#overrides",
+                        "description": "Overrides for the profile"
                     }
                 },
                 "required": [
@@ -50,6 +40,21 @@
                 "type": "object"
             },
             "type": "record"
+        },
+        "overrides": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
         }
     },
     "id": "net.atview.experimental.account",
