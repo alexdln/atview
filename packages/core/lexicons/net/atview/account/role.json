@@ -10,12 +10,12 @@
                         "type": "string"
                     },
                     "role": {
-                        "ref": "net.atview.managed.role",
-                        "type": "ref"
+                        "type": "string",
+                        "format": "at-uri"
                     },
                     "account": {
-                        "ref": "net.atview.account.actor",
-                        "type": "ref"
+                        "type": "string",
+                        "format": "at-uri"
                     }
                 },
                 "required": [
