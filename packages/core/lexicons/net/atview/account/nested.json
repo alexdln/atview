@@ -10,8 +10,8 @@
                         "type": "string"
                     },
                     "account": {
-                        "ref": "net.atview.account.actor",
-                        "type": "ref"
+                        "type": "string",
+                        "format": "at-uri"
                     },
                     "note": {
                         "type": "string",

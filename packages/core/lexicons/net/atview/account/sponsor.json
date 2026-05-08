@@ -9,17 +9,18 @@
                         "format": "datetime",
                         "type": "string"
                     },
-                    "amount": {
-                        "type": "integer"
+                    "note": {
+                        "type": "string",
+                        "maxLength": 2560,
+                        "maxGraphemes": 256
                     },
                     "account": {
-                        "ref": "net.atview.account.actor",
-                        "type": "ref"
+                        "type": "string",
+                        "format": "at-uri"
                     }
                 },
                 "required": [
                     "createdAt",
-                    "amount",
                     "account"
                 ],
                 "type": "object"

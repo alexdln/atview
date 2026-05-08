@@ -10,12 +10,9 @@
                         "type": "string"
                     },
                     "actor": {
-                        "refs": [
-                            "app.bsky.actor.defs#profileViewDetailed",
-                            "net.atview.managed.profile"
-                        ],
-                        "description": "Reference to a user's profile or managed profile",
-                        "type": "union"
+                        "description": "AtUri of a user's profile or managed profile",
+                        "type": "string",
+                        "format": "at-uri"
                     },
                     "type": {
                         "type": "string",
