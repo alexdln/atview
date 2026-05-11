@@ -4,7 +4,7 @@ import "./task-list-item.scss";
 
 export interface TaskListItemProps {
     checked: boolean;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const TaskListItem: React.FC<TaskListItemProps> = ({ checked, children }) => (

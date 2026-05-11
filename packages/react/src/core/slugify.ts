@@ -3,7 +3,7 @@ type SlugifyOptions = {
     lowercase?: boolean;
 };
 
-export function slugify(input: string, options: SlugifyOptions = {}): string {
+export const slugify = (input: string, options: SlugifyOptions = {}): string => {
     const { separator = "-", lowercase = true } = options;
 
     let slug = input
@@ -16,9 +16,9 @@ export function slugify(input: string, options: SlugifyOptions = {}): string {
     if (lowercase) slug = slug.toLowerCase();
 
     return slug || "heading";
-}
+};
 
-export function createSlugGenerator(optionsGlobal?: SlugifyOptions) {
+export const createSlugGenerator = (optionsGlobal?: SlugifyOptions) => {
     const counts = new Map<string, number>();
 
     return (input: string, options?: SlugifyOptions) => {
@@ -28,4 +28,4 @@ export function createSlugGenerator(optionsGlobal?: SlugifyOptions) {
 
         return count === 0 ? base : `${base}-${count}`;
     };
-}
+};

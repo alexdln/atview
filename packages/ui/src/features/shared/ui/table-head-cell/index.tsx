@@ -3,7 +3,7 @@ import React from "react";
 import "./table-head-cell.scss";
 
 export interface TableHeadCellProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     colSpan?: number;
     rowSpan?: number;
 }

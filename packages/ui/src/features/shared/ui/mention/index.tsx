@@ -4,7 +4,7 @@ import { LinkBase } from "../link-base";
 
 export interface MentionProps {
     did: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const Mention: React.FC<MentionProps> = ({ did, ...props }) => (

@@ -6,7 +6,7 @@ import { TopLayerProvider } from "../../stores/top-layer/provider";
 
 export interface AtviewProviderProps {
     defaultSettings?: Partial<SettingsStoreValue>;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const AtviewProvider: React.FC<AtviewProviderProps> = ({ children, defaultSettings }) => (

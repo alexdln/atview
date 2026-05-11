@@ -2,8 +2,8 @@ import React from "react";
 import { LinkBase } from "../link-base";
 
 export interface LinkProps {
-    href: string;
-    children: React.ReactNode;
+    href?: string;
+    children?: React.ReactNode;
 }
 
 export const Link: React.FC<LinkProps> = ({ href, children }) =>

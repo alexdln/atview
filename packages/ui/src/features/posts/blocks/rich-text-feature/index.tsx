@@ -7,7 +7,7 @@ import "./rich-text-feature.scss";
 
 export interface RichTextFeatureProps {
     features: AppBskyRichtextFacet.Main["features"];
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const RichTextFeature: React.FC<RichTextFeatureProps> = ({ features, children }) => {
