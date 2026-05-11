@@ -1,11 +1,12 @@
-import { type Document, dataToAst } from "@atview/core";
+import { type Document } from "@atview/core";
+import { type DefaultRenderContext } from "@atview/react/default";
+import { dataToJsx as dataToJsxCore } from "@atview/react";
 
-import { astToJsx, type RenderContext } from "./ast-to-jsx";
+import { InlineElements, BlockElements } from "./components";
 
-export const dataToJsx = <T extends Document>(post: T, context: RenderContext) => {
-    const ast = dataToAst(post);
-
-    if (!ast) return null;
-
-    return astToJsx(ast, context);
-};
+export const dataToJsx = (data: Document, context: DefaultRenderContext) =>
+    dataToJsxCore(data, {
+        ...context,
+        inlineElements: { ...InlineElements, ...context.inlineElements },
+        blockElements: { ...BlockElements, ...context.blockElements },
+    });

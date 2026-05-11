@@ -3,7 +3,7 @@ import React from "react";
 import "./ordered-list.scss";
 
 export interface OrderedListProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     start?: number;
 }
 

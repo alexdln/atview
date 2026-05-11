@@ -7,6 +7,5 @@ export * from "./core/ast/ast-to-jsx";
 export * from "./core/ast/data-to-jsx";
 export * from "./core/ast/components";
 export * from "./core/instances/public-agent";
-export * from "./core/utils/slugify";
 export * from "./ui/copy-button";
 export * from "./ui/copy-text";

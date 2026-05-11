@@ -13,7 +13,7 @@ type ButtonProps<T extends React.ElementType> = {
     as?: T;
     variant?: keyof typeof VARIANTS;
     block?: boolean;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 } & Omit<React.ComponentProps<T>, "as" | "color" | "children">;
 
 export const Button = <T extends React.ElementType = "button">({

@@ -7,7 +7,7 @@ import { SettingsStore } from "./stores";
 
 export interface SettingsProviderProps {
     defaultSettings?: Partial<SettingsStoreValue>;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const SettingsProvider: React.FC<SettingsProviderProps> = ({ defaultSettings, children }) => (
