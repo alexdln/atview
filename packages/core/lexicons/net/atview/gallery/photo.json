@@ -28,8 +28,8 @@
           "description": {
             "type": "string",
             "description": "Optional caption or longer description of the photo.",
-            "maxLength": 30000,
-            "maxGraphemes": 3000
+            "maxLength": 10000,
+            "maxGraphemes": 1000
           },
           "tags": {
             "type": "array",
