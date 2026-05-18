@@ -1,0 +1,49 @@
+{
+  "id": "net.atview.gallery.photo",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A photo in an atview gallery. Stores the image blob alongside accessibility text, an optional caption, and categorization tags.",
+      "record": {
+        "type": "object",
+        "required": [
+          "blob"
+        ],
+        "properties": {
+          "blob": {
+            "type": "blob",
+            "accept": [
+              "image/*"
+            ],
+            "maxSize": 10000000,
+            "description": "The photo image file. May be up to 2 MB."
+          },
+          "alt": {
+            "type": "string",
+            "description": "Alt text describing the photo for accessibility.",
+            "maxLength": 5000,
+            "maxGraphemes": 500
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional caption or longer description of the photo.",
+            "maxLength": 30000,
+            "maxGraphemes": 3000
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags used to categorize or filter gallery photos. Avoid prepending tags with hashtags.",
+            "items": {
+              "type": "string",
+              "maxLength": 1280,
+              "maxGraphemes": 128
+            }
+          }
+        }
+      }
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}
